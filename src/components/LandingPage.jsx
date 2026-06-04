@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function LandingPage({ setPage }) {
   const careCards = [
@@ -47,7 +47,19 @@ export default function LandingPage({ setPage }) {
   ];
 
   const [currentCard, setCurrentCard] = useState(0);
-  const cardsPerView = 3;
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+      setCurrentCard(0); // reset position on resize
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const cardsPerView = isMobile ? 1 : 3;
   const maxIndex = careCards.length - cardsPerView;
 
   const logos = ['Aetna', 'Blue Cross Blue Shield', 'UnitedHealthcare', 'Cigna', 'Humana', 'CVS Health', 'Anthem', 'Centene', 'Molina', 'WellCare'];

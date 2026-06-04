@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const NAV_SHOPS = {
   label: 'Shops',
@@ -272,10 +272,34 @@ const NAV_CLINICIANS = {
   },
 };
 
+// Mobile accordion nav section
+function MobileNavSection({ title, children }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="mob-nav-section">
+      <button
+        className="mob-nav-section-btn"
+        onClick={() => setOpen(o => !o)}
+        aria-expanded={open}
+      >
+        <span>{title}</span>
+        <svg
+          className={`mob-nav-chevron${open ? ' open' : ''}`}
+          viewBox="0 0 16 16" width="14" height="14"
+        >
+          <path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill="currentColor"/>
+        </svg>
+      </button>
+      {open && <div className="mob-nav-section-body">{children}</div>}
+    </div>
+  );
+}
+
 export default function TDHHeader({ setPage }) {
-  const [activeMenu, setActiveMenu] = useState(null); // 'shops' | 'individuals' | 'organizations' | 'clinicians'
-  const [activePartner, setActivePartner] = useState(0); // for organizations submenu
+  const [activeMenu, setActiveMenu] = useState(null);
+  const [activePartner, setActivePartner] = useState(0);
   const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const navRef = useRef(null);
 
   useEffect(() => {
@@ -292,392 +316,504 @@ export default function TDHHeader({ setPage }) {
     return () => document.removeEventListener('mousedown', close);
   }, []);
 
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
+
   const goto = (pageKey) => {
     setPage(pageKey);
     setActiveMenu(null);
+    setMobileOpen(false);
   };
 
   return (
-    <header className={`tdh-header-wrapper${scrolled ? ' scrolled' : ''}`} ref={navRef}>
-      <div className="tdh-header-inner">
-        {/* Logo */}
-        <a className="tdh-logo" href="#" onClick={e => { e.preventDefault(); goto('landing'); }}>
-          <img
-            src="/logo.png"
-            alt="SummitMD"
-            className="tdh-logo-img"
-          />
-        </a>
+    <>
+      <header className={`tdh-header-wrapper${scrolled ? ' scrolled' : ''}`} ref={navRef}>
+        <div className="tdh-header-inner">
+          {/* Logo */}
+          <a className="tdh-logo" href="#" onClick={e => { e.preventDefault(); goto('landing'); }}>
+            <img
+              src="/logo.png"
+              alt="SummitMD"
+              className="tdh-logo-img"
+            />
+          </a>
 
-        {/* Primary Nav */}
-        <nav className="tdh-primary-nav" aria-label="Primary navigation">
-          {/* SHOPS */}
-          <div
-            className={`tdh-nav-item${activeMenu === 'shops' ? ' active' : ''}`}
-            onMouseEnter={() => setActiveMenu('shops')}
-            onMouseLeave={() => setActiveMenu(null)}
-          >
-            <button className="tdh-nav-btn" aria-expanded={activeMenu === 'shops'} onClick={e => { e.preventDefault(); goto('shop'); }}>
-              Shops
-              <svg className="tdh-chevron" viewBox="0 0 16 16" width="14" height="14"><path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill="currentColor"/></svg>
-            </button>
-            {activeMenu === 'shops' && (
-              <div className="tdh-mega-menu tdh-mega-menu--4col summitmd-shop-dropdown">
-                <div className="tdh-mega-inner">
-                  {NAV_SHOPS.products.map((cat, i) => (
-                    <div className="tdh-mega-col tdh-mega-col--dynamic" key={i}>
-                      <div className="tdh-mega-col-header" style={{ color: '#0f2e2f', fontWeight: '800', borderBottom: '2px solid #0f2e2f', paddingBottom: '8px', marginBottom: '16px' }}>{cat.category}</div>
-                      <ul className="tdh-mega-ways-list">
-                        {cat.items.map((item, j) => (
-                          <li key={j} style={{ marginBottom: '16px' }}>
-                            <a 
-                              href="#" 
-                              className="tdh-mega-way-link" 
-                              onClick={e => { e.preventDefault(); goto(item.href); }}
-                              style={{ display: 'block' }}
-                            >
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <strong style={{ color: '#0f2e2f' }}>{item.label}</strong>
-                                {item.tag && (
-                                  <span style={{ fontSize: '0.65rem', backgroundColor: '#e2ece9', color: '#0f2e2f', padding: '2px 6px', borderRadius: '4px', fontWeight: '700' }}>
-                                    {item.tag}
-                                  </span>
-                                )}
+          {/* Desktop Primary Nav */}
+          <nav className="tdh-primary-nav" aria-label="Primary navigation">
+            {/* SHOPS */}
+            <div
+              className={`tdh-nav-item${activeMenu === 'shops' ? ' active' : ''}`}
+              onMouseEnter={() => setActiveMenu('shops')}
+              onMouseLeave={() => setActiveMenu(null)}
+            >
+              <button className="tdh-nav-btn" aria-expanded={activeMenu === 'shops'} onClick={e => { e.preventDefault(); goto('shop'); }}>
+                Shops
+                <svg className="tdh-chevron" viewBox="0 0 16 16" width="14" height="14"><path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill="currentColor"/></svg>
+              </button>
+              {activeMenu === 'shops' && (
+                <div className="tdh-mega-menu tdh-mega-menu--4col summitmd-shop-dropdown">
+                  <div className="tdh-mega-inner">
+                    {NAV_SHOPS.products.map((cat, i) => (
+                      <div className="tdh-mega-col tdh-mega-col--dynamic" key={i}>
+                        <div className="tdh-mega-col-header" style={{ color: '#0f2e2f', fontWeight: '800', borderBottom: '2px solid #0f2e2f', paddingBottom: '8px', marginBottom: '16px' }}>{cat.category}</div>
+                        <ul className="tdh-mega-ways-list">
+                          {cat.items.map((item, j) => (
+                            <li key={j} style={{ marginBottom: '16px' }}>
+                              <a
+                                href="#"
+                                className="tdh-mega-way-link"
+                                onClick={e => { e.preventDefault(); goto(item.href); }}
+                                style={{ display: 'block' }}
+                              >
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                  <strong style={{ color: '#0f2e2f' }}>{item.label}</strong>
+                                  {item.tag && (
+                                    <span style={{ fontSize: '0.65rem', backgroundColor: '#e2ece9', color: '#0f2e2f', padding: '2px 6px', borderRadius: '4px', fontWeight: '700' }}>
+                                      {item.tag}
+                                    </span>
+                                  )}
+                                </div>
+                                <p style={{ margin: '4px 0 0 0', fontSize: '0.8rem', color: '#64748b', fontWeight: 'normal', lineHeight: '1.4' }}>{item.desc}</p>
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                    <div className="tdh-mega-col tdh-mega-col--promo tdh-mega-col--promo-pine" style={{ backgroundColor: '#0f2e2f', color: '#ffffff', padding: '24px', borderRadius: '8px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', minHeight: '220px', backgroundImage: `linear-gradient(rgba(15,46,47,0.4), rgba(15,46,47,0.9)), url(${NAV_SHOPS.promo.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                      <div className="tdh-mega-promo-body" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#ffffff', margin: 0 }}>{NAV_SHOPS.promo.title}</h3>
+                        <a href="#" className="tdh-mega-promo-cta" onClick={e => { e.preventDefault(); goto(NAV_SHOPS.promo.href); }} style={{ color: '#00d2c4', fontWeight: '700', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '4px', textDecoration: 'none' }}>
+                          {NAV_SHOPS.promo.cta} <span>→</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* INDIVIDUALS */}
+            <div
+              className={`tdh-nav-item${activeMenu === 'individuals' ? ' active' : ''}`}
+              onMouseEnter={() => setActiveMenu('individuals')}
+              onMouseLeave={() => setActiveMenu(null)}
+            >
+              <button className="tdh-nav-btn" aria-expanded={activeMenu === 'individuals'}>
+                Individuals
+                <svg className="tdh-chevron" viewBox="0 0 16 16" width="14" height="14"><path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill="currentColor"/></svg>
+              </button>
+              {activeMenu === 'individuals' && (
+                <div className="tdh-mega-menu tdh-mega-menu--3col tdh-mega-menu--individuals">
+                  <div className="tdh-mega-inner">
+                    <div className="tdh-mega-col tdh-mega-col--dynamic">
+                      <div className="tdh-mega-col-header">Ways we help</div>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                        {NAV_INDIVIDUALS.ways.map((w, i) => (
+                          <div
+                            key={i}
+                            style={{
+                              padding: '10px 12px',
+                              borderRadius: '10px',
+                              background: '#f4f6ff',
+                              border: '1px solid #e2e8f8',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              gap: '4px',
+                              cursor: 'default',
+                              transition: 'background 0.15s',
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.background = '#eaf0ff'}
+                            onMouseLeave={e => e.currentTarget.style.background = '#f4f6ff'}
+                          >
+                            {w.href ? (
+                              <a
+                                href="#"
+                                className="tdh-mega-way-link-title"
+                                onClick={ev => { ev.preventDefault(); goto(w.href); }}
+                                style={{ fontWeight: '700', fontSize: '0.84rem', color: 'var(--tdh-navy)', textDecoration: 'none', lineHeight: '1.25' }}
+                              >
+                                {w.label}
+                              </a>
+                            ) : (
+                              <span style={{ fontWeight: '700', fontSize: '0.84rem', color: 'var(--tdh-navy)', lineHeight: '1.25' }}>{w.label}</span>
+                            )}
+                            <p style={{ margin: 0, fontSize: '0.71rem', color: '#64748b', lineHeight: '1.35', fontWeight: 'normal' }}>{w.desc}</p>
+                            {w.sub && (
+                              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 8px', marginTop: '2px' }}>
+                                {w.sub.map((subItem, sIdx) => {
+                                  const isGetCare = subItem.label === 'Get Care Now';
+                                  return (
+                                    <a
+                                      key={sIdx}
+                                      href={subItem.external ? subItem.url : '#'}
+                                      target={subItem.external ? '_blank' : undefined}
+                                      rel={subItem.external ? 'noopener noreferrer' : undefined}
+                                      onClick={ev => {
+                                        if (!subItem.external) {
+                                          ev.preventDefault();
+                                          goto(subItem.href);
+                                        }
+                                      }}
+                                      style={{
+                                        fontSize: '0.69rem',
+                                        color: isGetCare ? '#fff' : 'var(--tdh-purple)',
+                                        backgroundColor: isGetCare ? 'var(--tdh-purple)' : 'transparent',
+                                        padding: isGetCare ? '2px 8px' : '0',
+                                        borderRadius: isGetCare ? '12px' : '0',
+                                        fontWeight: '700',
+                                        textDecoration: isGetCare ? 'none' : 'underline',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '2px',
+                                        cursor: 'pointer',
+                                        whiteSpace: 'nowrap',
+                                      }}
+                                    >
+                                      {subItem.label}{subItem.external && !isGetCare ? ' ↗' : ''}
+                                    </a>
+                                  );
+                                })}
                               </div>
-                              <p style={{ margin: '4px 0 0 0', fontSize: '0.8rem', color: '#64748b', fontWeight: 'normal', lineHeight: '1.4' }}>{item.desc}</p>
-                            </a>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="tdh-mega-col tdh-mega-col--static">
+                      <div className="tdh-mega-col-header">Explore</div>
+                      <ul className="tdh-mega-explore-list">
+                        {NAV_INDIVIDUALS.explore.map((e2, i) => (
+                          <li key={i}>
+                            <a href="#" className="tdh-mega-explore-link" onClick={e => { e.preventDefault(); goto(e2.href); }}>{e2.label}</a>
                           </li>
                         ))}
                       </ul>
                     </div>
-                  ))}
-                  <div className="tdh-mega-col tdh-mega-col--promo tdh-mega-col--promo-pine" style={{ backgroundColor: '#0f2e2f', color: '#ffffff', padding: '24px', borderRadius: '8px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', minHeight: '220px', backgroundImage: `linear-gradient(rgba(15,46,47,0.4), rgba(15,46,47,0.9)), url(${NAV_SHOPS.promo.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                    <div className="tdh-mega-promo-body" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#ffffff', margin: 0 }}>{NAV_SHOPS.promo.title}</h3>
-                      <a href="#" className="tdh-mega-promo-cta" onClick={e => { e.preventDefault(); goto(NAV_SHOPS.promo.href); }} style={{ color: '#00d2c4', fontWeight: '700', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '4px', textDecoration: 'none' }}>
-                        {NAV_SHOPS.promo.cta} <span>→</span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
 
-          {/* INDIVIDUALS */}
-          <div
-            className={`tdh-nav-item${activeMenu === 'individuals' ? ' active' : ''}`}
-            onMouseEnter={() => setActiveMenu('individuals')}
-            onMouseLeave={() => setActiveMenu(null)}
-          >
-            <button className="tdh-nav-btn" aria-expanded={activeMenu === 'individuals'}>
-              Individuals
-              <svg className="tdh-chevron" viewBox="0 0 16 16" width="14" height="14"><path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill="currentColor"/></svg>
-            </button>
-            {activeMenu === 'individuals' && (
-              <div className="tdh-mega-menu tdh-mega-menu--3col tdh-mega-menu--individuals">
-                <div className="tdh-mega-inner">
-
-                  {/* ── Ways We Help — 2-column card grid ── */}
-                  <div className="tdh-mega-col tdh-mega-col--dynamic">
-                    <div className="tdh-mega-col-header">Ways we help</div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                      {NAV_INDIVIDUALS.ways.map((w, i) => (
-                        <div
-                          key={i}
-                          style={{
-                            padding: '10px 12px',
-                            borderRadius: '10px',
-                            background: '#f4f6ff',
-                            border: '1px solid #e2e8f8',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '4px',
-                            cursor: 'default',
-                            transition: 'background 0.15s',
-                          }}
-                          onMouseEnter={e => e.currentTarget.style.background = '#eaf0ff'}
-                          onMouseLeave={e => e.currentTarget.style.background = '#f4f6ff'}
-                        >
-                          {w.href ? (
-                            <a
-                              href="#"
-                              className="tdh-mega-way-link-title"
-                              onClick={ev => { ev.preventDefault(); goto(w.href); }}
-                              style={{ fontWeight: '700', fontSize: '0.84rem', color: 'var(--tdh-navy)', textDecoration: 'none', lineHeight: '1.25' }}
-                            >
-                              {w.label}
-                            </a>
-                          ) : (
-                            <span style={{ fontWeight: '700', fontSize: '0.84rem', color: 'var(--tdh-navy)', lineHeight: '1.25' }}>{w.label}</span>
-                          )}
-                          <p style={{ margin: 0, fontSize: '0.71rem', color: '#64748b', lineHeight: '1.35', fontWeight: 'normal' }}>{w.desc}</p>
-                          {w.sub && (
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 8px', marginTop: '2px' }}>
-                              {w.sub.map((subItem, sIdx) => {
-                                const isGetCare = subItem.label === 'Get Care Now';
-                                return (
-                                  <a
-                                    key={sIdx}
-                                    href={subItem.external ? subItem.url : '#'}
-                                    target={subItem.external ? '_blank' : undefined}
-                                    rel={subItem.external ? 'noopener noreferrer' : undefined}
-                                    onClick={ev => {
-                                      if (!subItem.external) {
-                                        ev.preventDefault();
-                                        goto(subItem.href);
-                                      }
-                                    }}
-                                    style={{
-                                      fontSize: '0.69rem',
-                                      color: isGetCare ? '#fff' : 'var(--tdh-purple)',
-                                      backgroundColor: isGetCare ? 'var(--tdh-purple)' : 'transparent',
-                                      padding: isGetCare ? '2px 8px' : '0',
-                                      borderRadius: isGetCare ? '12px' : '0',
-                                      fontWeight: '700',
-                                      textDecoration: isGetCare ? 'none' : 'underline',
-                                      display: 'inline-flex',
-                                      alignItems: 'center',
-                                      gap: '2px',
-                                      cursor: 'pointer',
-                                      whiteSpace: 'nowrap',
-                                    }}
-                                  >
-                                    {subItem.label}{subItem.external && !isGetCare ? ' ↗' : ''}
-                                  </a>
-                                );
-                              })}
-                            </div>
-                          )}
+                    <div className="tdh-mega-col tdh-mega-col--promo tdh-mega-col--promo-plum">
+                      <div className="tdh-mega-promo" style={{ backgroundImage: `url(${NAV_INDIVIDUALS.promo.bg})` }}>
+                        <div className="tdh-mega-promo-body">
+                          <h3>{NAV_INDIVIDUALS.promo.title}</h3>
+                          <a href={NAV_INDIVIDUALS.promo.url} target="_blank" rel="noopener noreferrer" className="tdh-mega-promo-cta">
+                            {NAV_INDIVIDUALS.promo.cta} <i className="tdh-icon-arrow">↗</i>
+                          </a>
                         </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* ── Explore column ── */}
-                  <div className="tdh-mega-col tdh-mega-col--static">
-                    <div className="tdh-mega-col-header">Explore</div>
-                    <ul className="tdh-mega-explore-list">
-                      {NAV_INDIVIDUALS.explore.map((e2, i) => (
-                        <li key={i}>
-                          <a href="#" className="tdh-mega-explore-link" onClick={e => { e.preventDefault(); goto(e2.href); }}>{e2.label}</a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* ── Promo card ── */}
-                  <div className="tdh-mega-col tdh-mega-col--promo tdh-mega-col--promo-plum">
-                    <div className="tdh-mega-promo" style={{ backgroundImage: `url(${NAV_INDIVIDUALS.promo.bg})` }}>
-                      <div className="tdh-mega-promo-body">
-                        <h3>{NAV_INDIVIDUALS.promo.title}</h3>
-                        <a href={NAV_INDIVIDUALS.promo.url} target="_blank" rel="noopener noreferrer" className="tdh-mega-promo-cta">
-                          {NAV_INDIVIDUALS.promo.cta} <i className="tdh-icon-arrow">↗</i>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* ORGANIZATIONS */}
-          <div
-            className={`tdh-nav-item${activeMenu === 'organizations' ? ' active' : ''}`}
-            onMouseEnter={() => { setActiveMenu('organizations'); setActivePartner(0); }}
-            onMouseLeave={() => setActiveMenu(null)}
-          >
-            <button className="tdh-nav-btn" aria-expanded={activeMenu === 'organizations'}>
-              Organizations
-              <svg className="tdh-chevron" viewBox="0 0 16 16" width="14" height="14"><path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill="currentColor"/></svg>
-            </button>
-            {activeMenu === 'organizations' && (
-              <div className="tdh-mega-menu tdh-mega-menu--4col">
-                <div className="tdh-mega-inner">
-                  {/* Partners column */}
-                  <div className="tdh-mega-col tdh-mega-col--dynamic">
-                    <div className="tdh-mega-col-header">Partners</div>
-                    <ul className="tdh-mega-partner-list">
-                      {NAV_ORGANIZATIONS.partners.map((p, i) => (
-                        <li
-                          key={i}
-                          className={`tdh-mega-partner-item${activePartner === i ? ' active' : ''}`}
-                          onMouseEnter={() => setActivePartner(i)}
-                        >
-                          <button className="tdh-mega-partner-btn">
-                            <strong>{p.label}</strong>
-                            <p>{p.desc}</p>
-                            <svg viewBox="0 0 16 16" width="12" height="12"><path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" fill="#6240e8"/></svg>
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  {/* Solutions column (changes based on partner) */}
-                  <div className="tdh-mega-col tdh-mega-col--solutions">
-                    <div className="tdh-mega-col-header">Solutions</div>
-                    <ul className="tdh-mega-solutions-list">
-                      {NAV_ORGANIZATIONS.partners[activePartner].solutions.map((s, i) => (
-                        <li key={i}>
-                          <a href="#" className="tdh-mega-solution-link" onClick={e => { e.preventDefault(); goto(s.href); }}>{s.label}</a>
-                          {s.sub && (
-                            <ul className="tdh-mega-solution-sub">
-                              {s.sub.map((ss, j) => (
-                                <li key={j}>
-                                  <a href="#" onClick={e => { e.preventDefault(); goto(ss.href); }}>{ss.label}</a>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  {/* Explore */}
-                  <div className="tdh-mega-col tdh-mega-col--static">
-                    <div className="tdh-mega-col-header">Explore</div>
-                    <ul className="tdh-mega-explore-list">
-                      {NAV_ORGANIZATIONS.explore.map((e2, i) => (
-                        <li key={i}>
-                          <a href="#" className="tdh-mega-explore-link" onClick={e => { e.preventDefault(); goto(e2.href); }}>{e2.label}</a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  {/* Promo */}
-                  <div className="tdh-mega-col tdh-mega-col--promo">
-                    <div className="tdh-mega-promo" style={{ backgroundImage: `url(${NAV_ORGANIZATIONS.promo.bg})` }}>
-                      <div className="tdh-mega-promo-body">
-                        <h3>{NAV_ORGANIZATIONS.promo.title}</h3>
-                        <a href="#" className="tdh-mega-promo-cta" onClick={e => { e.preventDefault(); goto('library'); }}>
-                          {NAV_ORGANIZATIONS.promo.cta} →
-                        </a>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
 
-          {/* CLINICIANS */}
-          <div
-            className={`tdh-nav-item${activeMenu === 'clinicians' ? ' active' : ''}`}
-            onMouseEnter={() => setActiveMenu('clinicians')}
-            onMouseLeave={() => setActiveMenu(null)}
-          >
-            <button className="tdh-nav-btn" aria-expanded={activeMenu === 'clinicians'}>
-              Clinicians
-              <svg className="tdh-chevron" viewBox="0 0 16 16" width="14" height="14"><path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill="currentColor"/></svg>
-            </button>
-            {activeMenu === 'clinicians' && (
-              <div className="tdh-mega-menu tdh-mega-menu--3col">
-                <div className="tdh-mega-inner">
-                  <div className="tdh-mega-col tdh-mega-col--dynamic">
-                    <div className="tdh-mega-col-header">Our team</div>
-                    <ul className="tdh-mega-ways-list" style={{ gap: '12px' }}>
-                      {NAV_CLINICIANS.team.map((t, i) => (
-                        <li key={i} style={{ padding: '6px 10px', borderRadius: '8px' }}>
-                          <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            {t.external ? (
-                              <a 
-                                href={t.url} 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                className="tdh-mega-way-link-title"
-                                style={{ fontWeight: '700', fontSize: '0.95rem', color: 'var(--tdh-navy)', textDecoration: 'none' }}
-                              >
-                                {t.label} ↗
-                              </a>
-                            ) : (
-                              <a 
-                                href="#" 
-                                className="tdh-mega-way-link-title"
-                                onClick={e => { e.preventDefault(); goto(t.href); }} 
-                                style={{ fontWeight: '700', fontSize: '0.95rem', color: 'var(--tdh-navy)', textDecoration: 'none' }}
-                              >
-                                {t.label}
-                              </a>
-                            )}
-                            <p style={{ margin: '3px 0 6px 0', fontSize: '0.78rem', color: '#64748b', fontWeight: 'normal', lineHeight: '1.4' }}>{t.desc}</p>
-                            {t.sub && (
-                              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 12px', alignItems: 'center' }}>
-                                {t.sub.map((subItem, sIdx) => (
-                                  <a 
-                                    key={sIdx}
-                                    href={subItem.external ? subItem.url : "#"} 
-                                    target={subItem.external ? "_blank" : undefined}
-                                    rel={subItem.external ? "noopener noreferrer" : undefined}
-                                    onClick={e => {
-                                      if (!subItem.external) {
-                                        e.preventDefault();
-                                        goto(subItem.href);
-                                      }
-                                    }}
-                                    style={{ 
-                                      fontSize: '0.75rem', 
-                                      color: 'var(--tdh-purple)', 
-                                      fontWeight: '700', 
-                                      textDecoration: 'underline',
-                                      display: 'inline-flex',
-                                      alignItems: 'center',
-                                      cursor: 'pointer'
-                                    }}
-                                  >
-                                    {subItem.label} {subItem.external ? '↗' : ''}
-                                  </a>
+            {/* ORGANIZATIONS */}
+            <div
+              className={`tdh-nav-item${activeMenu === 'organizations' ? ' active' : ''}`}
+              onMouseEnter={() => { setActiveMenu('organizations'); setActivePartner(0); }}
+              onMouseLeave={() => setActiveMenu(null)}
+            >
+              <button className="tdh-nav-btn" aria-expanded={activeMenu === 'organizations'}>
+                Organizations
+                <svg className="tdh-chevron" viewBox="0 0 16 16" width="14" height="14"><path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill="currentColor"/></svg>
+              </button>
+              {activeMenu === 'organizations' && (
+                <div className="tdh-mega-menu tdh-mega-menu--4col">
+                  <div className="tdh-mega-inner">
+                    <div className="tdh-mega-col tdh-mega-col--dynamic">
+                      <div className="tdh-mega-col-header">Partners</div>
+                      <ul className="tdh-mega-partner-list">
+                        {NAV_ORGANIZATIONS.partners.map((p, i) => (
+                          <li
+                            key={i}
+                            className={`tdh-mega-partner-item${activePartner === i ? ' active' : ''}`}
+                            onMouseEnter={() => setActivePartner(i)}
+                          >
+                            <button className="tdh-mega-partner-btn">
+                              <strong>{p.label}</strong>
+                              <p>{p.desc}</p>
+                              <svg viewBox="0 0 16 16" width="12" height="12"><path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" fill="#6240e8"/></svg>
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="tdh-mega-col tdh-mega-col--solutions">
+                      <div className="tdh-mega-col-header">Solutions</div>
+                      <ul className="tdh-mega-solutions-list">
+                        {NAV_ORGANIZATIONS.partners[activePartner].solutions.map((s, i) => (
+                          <li key={i}>
+                            <a href="#" className="tdh-mega-solution-link" onClick={e => { e.preventDefault(); goto(s.href); }}>{s.label}</a>
+                            {s.sub && (
+                              <ul className="tdh-mega-solution-sub">
+                                {s.sub.map((ss, j) => (
+                                  <li key={j}>
+                                    <a href="#" onClick={e => { e.preventDefault(); goto(ss.href); }}>{ss.label}</a>
+                                  </li>
                                 ))}
-                              </div>
+                              </ul>
                             )}
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="tdh-mega-col tdh-mega-col--static">
-                    <div className="tdh-mega-col-header">Explore</div>
-                    <ul className="tdh-mega-explore-list">
-                      {NAV_CLINICIANS.explore.map((e2, i) => (
-                        <li key={i}>
-                          {e2.external
-                            ? <a href={e2.url} target="_blank" rel="noopener noreferrer" className="tdh-mega-explore-link">{e2.label} ↗</a>
-                            : <a href="#" className="tdh-mega-explore-link" onClick={e => { e.preventDefault(); goto(e2.href); }}>{e2.label}</a>
-                          }
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="tdh-mega-col tdh-mega-col--promo tdh-mega-col--promo-plum">
-                    <div className="tdh-mega-promo" style={{ backgroundImage: `url(${NAV_CLINICIANS.promo.bg})` }}>
-                      <div className="tdh-mega-promo-body">
-                        <h3>{NAV_CLINICIANS.promo.title}</h3>
-                        <a href={NAV_CLINICIANS.promo.url} target="_blank" rel="noopener noreferrer" className="tdh-mega-promo-cta">
-                          {NAV_CLINICIANS.promo.cta} ↗
-                        </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="tdh-mega-col tdh-mega-col--static">
+                      <div className="tdh-mega-col-header">Explore</div>
+                      <ul className="tdh-mega-explore-list">
+                        {NAV_ORGANIZATIONS.explore.map((e2, i) => (
+                          <li key={i}>
+                            <a href="#" className="tdh-mega-explore-link" onClick={e => { e.preventDefault(); goto(e2.href); }}>{e2.label}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="tdh-mega-col tdh-mega-col--promo">
+                      <div className="tdh-mega-promo" style={{ backgroundImage: `url(${NAV_ORGANIZATIONS.promo.bg})` }}>
+                        <div className="tdh-mega-promo-body">
+                          <h3>{NAV_ORGANIZATIONS.promo.title}</h3>
+                          <a href="#" className="tdh-mega-promo-cta" onClick={e => { e.preventDefault(); goto('library'); }}>
+                            {NAV_ORGANIZATIONS.promo.cta} →
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
-        </nav>
+              )}
+            </div>
 
-        {/* Header Actions */}
-        <div className="tdh-header-actions">
-          <button type="button" className="tdh-signin-btn" onClick={() => goto('login')}>
-            Sign in
-          </button>
-          <button type="button" className="tdh-register-btn" onClick={() => goto('register')}>
-            Register
-          </button>
-          <button type="button" className="tdh-getcare-btn" onClick={() => goto('register')}>
-            Get care now
+            {/* CLINICIANS */}
+            <div
+              className={`tdh-nav-item${activeMenu === 'clinicians' ? ' active' : ''}`}
+              onMouseEnter={() => setActiveMenu('clinicians')}
+              onMouseLeave={() => setActiveMenu(null)}
+            >
+              <button className="tdh-nav-btn" aria-expanded={activeMenu === 'clinicians'}>
+                Clinicians
+                <svg className="tdh-chevron" viewBox="0 0 16 16" width="14" height="14"><path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill="currentColor"/></svg>
+              </button>
+              {activeMenu === 'clinicians' && (
+                <div className="tdh-mega-menu tdh-mega-menu--3col">
+                  <div className="tdh-mega-inner">
+                    <div className="tdh-mega-col tdh-mega-col--dynamic">
+                      <div className="tdh-mega-col-header">Our team</div>
+                      <ul className="tdh-mega-ways-list" style={{ gap: '12px' }}>
+                        {NAV_CLINICIANS.team.map((t, i) => (
+                          <li key={i} style={{ padding: '6px 10px', borderRadius: '8px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                              {t.external ? (
+                                <a
+                                  href={t.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="tdh-mega-way-link-title"
+                                  style={{ fontWeight: '700', fontSize: '0.95rem', color: 'var(--tdh-navy)', textDecoration: 'none' }}
+                                >
+                                  {t.label} ↗
+                                </a>
+                              ) : (
+                                <a
+                                  href="#"
+                                  className="tdh-mega-way-link-title"
+                                  onClick={e => { e.preventDefault(); goto(t.href); }}
+                                  style={{ fontWeight: '700', fontSize: '0.95rem', color: 'var(--tdh-navy)', textDecoration: 'none' }}
+                                >
+                                  {t.label}
+                                </a>
+                              )}
+                              <p style={{ margin: '3px 0 6px 0', fontSize: '0.78rem', color: '#64748b', fontWeight: 'normal', lineHeight: '1.4' }}>{t.desc}</p>
+                              {t.sub && (
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 12px', alignItems: 'center' }}>
+                                  {t.sub.map((subItem, sIdx) => (
+                                    <a
+                                      key={sIdx}
+                                      href={subItem.external ? subItem.url : "#"}
+                                      target={subItem.external ? "_blank" : undefined}
+                                      rel={subItem.external ? "noopener noreferrer" : undefined}
+                                      onClick={e => {
+                                        if (!subItem.external) {
+                                          e.preventDefault();
+                                          goto(subItem.href);
+                                        }
+                                      }}
+                                      style={{
+                                        fontSize: '0.75rem',
+                                        color: 'var(--tdh-purple)',
+                                        fontWeight: '700',
+                                        textDecoration: 'underline',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        cursor: 'pointer'
+                                      }}
+                                    >
+                                      {subItem.label} {subItem.external ? '↗' : ''}
+                                    </a>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="tdh-mega-col tdh-mega-col--static">
+                      <div className="tdh-mega-col-header">Explore</div>
+                      <ul className="tdh-mega-explore-list">
+                        {NAV_CLINICIANS.explore.map((e2, i) => (
+                          <li key={i}>
+                            {e2.external
+                              ? <a href={e2.url} target="_blank" rel="noopener noreferrer" className="tdh-mega-explore-link">{e2.label} ↗</a>
+                              : <a href="#" className="tdh-mega-explore-link" onClick={e => { e.preventDefault(); goto(e2.href); }}>{e2.label}</a>
+                            }
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="tdh-mega-col tdh-mega-col--promo tdh-mega-col--promo-plum">
+                      <div className="tdh-mega-promo" style={{ backgroundImage: `url(${NAV_CLINICIANS.promo.bg})` }}>
+                        <div className="tdh-mega-promo-body">
+                          <h3>{NAV_CLINICIANS.promo.title}</h3>
+                          <a href={NAV_CLINICIANS.promo.url} target="_blank" rel="noopener noreferrer" className="tdh-mega-promo-cta">
+                            {NAV_CLINICIANS.promo.cta} ↗
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </nav>
+
+          {/* Header Actions (desktop) */}
+          <div className="tdh-header-actions">
+            <button type="button" className="tdh-signin-btn" onClick={() => goto('login')}>
+              Sign in
+            </button>
+            <button type="button" className="tdh-register-btn" onClick={() => goto('register')}>
+              Register
+            </button>
+            <button type="button" className="tdh-getcare-btn" onClick={() => goto('register')}>
+              Get care now
+            </button>
+          </div>
+
+          {/* Mobile Hamburger Toggle */}
+          <button
+            className={`tdh-mobile-toggle${mobileOpen ? ' is-open' : ''}`}
+            onClick={() => setMobileOpen(o => !o)}
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileOpen}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
           </button>
         </div>
+      </header>
+
+      {/* Mobile Drawer Overlay */}
+      {mobileOpen && (
+        <div className="mob-drawer-overlay" onClick={() => setMobileOpen(false)} />
+      )}
+
+      {/* Mobile Drawer */}
+      <div className={`mob-drawer${mobileOpen ? ' open' : ''}`} aria-hidden={!mobileOpen}>
+        <div className="mob-drawer-header">
+          <a className="tdh-logo" href="#" onClick={e => { e.preventDefault(); goto('landing'); }}>
+            <img src="/logo.png" alt="SummitMD" className="tdh-logo-img" />
+          </a>
+          <button className="mob-drawer-close" onClick={() => setMobileOpen(false)} aria-label="Close menu">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <div className="mob-drawer-body">
+          {/* Shops */}
+          <MobileNavSection title="Shops">
+            {NAV_SHOPS.products.map((cat, i) => (
+              <div key={i} className="mob-nav-group">
+                <div className="mob-nav-group-label">{cat.category}</div>
+                {cat.items.map((item, j) => (
+                  <button key={j} className="mob-nav-link" onClick={() => goto(item.href)}>
+                    {item.label}
+                    {item.tag && <span className="mob-nav-tag">{item.tag}</span>}
+                  </button>
+                ))}
+              </div>
+            ))}
+          </MobileNavSection>
+
+          {/* Individuals */}
+          <MobileNavSection title="Individuals">
+            <div className="mob-nav-group">
+              <div className="mob-nav-group-label">Ways we help</div>
+              {NAV_INDIVIDUALS.ways.map((w, i) => (
+                <button key={i} className="mob-nav-link" onClick={() => goto(w.href)}>
+                  {w.label}
+                </button>
+              ))}
+            </div>
+            <div className="mob-nav-group">
+              <div className="mob-nav-group-label">Explore</div>
+              {NAV_INDIVIDUALS.explore.map((e2, i) => (
+                <button key={i} className="mob-nav-link" onClick={() => goto(e2.href)}>
+                  {e2.label}
+                </button>
+              ))}
+            </div>
+          </MobileNavSection>
+
+          {/* Organizations */}
+          <MobileNavSection title="Organizations">
+            {NAV_ORGANIZATIONS.partners.map((partner, i) => (
+              <div key={i} className="mob-nav-group">
+                <div className="mob-nav-group-label">{partner.label}</div>
+                {partner.solutions.slice(0, 4).map((s, j) => (
+                  <button key={j} className="mob-nav-link" onClick={() => goto(s.href)}>
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+            ))}
+          </MobileNavSection>
+
+          {/* Clinicians */}
+          <MobileNavSection title="Clinicians">
+            {NAV_CLINICIANS.team.map((t, i) => (
+              <button
+                key={i}
+                className="mob-nav-link"
+                onClick={() => {
+                  if (t.external) window.open(t.url, '_blank');
+                  else goto(t.href);
+                }}
+              >
+                {t.label} {t.external ? '↗' : ''}
+              </button>
+            ))}
+          </MobileNavSection>
+
+          {/* Direct links */}
+          <div className="mob-nav-direct">
+            <button className="mob-nav-link" onClick={() => goto('how-it-works')}>How It Works</button>
+            <button className="mob-nav-link" onClick={() => goto('faq')}>FAQs</button>
+            <button className="mob-nav-link" onClick={() => goto('about')}>About Us</button>
+            <button className="mob-nav-link" onClick={() => goto('contact')}>Contact</button>
+          </div>
+        </div>
+
+        <div className="mob-drawer-footer">
+          <button className="mob-btn-signin" onClick={() => goto('login')}>Sign in</button>
+          <button className="mob-btn-register" onClick={() => goto('register')}>Register</button>
+          <button className="mob-btn-getcare" onClick={() => goto('register')}>Get care now</button>
+        </div>
       </div>
-    </header>
+    </>
   );
 }
