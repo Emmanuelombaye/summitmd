@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Star, Calendar, Clock, Check, X } from 'lucide-react';
 import { peakHealthClient } from '../api/peakHealthClient';
 
@@ -15,8 +15,15 @@ export default function ProviderSearch({ user, reloadDashboardData }) {
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
   useEffect(() => {
-    const list = peakHealthClient.getProviders();
-    setProviders(list);
+    const fetchProviders = async () => {
+      try {
+        const list = await peakHealthClient.getProviders();
+        setProviders(list);
+      } catch (err) {
+        console.error('Error fetching providers:', err);
+      }
+    };
+    fetchProviders();
   }, []);
 
   const filteredProviders = providers.filter(p => {
@@ -27,24 +34,28 @@ export default function ProviderSearch({ user, reloadDashboardData }) {
     return matchesSearch && p.qualification[0].code.text.includes(selectedSpecialty);
   });
 
-  const handleBookAppointment = (e) => {
+  const handleBookAppointment = async (e) => {
     e.preventDefault();
     if (!bookingProvider) return;
 
     const dateTimeStr = `${bookingDate}T${bookingTime}:00`;
-    peakHealthClient.createAppointment(
-      bookingProvider.id, 
-      bookingProvider.qualification[0].code.text, 
-      dateTimeStr, 
-      bookingReason
-    );
-    
-    setBookingSuccess(true);
-    setTimeout(() => {
-      setBookingSuccess(false);
-      setBookingProvider(null);
-      if (reloadDashboardData) reloadDashboardData();
-    }, 1800);
+    try {
+      await peakHealthClient.createAppointment(
+        bookingProvider.id, 
+        bookingProvider.qualification[0].code.text, 
+        dateTimeStr, 
+        bookingReason
+      );
+      
+      setBookingSuccess(true);
+      setTimeout(() => {
+        setBookingSuccess(false);
+        setBookingProvider(null);
+        if (reloadDashboardData) reloadDashboardData();
+      }, 1800);
+    } catch (err) {
+      console.error('Error booking appointment:', err);
+    }
   };
 
   return (

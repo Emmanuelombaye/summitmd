@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Activity, Plus, ShieldCheck, HeartPulse } from 'lucide-react';
 import { peakHealthClient } from '../api/peakHealthClient';
@@ -15,46 +15,31 @@ export default function HealthTracker({ user, reloadDashboardData }) {
   
   const [showLogModal, setShowLogModal] = useState(false);
 
-  const fetchHistory = () => {
-    const list = peakHealthClient.getObservations(activeTab);
-    // Format for Recharts
+  const fetchHistory = async () => {
+    const list = await peakHealthClient.getObservations(activeTab);
     const formatted = list.map(item => {
       const date = new Date(item.effectiveDateTime);
       const timeLabel = date.toLocaleDateString([], { month: 'short', day: 'numeric' });
-      
       if (item.code.text === 'Blood Pressure') {
-        return {
-          name: timeLabel,
-          systolic: item.component[0].valueQuantity.value,
-          diastolic: item.component[1].valueQuantity.value,
-          timestamp: item.effectiveDateTime
-        };
-      } else {
-        return {
-          name: timeLabel,
-          value: item.valueQuantity.value,
-          timestamp: item.effectiveDateTime
-        };
+        return { name: timeLabel, systolic: item.component[0].valueQuantity.value, diastolic: item.component[1].valueQuantity.value, timestamp: item.effectiveDateTime };
       }
+      return { name: timeLabel, value: item.valueQuantity.value, timestamp: item.effectiveDateTime };
     });
     setHistory(formatted);
   };
 
-  useEffect(() => {
-    fetchHistory();
-  }, [activeTab, user]);
+  useEffect(() => { fetchHistory(); }, [activeTab, user]);
 
-  const handleLogVital = (e) => {
+  const handleLogVital = async (e) => {
     e.preventDefault();
     if (activeTab === 'Blood Pressure') {
-      peakHealthClient.addObservation('Blood Pressure', bpSystolic, bpDiastolic);
+      await peakHealthClient.addObservation('Blood Pressure', bpSystolic, bpDiastolic);
     } else if (activeTab === 'Blood Glucose') {
-      peakHealthClient.addObservation('Blood Glucose', glucoseVal);
+      await peakHealthClient.addObservation('Blood Glucose', glucoseVal);
     } else {
-      peakHealthClient.addObservation('Weight', weightVal);
+      await peakHealthClient.addObservation('Weight', weightVal);
     }
-    
-    fetchHistory();
+    await fetchHistory();
     setShowLogModal(false);
     if (reloadDashboardData) reloadDashboardData();
   };

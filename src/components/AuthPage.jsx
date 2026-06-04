@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Activity, ShieldCheck, Heart } from 'lucide-react';
 import { peakHealthClient } from '../api/peakHealthClient';
 
@@ -19,35 +19,41 @@ export default function AuthPage({ mode, setPage, setUser }) {
   const [insurance, setInsurance] = useState('Blue Shield PPO - Gold Plan');
   const [mrn, setMrn] = useState('pat-901'); // FHIR Patient ID
 
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false);
+  const [authError, setAuthError] = useState('');
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isLogin) {
-      // Simulate auth using peakHealthClient getPatient
-      const patientData = peakHealthClient.getPatient();
-      setUser(patientData);
-      setPage('dashboard');
-    } else {
-      // Update patient state in Client store
-      const newPatient = {
-        id: mrn || `pat-${Date.now()}`,
-        name: [{ text: name }],
-        telecom: [
-          { system: "phone", value: phone, use: "mobile" },
-          { system: "email", value: email, use: "home" }
-        ],
-        gender,
-        birthDate,
-        extension: [
-          {
-            url: "http://summitmd.com/fhir/StructureDefinition/insurance-info",
-            valueCodeableConcept: { text: insurance }
-          }
-        ]
-      };
-      
-      peakHealthClient.updatePatient(newPatient);
-      setUser(newPatient);
-      setPage('dashboard');
+    setLoading(true);
+    setAuthError('');
+    try {
+      if (isLogin) {
+        const patientData = await peakHealthClient.login(email, password);
+        setUser(patientData);
+        setPage('dashboard');
+      } else {
+        const newPatient = {
+          id: mrn || `pat-${Date.now()}`,
+          name: [{ text: name }],
+          telecom: [
+            { system: 'phone', value: phone, use: 'mobile' },
+            { system: 'email', value: email, use: 'home' },
+          ],
+          gender,
+          birthDate,
+          extension: [{
+            url: 'http://summitmd.com/fhir/StructureDefinition/insurance-info',
+            valueCodeableConcept: { text: insurance },
+          }],
+        };
+        const registered = await peakHealthClient.register({ ...newPatient, email, password });
+        setUser(registered);
+        setPage('dashboard');
+      }
+    } catch (err) {
+      setAuthError(err.message || 'Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -143,8 +149,13 @@ export default function AuthPage({ mode, setPage, setUser }) {
               <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
             </div>
 
-            <button type="submit" className="btn btn-primary auth-submit-btn">
-              {isLogin ? "Sign In" : "Register and Connect"}
+            {authError && (
+              <div style={{ color: 'var(--color-danger)', fontSize: '0.85rem', marginBottom: '12px', padding: '10px 14px', background: 'rgba(239,68,68,0.08)', borderRadius: '8px', border: '1px solid rgba(239,68,68,0.2)' }}>
+                ⚠ {authError}
+              </div>
+            )}
+            <button type="submit" className="btn btn-primary auth-submit-btn" disabled={loading}>
+              {loading ? 'Connecting to PeakHealth...' : (isLogin ? 'Sign In' : 'Register and Connect')}
             </button>
           </form>
 

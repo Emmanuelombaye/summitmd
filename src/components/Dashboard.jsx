@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Activity, Calendar, HeartPulse, UserCheck, MessageSquare, Plus, Bell, ShieldCheck, 
   Settings, LogOut, ChevronRight, Stethoscope, FileHeart
@@ -8,41 +8,42 @@ import ProviderSearch from './ProviderSearch';
 import HealthTracker from './HealthTracker';
 
 export default function Dashboard({ user, setPage, activePortalTab, setActivePortalTab, handleLogout }) {
-  const [appointments, setAppointments] = useState([]);
-  const [vitals, setVitals] = useState({ bp: '--/--', bg: '--', weight: '--' });
-  const [isSyncing, setIsSyncing] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const loadData = () => {
-    // Get fresh appointments
-    const apts = peakHealthClient.getAppointments();
-    setAppointments(apts);
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const apts = await peakHealthClient.getAppointments();
+      setAppointments(apts);
 
-    // Get latest vitals
-    const bpList = peakHealthClient.getObservations("Blood Pressure");
-    const bgList = peakHealthClient.getObservations("Blood Glucose");
-    const weightList = peakHealthClient.getObservations("Weight");
+      const [bpList, bgList, weightList] = await Promise.all([
+        peakHealthClient.getObservations('Blood Pressure'),
+        peakHealthClient.getObservations('Blood Glucose'),
+        peakHealthClient.getObservations('Weight'),
+      ]);
 
-    const latestBp = bpList.length > 0 ? bpList[bpList.length - 1] : null;
-    const latestBg = bgList.length > 0 ? bgList[bgList.length - 1] : null;
-    const latestWeight = weightList.length > 0 ? weightList[weightList.length - 1] : null;
+      const latestBp     = bpList.length     > 0 ? bpList[bpList.length - 1]         : null;
+      const latestBg     = bgList.length     > 0 ? bgList[bgList.length - 1]         : null;
+      const latestWeight = weightList.length > 0 ? weightList[weightList.length - 1] : null;
 
-    setVitals({
-      bp: latestBp ? `${latestBp.component[0].valueQuantity.value}/${latestBp.component[1].valueQuantity.value}` : '--/--',
-      bg: latestBg ? latestBg.valueQuantity.value : '--',
-      weight: latestWeight ? latestWeight.valueQuantity.value : '--'
-    });
+      setVitals({
+        bp:     latestBp     ? `${latestBp.component[0].valueQuantity.value}/${latestBp.component[1].valueQuantity.value}` : '--/--',
+        bg:     latestBg     ? latestBg.valueQuantity.value     : '--',
+        weight: latestWeight ? latestWeight.valueQuantity.value : '--',
+      });
+    } catch (err) {
+      console.error('[Dashboard] loadData error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(() => {
-    loadData();
-  }, [user]);
+  useEffect(() => { loadData(); }, [user]);
 
-  const triggerPeakSync = () => {
+  const triggerPeakSync = async () => {
     setIsSyncing(true);
-    setTimeout(() => {
-      loadData();
-      setIsSyncing(false);
-    }, 1200);
+    await loadData();
+    setIsSyncing(false);
   };
 
   const getInsuranceName = () => {
@@ -257,7 +258,7 @@ export default function Dashboard({ user, setPage, activePortalTab, setActivePor
                       <p style={{ fontSize: '0.85rem', fontWeight: 600 }}>Practitioner: {apt.participant[0].actor.display}</p>
                     </div>
                     <div style={{ display: 'flex', gap: '12px' }}>
-                      <button className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '0.85rem' }} onClick={() => { peakHealthClient.cancelAppointment(apt.id); loadData(); }}>
+                      <button className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '0.85rem' }} onClick={async () => { await peakHealthClient.cancelAppointment(apt.id); loadData(); }}>
                         Cancel
                       </button>
                       <button className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.85rem' }} onClick={() => setPage('waiting-room')}>
