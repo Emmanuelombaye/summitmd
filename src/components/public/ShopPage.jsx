@@ -5,9 +5,9 @@ const PRODUCTS = [
   // Existing Nutrition Stacks
   {
     id: 'travel',
-    name: 'AG1 Travel Packs',
+    name: 'SummitMd Travel Packs',
     category: 'nutrition',
-    desc: 'Individual packets of the foundational AG1 formula. Ideal for traveling, office, or active habits on-the-go.',
+    desc: 'Individual packets of the foundational SummitMd formula. Ideal for traveling, office, or active habits on-the-go.',
     image: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=400',
     subPrice: 89,
     oneTimePrice: 109,
@@ -27,7 +27,7 @@ const PRODUCTS = [
     id: 'd3k2',
     name: 'AG Vitamin D3 + K2',
     category: 'nutrition',
-    desc: 'Highly absorbable liquid drops designed for daily bone density, circulatory, and immune support. Ideal supplement to AG1.',
+    desc: 'Highly absorbable liquid drops designed for daily bone density, circulatory, and immune support. Ideal supplement to SummitMd.',
     image: 'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?w=400',
     subPrice: 16,
     oneTimePrice: 20
@@ -45,7 +45,7 @@ const PRODUCTS = [
     id: 'daynight',
     name: 'Day & Night Bundle',
     category: 'nutrition',
-    desc: 'Complete daily foundations stack. Includes AG1 Next Gen Pouch + AGZ Nightly Sleep Support for 24-hour biological balance.',
+    desc: 'Complete daily foundations stack. Includes SummitMd Next Gen Pouch + AGZ Nightly Sleep Support for 24-hour biological balance.',
     image: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=400',
     subPrice: 109,
     oneTimePrice: 139,
@@ -244,7 +244,7 @@ const PRODUCTS = [
 ];
 
 export default function ShopPage({ setPage }) {
-  const [ag1PurchaseType, setAg1PurchaseType] = useState('single'); // 'single' | 'double' | 'onetime'
+  const [summitMdPurchaseType, setSummitMdPurchaseType] = useState('single'); // 'single' | 'double' | 'onetime'
   const [cartSuccess, setCartSuccess] = useState(null); // name of added product
   const [activeTab, setActiveTab] = useState('all'); // 'all' | 'wellness' | 'devices' | 'maternal' | 'subscriptions'
 
@@ -286,13 +286,13 @@ export default function ShopPage({ setPage }) {
       
       {/* Custom Styles Injection */}
       <style dangerouslySetInnerHTML={{__html: `
-        .ag1-shop-title-section {
+        .summitmd-shop-title-section {
           text-align: center;
           margin-bottom: 48px;
           padding: 0 24px;
         }
 
-        .ag1-shop-title {
+        .summitmd-shop-title {
           font-family: var(--font-display);
           font-size: 2.75rem;
           color: #0f2e2f;
@@ -301,7 +301,7 @@ export default function ShopPage({ setPage }) {
           margin-bottom: 12px;
         }
 
-        .ag1-shop-subtitle {
+        .summitmd-shop-subtitle {
           color: #64748b;
           font-size: 1.1rem;
           max-width: 600px;
@@ -309,7 +309,7 @@ export default function ShopPage({ setPage }) {
         }
 
         /* Flagship card */
-        .ag1-flagship-card {
+        .summitmd-flagship-card {
           background: #ffffff;
           border-radius: 24px;
           border: 1.5px solid rgba(15, 46, 47, 0.1);
@@ -321,12 +321,12 @@ export default function ShopPage({ setPage }) {
         }
 
         @media (max-width: 992px) {
-          .ag1-flagship-card {
+          .summitmd-flagship-card {
             grid-template-columns: 1fr;
           }
         }
 
-        .ag1-flagship-visual {
+        .summitmd-flagship-visual {
           background-color: #e6ecea;
           position: relative;
           display: flex;
@@ -336,7 +336,7 @@ export default function ShopPage({ setPage }) {
           min-height: 400px;
         }
 
-        .ag1-flagship-img {
+        .summitmd-flagship-img {
           width: 100%;
           max-width: 360px;
           height: auto;
@@ -344,7 +344,7 @@ export default function ShopPage({ setPage }) {
           filter: drop-shadow(0 15px 30px rgba(15, 46, 47, 0.15));
         }
 
-        .ag1-flagship-details {
+        .summitmd-flagship-details {
           padding: 48px;
           display: flex;
           flex-direction: column;
@@ -352,12 +352,12 @@ export default function ShopPage({ setPage }) {
         }
 
         @media (max-width: 576px) {
-          .ag1-flagship-details {
+          .summitmd-flagship-details {
             padding: 24px;
           }
         }
 
-        .ag1-tag-green {
+        .summitmd-tag-green {
           background-color: #0f2e2f;
           color: #ffffff;
           font-size: 0.7rem;
@@ -370,7 +370,7 @@ export default function ShopPage({ setPage }) {
           margin-bottom: 16px;
         }
 
-        .ag1-flagship-title {
+        .summitmd-flagship-title {
           font-family: var(--font-display);
           font-size: 2.25rem;
           color: #0f2e2f;
@@ -378,7 +378,7 @@ export default function ShopPage({ setPage }) {
           margin-bottom: 12px;
         }
 
-        .ag1-flagship-desc {
+        .summitmd-flagship-desc {
           color: #475569;
           font-size: 0.95rem;
           line-height: 1.6;
@@ -386,14 +386,14 @@ export default function ShopPage({ setPage }) {
         }
 
         /* Option selector */
-        .ag1-option-list {
+        .summitmd-option-list {
           display: flex;
           flex-direction: column;
           gap: 12px;
           margin-bottom: 24px;
         }
 
-        .ag1-option-row {
+        .summitmd-option-row {
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -404,24 +404,24 @@ export default function ShopPage({ setPage }) {
           transition: all 0.2s ease;
         }
 
-        .ag1-option-row:hover {
+        .summitmd-option-row:hover {
           border-color: #0f2e2f;
           background-color: rgba(15, 46, 47, 0.01);
         }
 
-        .ag1-option-row.active {
+        .summitmd-option-row.active {
           border-color: #0f2e2f;
           background-color: rgba(15, 46, 47, 0.03);
           box-shadow: 0 0 0 1px #0f2e2f;
         }
 
-        .ag1-option-left {
+        .summitmd-option-left {
           display: flex;
           align-items: center;
           gap: 12px;
         }
 
-        .ag1-radio-dot {
+        .summitmd-radio-dot {
           width: 20px;
           height: 20px;
           border-radius: 50%;
@@ -432,11 +432,11 @@ export default function ShopPage({ setPage }) {
           flex-shrink: 0;
         }
 
-        .ag1-option-row.active .ag1-radio-dot {
+        .summitmd-option-row.active .summitmd-radio-dot {
           border-color: #0f2e2f;
         }
 
-        .ag1-option-row.active .ag1-radio-dot::after {
+        .summitmd-option-row.active .summitmd-radio-dot::after {
           content: '';
           width: 10px;
           height: 10px;
@@ -444,30 +444,30 @@ export default function ShopPage({ setPage }) {
           background-color: #0f2e2f;
         }
 
-        .ag1-option-info h4 {
+        .summitmd-option-info h4 {
           margin: 0;
           font-size: 0.95rem;
           color: #0f2e2f;
           font-weight: 700;
         }
 
-        .ag1-option-info p {
+        .summitmd-option-info p {
           margin: 4px 0 0 0;
           font-size: 0.8rem;
           color: #64748b;
         }
 
-        .ag1-option-price {
+        .summitmd-option-price {
           text-align: right;
         }
 
-        .ag1-price-current {
+        .summitmd-price-current {
           font-size: 1.15rem;
           font-weight: 800;
           color: #0f2e2f;
         }
 
-        .ag1-price-strike {
+        .summitmd-price-strike {
           font-size: 0.85rem;
           color: #94a3b8;
           text-decoration: line-through;
@@ -475,7 +475,7 @@ export default function ShopPage({ setPage }) {
         }
 
         /* Tabs styling */
-        .ag1-tabs-container {
+        .summitmd-tabs-container {
           display: flex;
           justify-content: center;
           gap: 12px;
@@ -484,7 +484,7 @@ export default function ShopPage({ setPage }) {
           padding: 0 16px;
         }
 
-        .ag1-tab-btn {
+        .summitmd-tab-btn {
           background-color: #ffffff;
           border: 1.5px solid rgba(15, 46, 47, 0.1);
           color: #0f2e2f;
@@ -497,12 +497,12 @@ export default function ShopPage({ setPage }) {
           outline: none;
         }
 
-        .ag1-tab-btn:hover {
+        .summitmd-tab-btn:hover {
           border-color: #0f2e2f;
           background-color: rgba(15, 46, 47, 0.02);
         }
 
-        .ag1-tab-btn.active {
+        .summitmd-tab-btn.active {
           background-color: #0f2e2f;
           color: #ffffff;
           border-color: #0f2e2f;
@@ -510,14 +510,14 @@ export default function ShopPage({ setPage }) {
         }
 
         /* Products Grid */
-        .ag1-products-grid {
+        .summitmd-products-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
           gap: 30px;
           margin-bottom: 80px;
         }
 
-        .ag1-product-card {
+        .summitmd-product-card {
           background: #ffffff;
           border-radius: 20px;
           border: 1.5px solid rgba(15, 46, 47, 0.08);
@@ -529,13 +529,13 @@ export default function ShopPage({ setPage }) {
           position: relative;
         }
 
-        .ag1-product-card:hover {
+        .summitmd-product-card:hover {
           transform: translateY(-4px);
           box-shadow: 0 10px 25px -5px rgba(15, 46, 47, 0.08);
           border-color: rgba(15, 46, 47, 0.15);
         }
 
-        .ag1-product-visual {
+        .summitmd-product-visual {
           background-color: #f1f5f4;
           height: 220px;
           display: flex;
@@ -545,7 +545,7 @@ export default function ShopPage({ setPage }) {
           position: relative;
         }
 
-        .ag1-product-img {
+        .summitmd-product-img {
           height: 100%;
           width: 100%;
           object-fit: cover;
@@ -553,21 +553,21 @@ export default function ShopPage({ setPage }) {
           filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.08));
         }
 
-        .ag1-product-body {
+        .summitmd-product-body {
           padding: 24px;
           display: flex;
           flex-direction: column;
           flex-grow: 1;
         }
 
-        .ag1-product-title {
+        .summitmd-product-title {
           font-size: 1.25rem;
           color: #0f2e2f;
           font-weight: 800;
           margin-bottom: 8px;
         }
 
-        .ag1-product-desc {
+        .summitmd-product-desc {
           color: #64748b;
           font-size: 0.85rem;
           line-height: 1.5;
@@ -576,7 +576,7 @@ export default function ShopPage({ setPage }) {
         }
 
         /* Features */
-        .ag1-features-strip {
+        .summitmd-features-strip {
           background-color: #0f2e2f;
           color: #ffffff;
           padding: 60px 0;
@@ -584,7 +584,7 @@ export default function ShopPage({ setPage }) {
           margin-bottom: 80px;
         }
 
-        .ag1-features-grid {
+        .summitmd-features-grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           gap: 40px;
@@ -592,13 +592,13 @@ export default function ShopPage({ setPage }) {
         }
 
         @media (max-width: 768px) {
-          .ag1-features-grid {
+          .summitmd-features-grid {
             grid-template-columns: 1fr;
             gap: 32px;
           }
         }
 
-        .ag1-feature-item {
+        .summitmd-feature-item {
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -606,21 +606,21 @@ export default function ShopPage({ setPage }) {
           padding: 0 24px;
         }
 
-        .ag1-feature-icon {
+        .summitmd-feature-icon {
           color: #00d2c4;
           background-color: rgba(0, 210, 196, 0.1);
           padding: 12px;
           border-radius: 50%;
         }
 
-        .ag1-feature-item h3 {
+        .summitmd-feature-item h3 {
           font-size: 1.15rem;
           font-weight: 700;
           color: #ffffff;
           margin: 0;
         }
 
-        .ag1-feature-item p {
+        .summitmd-feature-item p {
           font-size: 0.85rem;
           color: #cbd5e1;
           margin: 0;
@@ -662,89 +662,89 @@ export default function ShopPage({ setPage }) {
       )}
 
       {/* Title Section */}
-      <div className="ag1-shop-title-section container">
+      <div className="summitmd-shop-title-section container">
         <span style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '2px', color: '#00d2c4', fontWeight: 800, backgroundColor: '#0f2e2f', padding: '4px 10px', borderRadius: '4px', display: 'inline-block', marginBottom: '16px' }}>
           OFFICIAL HEALTH & WELLNESS STORE
         </span>
-        <h1 className="ag1-shop-title">Set up your foundational health.</h1>
-        <p className="ag1-shop-subtitle">Discover nutrition, clinical monitoring devices, maternal diagnostics, and home care subscription bundles tailored to your daily habits.</p>
+        <h1 className="summitmd-shop-title">Set up your foundational health.</h1>
+        <p className="summitmd-shop-subtitle">Discover nutrition, clinical monitoring devices, maternal diagnostics, and home care subscription bundles tailored to your daily habits.</p>
       </div>
 
       <div className="container">
         
-        {/* Flagship AG1 Pouch Section */}
-        <div className="ag1-flagship-card">
-          <div className="ag1-flagship-visual">
+        {/* Flagship SummitMd Pouch Section */}
+        <div className="summitmd-flagship-card">
+          <div className="summitmd-flagship-visual">
             <span style={{ position: 'absolute', top: '24px', left: '24px', backgroundColor: '#ffffff', border: '1px solid #0f2e2f', color: '#0f2e2f', fontSize: '0.65rem', fontWeight: 800, padding: '4px 8px', borderRadius: '4px' }}>
               NSF CERTIFIED FOR SPORT
             </span>
             <img 
               src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400" 
-              alt="AG1 Daily Foundational Nutrition" 
-              className="ag1-flagship-img"
+              alt="SummitMd Daily Foundational Nutrition" 
+              className="summitmd-flagship-img"
             />
           </div>
 
-          <div className="ag1-flagship-details">
+          <div className="summitmd-flagship-details">
             <div>
-              <span className="ag1-tag-green">Best Seller</span>
-              <h2 className="ag1-flagship-title">AG1 Foundational Powder</h2>
-              <p className="ag1-flagship-desc">
+              <span className="summitmd-tag-green">Best Seller</span>
+              <h2 className="summitmd-flagship-title">SummitMd Foundational Powder</h2>
+              <p className="summitmd-flagship-desc">
                 Your daily health foundation. 75 vitamins, minerals, and whole-food sourced ingredients in one daily scoop. Supports gut health, immunity, energy, and mental focus.
               </p>
 
-              <div className="ag1-option-list">
+              <div className="summitmd-option-list">
                 
                 {/* Double Subscription */}
                 <div 
-                  className={`ag1-option-row${ag1PurchaseType === 'double' ? ' active' : ''}`}
-                  onClick={() => setAg1PurchaseType('double')}
+                  className={`summitmd-option-row${summitMdPurchaseType === 'double' ? ' active' : ''}`}
+                  onClick={() => setSummitMdPurchaseType('double')}
                 >
-                  <div className="ag1-option-left">
-                    <div className="ag1-radio-dot"></div>
-                    <div className="ag1-option-info">
+                  <div className="summitmd-option-left">
+                    <div className="summitmd-radio-dot"></div>
+                    <div className="summitmd-option-info">
                       <h4>Double Subscription</h4>
                       <p>60 Servings (2 Pouches) • Save $30 • Free Welcome Kit</p>
                     </div>
                   </div>
-                  <div className="ag1-option-price">
-                    <span className="ag1-price-strike">$198</span>
-                    <span className="ag1-price-current">$149/mo</span>
+                  <div className="summitmd-option-price">
+                    <span className="summitmd-price-strike">$198</span>
+                    <span className="summitmd-price-current">$149/mo</span>
                   </div>
                 </div>
 
                 {/* Single Subscription */}
                 <div 
-                  className={`ag1-option-row${ag1PurchaseType === 'single' ? ' active' : ''}`}
-                  onClick={() => setAg1PurchaseType('single')}
+                  className={`summitmd-option-row${summitMdPurchaseType === 'single' ? ' active' : ''}`}
+                  onClick={() => setSummitMdPurchaseType('single')}
                 >
-                  <div className="ag1-option-left">
-                    <div className="ag1-radio-dot"></div>
-                    <div className="ag1-option-info">
+                  <div className="summitmd-option-left">
+                    <div className="summitmd-radio-dot"></div>
+                    <div className="summitmd-option-info">
                       <h4>Single Subscription</h4>
                       <p>30 Servings (1 Pouch) • Save $20 • Free Welcome Kit</p>
                     </div>
                   </div>
-                  <div className="ag1-option-price">
-                    <span className="ag1-price-strike">$99</span>
-                    <span className="ag1-price-current">$79/mo</span>
+                  <div className="summitmd-option-price">
+                    <span className="summitmd-price-strike">$99</span>
+                    <span className="summitmd-price-current">$79/mo</span>
                   </div>
                 </div>
 
                 {/* One Time Purchase */}
                 <div 
-                  className={`ag1-option-row${ag1PurchaseType === 'onetime' ? ' active' : ''}`}
-                  onClick={() => setAg1PurchaseType('onetime')}
+                  className={`summitmd-option-row${summitMdPurchaseType === 'onetime' ? ' active' : ''}`}
+                  onClick={() => setSummitMdPurchaseType('onetime')}
                 >
-                  <div className="ag1-option-left">
-                    <div className="ag1-radio-dot"></div>
-                    <div className="ag1-option-info">
+                  <div className="summitmd-option-left">
+                    <div className="summitmd-radio-dot"></div>
+                    <div className="summitmd-option-info">
                       <h4>One-Time Purchase</h4>
                       <p>30 Servings (1 Pouch) • Standard pack</p>
                     </div>
                   </div>
-                  <div className="ag1-option-price">
-                    <span className="ag1-price-current">$99</span>
+                  <div className="summitmd-option-price">
+                    <span className="summitmd-price-current">$99</span>
                   </div>
                 </div>
 
@@ -753,7 +753,7 @@ export default function ShopPage({ setPage }) {
 
             <div>
               {/* Welcome Kit highlights */}
-              {ag1PurchaseType !== 'onetime' && (
+              {summitMdPurchaseType !== 'onetime' && (
                 <div style={{ backgroundColor: '#f1f5f9', borderRadius: '12px', padding: '16px', marginBottom: '24px', fontSize: '0.8rem', color: '#475569' }}>
                   <strong>🎁 FREE Welcome Kit Included:</strong> Premium Stainless Steel Canister, Shaker, Metal Scoop, and 5 Free Travel Packs ($45 value).
                 </div>
@@ -762,34 +762,34 @@ export default function ShopPage({ setPage }) {
               <button 
                 className="btn" 
                 style={{ width: '100%', backgroundColor: '#0f2e2f', color: '#ffffff', padding: '16px', borderRadius: '12px', fontWeight: '800', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-                onClick={() => handleAddToCart(ag1PurchaseType === 'double' ? 'AG1 Double Subscription' : ag1PurchaseType === 'single' ? 'AG1 Single Subscription' : 'AG1 One-Time Pouch')}
+                onClick={() => handleAddToCart(summitMdPurchaseType === 'double' ? 'SummitMd Double Subscription' : summitMdPurchaseType === 'single' ? 'SummitMd Single Subscription' : 'SummitMd One-Time Pouch')}
               >
                 <ShoppingCart size={18} />
-                {ag1PurchaseType !== 'onetime' ? 'Subscribe Now' : 'Add to Cart'}
+                {summitMdPurchaseType !== 'onetime' ? 'Subscribe Now' : 'Add to Cart'}
               </button>
             </div>
           </div>
         </div>
 
         {/* Tab Filter buttons */}
-        <div className="ag1-tabs-container">
-          <button className={`ag1-tab-btn${activeTab === 'all' ? ' active' : ''}`} onClick={() => setActiveTab('all')}>All Products</button>
-          <button className={`ag1-tab-btn${activeTab === 'wellness' ? ' active' : ''}`} onClick={() => setActiveTab('wellness')}>Nutrition & Wellness</button>
-          <button className={`ag1-tab-btn${activeTab === 'devices' ? ' active' : ''}`} onClick={() => setActiveTab('devices')}>Devices & Diagnostics</button>
-          <button className={`ag1-tab-btn${activeTab === 'maternal' ? ' active' : ''}`} onClick={() => setActiveTab('maternal')}>Maternal & Child</button>
-          <button className={`ag1-tab-btn${activeTab === 'subscriptions' ? ' active' : ''}`} onClick={() => setActiveTab('subscriptions')}>Care Subscriptions</button>
+        <div className="summitmd-tabs-container">
+          <button className={`summitmd-tab-btn${activeTab === 'all' ? ' active' : ''}`} onClick={() => setActiveTab('all')}>All Products</button>
+          <button className={`summitmd-tab-btn${activeTab === 'wellness' ? ' active' : ''}`} onClick={() => setActiveTab('wellness')}>Nutrition & Wellness</button>
+          <button className={`summitmd-tab-btn${activeTab === 'devices' ? ' active' : ''}`} onClick={() => setActiveTab('devices')}>Devices & Diagnostics</button>
+          <button className={`summitmd-tab-btn${activeTab === 'maternal' ? ' active' : ''}`} onClick={() => setActiveTab('maternal')}>Maternal & Child</button>
+          <button className={`summitmd-tab-btn${activeTab === 'subscriptions' ? ' active' : ''}`} onClick={() => setActiveTab('subscriptions')}>Care Subscriptions</button>
         </div>
 
         {/* Products Grid */}
-        <div className="ag1-products-grid">
+        <div className="summitmd-products-grid">
           {filteredProducts.map(p => {
             const hasSub = p.subPrice !== null && p.subPrice !== undefined;
             const hasOneTime = p.oneTimePrice !== null && p.oneTimePrice !== undefined;
 
             return (
-              <div className="ag1-product-card" key={p.id}>
+              <div className="summitmd-product-card" key={p.id}>
                 {/* Visual / Image */}
-                <div className="ag1-product-visual">
+                <div className="summitmd-product-visual">
                   {p.tag && (
                     <span style={{ 
                       position: 'absolute', 
@@ -826,13 +826,13 @@ export default function ShopPage({ setPage }) {
                       {p.badge}
                     </span>
                   )}
-                  <img src={p.image} alt={p.name} className="ag1-product-img" />
+                  <img src={p.image} alt={p.name} className="summitmd-product-img" />
                 </div>
 
                 {/* Body Details */}
-                <div className="ag1-product-body">
-                  <h3 className="ag1-product-title">{p.name}</h3>
-                  <p className="ag1-product-desc">{p.desc}</p>
+                <div className="summitmd-product-body">
+                  <h3 className="summitmd-product-title">{p.name}</h3>
+                  <p className="summitmd-product-desc">{p.desc}</p>
                   
                   {/* Selectors or static pricing details */}
                   {hasSub && hasOneTime && (
@@ -922,27 +922,27 @@ export default function ShopPage({ setPage }) {
         </div>
 
         {/* Subscription Benefits section */}
-        <div className="ag1-features-strip">
-          <div className="ag1-features-grid">
+        <div className="summitmd-features-strip">
+          <div className="summitmd-features-grid">
             
-            <div className="ag1-feature-item">
-              <div className="ag1-feature-icon">
+            <div className="summitmd-feature-item">
+              <div className="summitmd-feature-icon">
                 <Calendar size={24} />
               </div>
               <h3>Flexible Health Delivery</h3>
               <p>Easily edit, pause, delay, or cancel your supplements and prescriptions at any time via your dashboard.</p>
             </div>
 
-            <div className="ag1-feature-item">
-              <div className="ag1-feature-icon">
+            <div className="summitmd-feature-item">
+              <div className="summitmd-feature-icon">
                 <ShieldCheck size={24} />
               </div>
               <h3>FDA Quality Standards</h3>
               <p>All clinical diagnostic cuffs, meters, scale devices, and supplement stacks meet rigid safety regulations.</p>
             </div>
 
-            <div className="ag1-feature-item">
-              <div className="ag1-feature-icon">
+            <div className="summitmd-feature-item">
+              <div className="summitmd-feature-icon">
                 <Heart size={24} />
               </div>
               <h3>Complete Family Support</h3>

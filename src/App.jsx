@@ -178,7 +178,7 @@ export default function App() {
         {page === 'legal' && <LegalPage setPage={setPageResolved} />}
         {page === 'providers-signup' && <ProviderSignupPage setPage={setPageResolved} />}
 
-        {/* Shop Page (drinkag1.com replication) */}
+        {/* Shop Page (drinksummitmd.com replication) */}
         {page === 'shop' && <ShopPage setPage={setPageResolved} />}
 
       </div>

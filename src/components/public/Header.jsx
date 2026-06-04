@@ -7,7 +7,7 @@ const NAV_SHOPS = {
       category: 'Nutrition & Wellness',
       items: [
         {
-          label: 'AG1 Foundational Powder',
+          label: 'SummitMd Foundational Powder',
           desc: '75 vitamins, minerals, and whole-food sourced ingredients in one scoop.',
           href: 'shop',
           tag: 'Flagship'
@@ -70,7 +70,7 @@ const NAV_SHOPS = {
   promo: {
     bg: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&auto=format&fit=crop&q=80',
     title: 'Foundational Nutrition, Simplified',
-    cta: 'Shop the AG1 Collection',
+    cta: 'Shop the SummitMd Collection',
     href: 'shop'
   }
 };
@@ -322,7 +322,7 @@ export default function TDHHeader({ setPage }) {
               <svg className="tdh-chevron" viewBox="0 0 16 16" width="14" height="14"><path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill="currentColor"/></svg>
             </button>
             {activeMenu === 'shops' && (
-              <div className="tdh-mega-menu tdh-mega-menu--4col ag1-shop-dropdown">
+              <div className="tdh-mega-menu tdh-mega-menu--4col summitmd-shop-dropdown">
                 <div className="tdh-mega-inner">
                   {NAV_SHOPS.products.map((cat, i) => (
                     <div className="tdh-mega-col tdh-mega-col--dynamic" key={i}>
