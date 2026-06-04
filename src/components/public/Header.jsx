@@ -76,7 +76,7 @@ const NAV_SHOPS = {
 };
 
 const NAV_INDIVIDUALS = {
-  label: 'Individuals',
+  label: 'Patients',
   ways: [
     {
       label: '24/7 Care',
@@ -160,7 +160,7 @@ const NAV_INDIVIDUALS = {
 };
 
 const NAV_ORGANIZATIONS = {
-  label: 'Organizations',
+  label: 'Practices',
   partners: [
     {
       label: 'Employers',
@@ -403,7 +403,7 @@ export default function TDHHeader({ setPage }) {
               onMouseLeave={() => setActiveMenu(null)}
             >
               <button className="tdh-nav-btn" aria-expanded={activeMenu === 'individuals'}>
-                Individuals
+                Patients
                 <svg className="tdh-chevron" viewBox="0 0 16 16" width="14" height="14"><path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill="currentColor"/></svg>
               </button>
               {activeMenu === 'individuals' && (
@@ -517,7 +517,7 @@ export default function TDHHeader({ setPage }) {
               onMouseLeave={() => setActiveMenu(null)}
             >
               <button className="tdh-nav-btn" aria-expanded={activeMenu === 'organizations'}>
-                Organizations
+                Practices
                 <svg className="tdh-chevron" viewBox="0 0 16 16" width="14" height="14"><path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill="currentColor"/></svg>
               </button>
               {activeMenu === 'organizations' && (
@@ -749,8 +749,8 @@ export default function TDHHeader({ setPage }) {
             ))}
           </MobileNavSection>
 
-          {/* Individuals */}
-          <MobileNavSection title="Individuals">
+          {/* Patients */}
+          <MobileNavSection title="Patients">
             <div className="mob-nav-group">
               <div className="mob-nav-group-label">Ways we help</div>
               {NAV_INDIVIDUALS.ways.map((w, i) => (
@@ -769,8 +769,8 @@ export default function TDHHeader({ setPage }) {
             </div>
           </MobileNavSection>
 
-          {/* Organizations */}
-          <MobileNavSection title="Organizations">
+          {/* Practices */}
+          <MobileNavSection title="Practices">
             {NAV_ORGANIZATIONS.partners.map((partner, i) => (
               <div key={i} className="mob-nav-group">
                 <div className="mob-nav-group-label">{partner.label}</div>

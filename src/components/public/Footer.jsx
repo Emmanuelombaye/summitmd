@@ -19,7 +19,7 @@ export default function TDHFooter({ setPage }) {
   const footerCols = [
     {
       id: 'individuals',
-      heading: 'Individuals',
+      heading: 'Patients',
       links: [
         { label: '24/7 Care', href: 'urgent-care' },
         { label: 'Mental Health', href: 'mental-health' },
@@ -32,7 +32,7 @@ export default function TDHFooter({ setPage }) {
     },
     {
       id: 'organizations',
-      heading: 'Organizations',
+      heading: 'Practices',
       links: [
         { label: 'Our Approach', href: 'how-it-works' },
         { label: 'Employers', href: 'employers' },
