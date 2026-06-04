@@ -665,14 +665,17 @@ export default function TDHHeader({ setPage }) {
           </div>
         </nav>
 
-        {/* Header Actions — exact from live site */}
+        {/* Header Actions */}
         <div className="tdh-header-actions">
-          <a href="#" className="tdh-signin-btn" onClick={e => { e.preventDefault(); goto('login'); }}>
+          <button type="button" className="tdh-signin-btn" onClick={() => goto('login')}>
             Sign in
-          </a>
-          <a href="#" className="tdh-getcare-btn" onClick={e => { e.preventDefault(); goto('register'); }}>
-            Register now
-          </a>
+          </button>
+          <button type="button" className="tdh-register-btn" onClick={() => goto('register')}>
+            Register
+          </button>
+          <button type="button" className="tdh-getcare-btn" onClick={() => goto('register')}>
+            Get care now
+          </button>
         </div>
       </div>
     </header>

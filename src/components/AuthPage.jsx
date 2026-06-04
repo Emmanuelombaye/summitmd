@@ -1,9 +1,13 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Activity, ShieldCheck, Heart } from 'lucide-react';
 import { peakHealthClient } from '../api/peakHealthClient';
 
 export default function AuthPage({ mode, setPage, setUser }) {
   const [isLogin, setIsLogin] = useState(mode === 'login');
+
+  useEffect(() => {
+    setIsLogin(mode === 'login');
+  }, [mode]);
   
   // Registration States
   const [name, setName] = useState('Alex Harrison');
@@ -71,25 +75,13 @@ export default function AuthPage({ mode, setPage, setUser }) {
       <div className="auth-main">
         {/* ← Back to site escape link */}
         <div style={{ padding: '20px 0 0 0', maxWidth: '440px', margin: '0 auto', width: '100%' }}>
-          <a
-            href="#"
-            onClick={e => { e.preventDefault(); setPage('landing'); }}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              fontSize: '0.85rem',
-              fontWeight: '600',
-              color: 'var(--color-accent)',
-              textDecoration: 'none',
-              opacity: 0.85,
-              transition: 'opacity 0.2s',
-            }}
-            onMouseEnter={e => e.currentTarget.style.opacity = 1}
-            onMouseLeave={e => e.currentTarget.style.opacity = 0.85}
+          <button
+            type="button"
+            className="auth-back-link"
+            onClick={() => setPage('landing')}
           >
             ← Back to SummitMD
-          </a>
+          </button>
         </div>
 
         <div className="auth-card">
@@ -160,9 +152,13 @@ export default function AuthPage({ mode, setPage, setUser }) {
             <span style={{ color: 'var(--color-text-muted)' }}>
               {isLogin ? "Don't have an account?" : "Already registered?"}
             </span>{' '}
-            <a href="#" style={{ color: 'var(--color-accent)', fontWeight: 600 }} onClick={(e) => { e.preventDefault(); setIsLogin(!isLogin); }}>
+            <button
+              type="button"
+              className="auth-toggle-link"
+              onClick={() => setPage(isLogin ? 'register' : 'login')}
+            >
               {isLogin ? "Register here" : "Sign in here"}
-            </a>
+            </button>
           </div>
         </div>
       </div>

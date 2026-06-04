@@ -47,7 +47,23 @@ export default function App() {
 
   useEffect(() => {
     peakHealthClient.init();
+    const hashPage = window.location.hash.replace(/^#\/?/, '');
+    if (hashPage === 'login' || hashPage === 'register') {
+      setPage(hashPage);
+    }
   }, []);
+
+  useEffect(() => {
+    if (page === 'login' || page === 'register') {
+      if (window.location.hash !== `#${page}`) {
+        window.location.hash = page;
+      }
+    } else if (!window.location.hash) {
+      return;
+    } else if (page === 'landing') {
+      window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  }, [page]);
 
   const handleLogout = () => {
     setUser(null);
@@ -132,6 +148,7 @@ export default function App() {
   ];
 
   const isPublicPage = publicPages.includes(page);
+  const isAuthPage = page === 'login' || page === 'register';
 
   return (
     <div className="app-container" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -140,7 +157,7 @@ export default function App() {
       {isPublicPage && <TDHHeader setPage={setPageResolved} />}
 
       {/* Main Page Layout Wrapper */}
-      <div style={{ flex: '1 0 auto' }}>
+      <main className="app-main" style={{ flex: '1 0 auto' }}>
         
         {/* ── PUBLIC PAGES ROUTER ─────────────────────────── */}
         {page === 'landing' && <LandingPage setPage={setPageResolved} />}
@@ -181,19 +198,19 @@ export default function App() {
         {/* Shop Page (drinksummitmd.com replication) */}
         {page === 'shop' && <ShopPage setPage={setPageResolved} />}
 
-      </div>
+        {/* ── AUTH (login / register) ─────────────────────── */}
+        {isAuthPage && (
+          <AuthPage
+            mode={page}
+            setPage={setPageResolved}
+            setUser={setUser}
+          />
+        )}
+
+      </main>
 
       {/* Global Marketing Footer */}
       {isPublicPage && <TDHFooter setPage={setPageResolved} />}
-
-      {/* ── AUTH (Non-marketing, simplified layouts) ────── */}
-      {(page === 'login' || page === 'register') && (
-        <AuthPage
-          mode={page}
-          setPage={setPageResolved}
-          setUser={setUser}
-        />
-      )}
 
       {/* ── SECURE PORTAL (Dashboard & Virtual Visit) ───── */}
       {page === 'dashboard' && user && (

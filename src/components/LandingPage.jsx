@@ -67,12 +67,12 @@ export default function LandingPage({ setPage }) {
               <p>SummitMD connects patients and care providers for medical care, mental health, chronic condition management and more.</p>
             </div>
             <div className="tdh-hero-ctas">
-              <a href="#" className="tdh-btn tdh-btn-primary-inverted" onClick={e => { e.preventDefault(); setPage('register'); }}>
+              <button type="button" className="tdh-btn tdh-btn-primary-inverted" onClick={() => setPage('register')}>
                 Get care now
-              </a>
-              <a href="#" className="tdh-btn tdh-btn-secondary-inverted" onClick={e => { e.preventDefault(); setPage('no-insurance'); }}>
+              </button>
+              <button type="button" className="tdh-btn tdh-btn-secondary-inverted" onClick={() => setPage('no-insurance')}>
                 No insurance needed
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -190,12 +190,12 @@ export default function LandingPage({ setPage }) {
           <h2>Start your journey to better health today</h2>
           <p>Join millions of people who trust SummitMD for their virtual care needs.</p>
           <div className="tdh-cta-banner-btns">
-            <a href="#" className="tdh-btn tdh-btn-primary-inverted" onClick={e => { e.preventDefault(); setPage('register'); }}>
+            <button type="button" className="tdh-btn tdh-btn-primary-inverted" onClick={() => setPage('register')}>
               Get care now
-            </a>
-            <a href="#" className="tdh-btn tdh-btn-outline-inverted" onClick={e => { e.preventDefault(); setPage('contact'); }}>
+            </button>
+            <button type="button" className="tdh-btn tdh-btn-outline-inverted" onClick={() => setPage('contact')}>
               Contact us
-            </a>
+            </button>
           </div>
         </div>
       </section>
