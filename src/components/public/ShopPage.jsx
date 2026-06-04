@@ -8,7 +8,7 @@ const PRODUCTS = [
     name: 'Compounded Semaglutide Program',
     category: 'subscriptions',
     desc: 'Medical weight loss program including asynchronous doctor evaluations, prescriptions, and monthly home delivery of compounded Semaglutide.',
-    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400',
+    image: '/semaglutide_pen.png',
     subPrice: 146,
     oneTimePrice: null,
     tag: 'Clinical Weight Loss',
@@ -19,7 +19,7 @@ const PRODUCTS = [
     name: 'Compounded Tirzepatide Program',
     category: 'subscriptions',
     desc: 'Advanced dual-agonist medical weight loss program. Includes ongoing telehealth medical supervision, customized dosage titration, and compounded Tirzepatide delivery.',
-    image: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=400',
+    image: '/tirzepatide_pen.png',
     subPrice: 192,
     oneTimePrice: null,
     tag: 'Clinical Weight Loss',
@@ -144,7 +144,7 @@ const PRODUCTS = [
     name: 'Portable Mesh Nebulizer',
     category: 'devices',
     desc: 'Ultra-quiet pocket inhaler for targeted asthma & respiratory support. Features battery or USB power with medical-grade mesh.',
-    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400',
+    image: '/nebulizer.png',
     subPrice: null,
     oneTimePrice: 35
   },
@@ -192,7 +192,7 @@ const PRODUCTS = [
     name: 'Baby Infrared Thermometer',
     category: 'maternal',
     desc: 'Non-contact forehead digital thermometer. Features color-coded fever alerts, silent night mode, and baby-safe soft scan sensors.',
-    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400',
+    image: '/baby_thermometer.png',
     subPrice: null,
     oneTimePrice: 24,
     badge: 'Infrared'
@@ -211,7 +211,7 @@ const PRODUCTS = [
     name: 'Maternal Prenatal Vitamins',
     category: 'maternal',
     desc: 'High-purity prenatal supplements featuring active L-methylfolate, plant-based DHA, and chelated iron. Gentle on empty stomachs.',
-    image: 'https://images.unsplash.com/photo-1611079830514-f72f43c0c13e?w=400',
+    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400',
     subPrice: 27,
     oneTimePrice: 34,
     tag: 'Doctor Recommended'
@@ -232,7 +232,7 @@ const PRODUCTS = [
     name: 'Buffered Vitamin C (1000mg)',
     category: 'wellness',
     desc: 'Premium vitamin C with bioflavonoids to support antibody production, iron absorption, and capillary tissue elasticity.',
-    image: 'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?w=400',
+    image: 'https://images.unsplash.com/photo-1607619056574-7b8d304e3b24?w=400',
     subPrice: 12,
     oneTimePrice: 15
   },
@@ -241,7 +241,7 @@ const PRODUCTS = [
     name: 'Chelated Zinc (50mg)',
     category: 'wellness',
     desc: 'High-bioavailability chelated zinc gluconate. Key micro-mineral supporting cellular repair, skin health, and natural defenses.',
-    image: 'https://images.unsplash.com/photo-1616679911721-eff6eec18fcd?w=400',
+    image: 'https://images.unsplash.com/photo-1584017912466-b3794e5d4b17?w=400',
     subPrice: 9,
     oneTimePrice: 12
   },
@@ -250,7 +250,7 @@ const PRODUCTS = [
     name: 'Hydration Electrolyte Packs',
     category: 'wellness',
     desc: '30 single-serve rapid hydration powder packets. Restores key sodium, potassium, and magnesium salts during recovery.',
-    image: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=400',
+    image: 'https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=400',
     subPrice: 20,
     oneTimePrice: 25,
     tag: 'Daily Drink'

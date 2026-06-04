@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Activity, Calendar, HeartPulse, UserCheck, MessageSquare, Plus, Bell, ShieldCheck, 
-  Settings, LogOut, ChevronRight, Stethoscope, FileHeart
+  Settings, LogOut, ChevronRight, Stethoscope, FileHeart, Check
 } from 'lucide-react';
 import { peakHealthClient } from '../api/peakHealthClient';
 import ProviderSearch from './ProviderSearch';
@@ -9,6 +9,15 @@ import HealthTracker from './HealthTracker';
 
 export default function Dashboard({ user, setPage, activePortalTab, setActivePortalTab, handleLogout }) {
   const [loading, setLoading] = useState(true);
+  const [appointments, setAppointments] = useState([]);
+  const [vitals, setVitals] = useState({ bp: '--/--', bg: '--', weight: '--' });
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [orderStatus, setOrderStatus] = useState({
+    programName: 'Compounded Semaglutide Weight Loss Program',
+    currentStep: 4, // 0: Submitted, 1: Account, 2: ID, 3: Intake, 4: Provider Review, 5: Processing, 6: Shipment
+    requiresVideoCall: true,
+    doctorName: 'Dr. Sarah Mercer, MD',
+  });
 
   const loadData = async () => {
     setLoading(true);
@@ -139,7 +148,174 @@ export default function Dashboard({ user, setPage, activePortalTab, setActivePor
 
         {/* Dynamic Tab Body rendering */}
         {activePortalTab === 'overview' && (
-          <div className="dashboard-grid">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            
+            {/* Active Order Status Tracker (Step 9 of Client Patient Flow) */}
+            <div className="order-tracker-card glass-card animate-fade-in" style={{ backgroundColor: 'var(--color-bg-white)', border: '1px solid var(--color-border)', borderRadius: '12px', padding: '24px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+                <div>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-accent)' }}>Active Care Program</span>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: '4px 0 0 0', color: 'var(--color-primary)' }}>{orderStatus.programName}</h3>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Status:</span>
+                  <span className={`status-badge ${orderStatus.requiresVideoCall ? 'status-badge-warning' : 'status-badge-active'}`} style={{
+                    padding: '4px 10px',
+                    borderRadius: '100px',
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    backgroundColor: orderStatus.requiresVideoCall ? '#ffedd5' : '#dcfce7',
+                    color: orderStatus.requiresVideoCall ? '#c2410c' : '#15803d'
+                  }}>
+                    {orderStatus.requiresVideoCall ? 'Action Required: Doctor Video Consultation' : 'Provider Review'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Progress Steps Timeline */}
+              <div className="order-progress-timeline" style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', margin: '24px 0 32px 0', padding: '0 10px' }}>
+                {/* Background connector line */}
+                <div style={{ position: 'absolute', top: '14px', left: '20px', right: '20px', height: '4px', backgroundColor: '#e2e8f0', zIndex: 1 }}></div>
+                {/* Active fill line */}
+                <div style={{ 
+                  position: 'absolute', 
+                  top: '14px', 
+                  left: '20px', 
+                  width: `${(orderStatus.currentStep / 6) * 100}%`, 
+                  height: '4px', 
+                  backgroundColor: orderStatus.requiresVideoCall ? '#ea580c' : 'var(--color-accent)', 
+                  zIndex: 2,
+                  transition: 'width 0.4s ease'
+                }}></div>
+
+                {[
+                  { label: 'Order Submitted', short: 'Submitted' },
+                  { label: 'Account Verified', short: 'Account' },
+                  { label: 'ID Verified', short: 'ID Verified' },
+                  { label: 'Intake Completed', short: 'Intake' },
+                  { label: 'Provider Review', short: 'Provider' },
+                  { label: 'Prescription Processing', short: 'Processing' },
+                  { label: 'Shipment', short: 'Shipment' }
+                ].map((s, idx) => {
+                  const isCompleted = idx < orderStatus.currentStep;
+                  const isActive = idx === orderStatus.currentStep;
+                  const isWarning = isActive && orderStatus.requiresVideoCall;
+                  
+                  let dotColor = '#e2e8f0';
+                  let textColor = 'var(--color-text-muted)';
+                  let borderStyle = '1px solid #cbd5e1';
+
+                  if (isCompleted) {
+                    dotColor = 'var(--color-accent)';
+                    textColor = 'var(--color-primary)';
+                  } else if (isActive) {
+                    dotColor = isWarning ? '#ea580c' : 'var(--color-accent)';
+                    textColor = isWarning ? '#c2410c' : 'var(--color-accent)';
+                    borderStyle = isWarning ? '2px solid #ea580c' : '2px solid var(--color-accent)';
+                  }
+
+                  return (
+                    <div key={idx} className="timeline-step" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', zIndex: 3, flex: 1 }}>
+                      <div style={{
+                        width: '30px',
+                        height: '30px',
+                        borderRadius: '50%',
+                        backgroundColor: isCompleted ? 'var(--color-accent)' : '#fff',
+                        border: isCompleted ? 'none' : borderStyle,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontWeight: 600,
+                        fontSize: '0.8rem',
+                        color: isCompleted ? '#fff' : textColor,
+                        boxShadow: isActive ? '0 0 10px rgba(0,210,196,0.3)' : 'none'
+                      }}>
+                        {isCompleted ? <Check size={14} strokeWidth={3} /> : idx + 1}
+                      </div>
+                      <span className="timeline-label-desktop" style={{ fontSize: '0.7rem', fontWeight: isActive ? 600 : 500, marginTop: '8px', color: textColor, textAlign: 'center' }}>
+                        {s.short}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Forced Video Consultation Callout banner */}
+              {orderStatus.requiresVideoCall && (
+                <div className="forced-video-alert animate-fade-in" style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  backgroundColor: '#fff7ed',
+                  border: '1px solid #ffedd5',
+                  borderRadius: '8px',
+                  padding: '16px 20px',
+                  marginTop: '16px',
+                  flexWrap: 'wrap',
+                  gap: '16px'
+                }}>
+                  <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                    <div style={{
+                      backgroundColor: '#ffedd5',
+                      color: '#ea580c',
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <HeartPulse size={20} />
+                    </div>
+                    <div>
+                      <h4 style={{ margin: 0, color: '#c2410c', fontSize: '0.95rem', fontWeight: 700 }}>Physician Video Call Required</h4>
+                      <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: '#9a3412', lineHeight: '1.4' }}>
+                        Your reviewing clinician, <strong>{orderStatus.doctorName}</strong>, has requested a brief live video consultation to confirm eligibility for your compounded Semaglutide prescription.
+                      </p>
+                    </div>
+                  </div>
+                  <button 
+                    className="btn btn-warning" 
+                    style={{
+                      padding: '10px 20px',
+                      fontSize: '0.85rem',
+                      fontWeight: 600,
+                      backgroundColor: '#ea580c',
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      boxShadow: '0 4px 12px rgba(234, 88, 12, 0.2)'
+                    }}
+                    onClick={() => setPage('waiting-room')}
+                  >
+                    Enter Live Video Consultation
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Interactive Toggle for Verification/Demo purposes */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', fontSize: '0.75rem', gap: '8px', color: 'var(--color-text-muted)', marginTop: '-12px', paddingRight: '4px' }}>
+              <span>Demo Controls:</span>
+              <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <input 
+                  type="checkbox" 
+                  checked={orderStatus.requiresVideoCall}
+                  onChange={(e) => setOrderStatus(prev => ({ 
+                    ...prev, 
+                    requiresVideoCall: e.target.checked,
+                    currentStep: e.target.checked ? 4 : 5 // Toggle between Provider Review and Prescription Processing
+                  }))} 
+                />
+                Simulate Doctor Forced Video Call Required
+              </label>
+            </div>
+
+            <div className="dashboard-grid">
             <div>
               {/* Urgent Care Banner */}
               <div className="welcome-card animate-fade-in">
@@ -232,6 +408,7 @@ export default function Dashboard({ user, setPage, activePortalTab, setActivePor
                 )}
               </div>
             </div>
+          </div>
           </div>
         )}
 
