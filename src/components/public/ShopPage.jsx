@@ -1,7 +1,30 @@
-﻿import React, { useState } from 'react';
-import { Check, Info, ShoppingCart, Calendar, Heart, ShieldCheck, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Check, Info, ShoppingCart, Calendar, Heart, ShieldCheck, ArrowRight, ArrowLeft, Loader2, Star, Plus } from 'lucide-react';
 
 const PRODUCTS = [
+  // Flagship Clinical Programs
+  {
+    id: 'weightloss_semaglutide',
+    name: 'Compounded Semaglutide Program',
+    category: 'subscriptions',
+    desc: 'Medical weight loss program including asynchronous doctor evaluations, prescriptions, and monthly home delivery of compounded Semaglutide.',
+    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400',
+    subPrice: 146,
+    oneTimePrice: null,
+    tag: 'Clinical Weight Loss',
+    badge: 'Doctor Approved'
+  },
+  {
+    id: 'weightloss_tirzepatide',
+    name: 'Compounded Tirzepatide Program',
+    category: 'subscriptions',
+    desc: 'Advanced dual-agonist medical weight loss program. Includes ongoing telehealth medical supervision, customized dosage titration, and compounded Tirzepatide delivery.',
+    image: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=400',
+    subPrice: 192,
+    oneTimePrice: null,
+    tag: 'Clinical Weight Loss',
+    badge: 'Doctor Approved'
+  },
   // Existing Nutrition Stacks
   {
     id: 'travel',
@@ -52,7 +75,7 @@ const PRODUCTS = [
     tag: 'Best Value'
   },
 
-  // 1. Fastest Revenue Opportunities / Care Subscriptions
+  // Care Subscriptions
   {
     id: 'telePlan',
     name: 'Teleconsultation Subscription',
@@ -95,7 +118,7 @@ const PRODUCTS = [
     tag: 'Corporate B2B'
   },
 
-  // 2. Devices & Diagnostics
+  // Devices & Diagnostics
   {
     id: 'bpMonitor',
     name: 'Blood Pressure Monitor',
@@ -144,7 +167,7 @@ const PRODUCTS = [
     oneTimePrice: 22
   },
 
-  // 3. Maternal & Child Health
+  // Maternal & Child Health
   {
     id: 'pregnancyKit',
     name: 'Pregnancy Test Kits (5-Pack)',
@@ -194,7 +217,7 @@ const PRODUCTS = [
     tag: 'Doctor Recommended'
   },
 
-  // 4. Wellness Products
+  // Wellness Products
   {
     id: 'multivitamins',
     name: 'Broad-Spectrum Multivitamins',
@@ -243,12 +266,256 @@ const PRODUCTS = [
   }
 ];
 
-export default function ShopPage({ setPage }) {
-  const [summitMdPurchaseType, setSummitMdPurchaseType] = useState('single'); // 'single' | 'double' | 'onetime'
-  const [cartSuccess, setCartSuccess] = useState(null); // name of added product
-  const [activeTab, setActiveTab] = useState('all'); // 'all' | 'wellness' | 'devices' | 'maternal' | 'subscriptions'
+const QUESTIONS = {
+  weightloss: [
+    {
+      id: 'goals',
+      type: 'multiselect',
+      question: 'What are your primary weight loss goals?',
+      sub: 'Select all that apply to help us customize your treatment plan.',
+      options: [
+        { label: 'Lose 10-25 lbs', value: 'lose_moderate' },
+        { label: 'Lose 25+ lbs', value: 'lose_significant' },
+        { label: 'Improve metabolic health & daily energy', value: 'improve_metabolic' },
+        { label: 'Manage stress/emotional eating habits', value: 'manage_eating' }
+      ]
+    },
+    {
+      id: 'vitals',
+      type: 'vitals',
+      question: 'Provide your basic physical parameters',
+      sub: 'We use height and weight to calculate your BMI for clinical approval guidelines.'
+    },
+    {
+      id: 'contraindications',
+      type: 'singleselect',
+      question: 'Thyroid Cancer Risk Screening',
+      sub: 'Do you or an immediate family member have a history of Medullary Thyroid Carcinoma (MTC) or MEN 2?',
+      options: [
+        { label: 'Yes, there is history of MTC or MEN2', value: 'yes', warning: 'Contraindicated: Due to safety guidelines, GLP-1 medications are not approved for individuals with an MTC or MEN2 history. We will suggest alternate treatments.' },
+        { label: 'No history', value: 'no' }
+      ]
+    },
+    {
+      id: 'pregnancy',
+      type: 'singleselect',
+      question: 'Pregnancy & Gestational Health',
+      sub: 'Are you currently pregnant, breastfeeding, or planning to become pregnant in the next 12 months?',
+      options: [
+        { label: 'Yes', value: 'yes', warning: 'Contraindicated: GLP-1 weight loss programs are contraindicated during pregnancy and lactation.' },
+        { label: 'No', value: 'no' }
+      ]
+    },
+    {
+      id: 'history',
+      type: 'multiselect',
+      question: 'Do you have a history of any of the following conditions?',
+      sub: 'Select all that apply. Honest screening keeps you safe.',
+      options: [
+        { label: 'Pancreatitis or gallbladder stones', value: 'pancreatitis', warning: 'Precaution: Active pancreatic or gallbladder history requires extra medical review.' },
+        { label: 'Kidney disease or reduced renal function', value: 'kidney' },
+        { label: 'Severe gastrointestinal issues (e.g. gastroparesis)', value: 'gi' },
+        { label: 'None of the above', value: 'none' }
+      ]
+    },
+    {
+      id: 'other_meds',
+      type: 'singleselect',
+      question: 'Are you currently taking other GLP-1s or insulin?',
+      sub: 'Includes prescription brands like Wegovy, Ozempic, Mounjaro, or Zepbound.',
+      options: [
+        { label: 'Yes, taking other GLP-1 or insulin therapy', value: 'yes', warning: 'Precaution: Combining multiple GLP-1 therapies is generally not recommended.' },
+        { label: 'No, not taking any', value: 'no' }
+      ]
+    }
+  ],
+  nutrition: [
+    {
+      id: 'focus',
+      type: 'multiselect',
+      question: 'What is your primary health and wellness focus?',
+      sub: 'Select all that apply to guide your recommendation.',
+      options: [
+        { label: 'Support immune system strength', value: 'immunity' },
+        { label: 'Boost daily focus & sustain physical energy', value: 'energy' },
+        { label: 'Improve gut microbiome & digestive transit', value: 'gut' },
+        { label: 'Sustain active bone density & circulation', value: 'bone_fitness' }
+      ]
+    },
+    {
+      id: 'energy_crashes',
+      type: 'singleselect',
+      question: 'Do you experience afternoon energy crashes or brain fog?',
+      sub: 'Select the option that best describes your typical daily energy cycle.',
+      options: [
+        { label: 'Yes, almost every day', value: 'daily' },
+        { label: 'Sometimes, a few times a week', value: 'weekly' },
+        { label: 'Rarely or never', value: 'rarely' }
+      ]
+    },
+    {
+      id: 'diet_quality',
+      type: 'singleselect',
+      question: 'How would you rate your typical daily intake of nutrient-dense foods?',
+      sub: 'Helps us determine baseline mineral and vitamin gaps.',
+      options: [
+        { label: 'High (Eat 5+ servings of vegetables/greens daily)', value: 'high' },
+        { label: 'Moderate (Balanced meals but skip fresh greens often)', value: 'medium' },
+        { label: 'Low (Rarely consume fresh greens or whole-food stacks)', value: 'low' }
+      ]
+    }
+  ],
+  sleep: [
+    {
+      id: 'sleep_challenge',
+      type: 'multiselect',
+      question: 'What is your primary sleep obstacle?',
+      sub: 'Select all that apply to help choose your adaptogen stack.',
+      options: [
+        { label: 'Difficulty falling asleep (mind racing)', value: 'falling' },
+        { label: 'Waking up frequently in the middle of the night', value: 'waking' },
+        { label: 'Waking up feeling tired and unrefreshed', value: 'unrefreshed' },
+        { label: 'High daytime stress blocking melatonin cycles', value: 'stress' }
+      ]
+    },
+    {
+      id: 'stress_level',
+      type: 'singleselect',
+      question: 'How often do you feel tense, anxious, or highly stressed?',
+      sub: 'Mental tension affects physical recovery and sleep cycles.',
+      options: [
+        { label: 'Almost daily', value: 'daily' },
+        { label: 'A few times a week', value: 'weekly' },
+        { label: 'Rarely', value: 'rarely' }
+      ]
+    },
+    {
+      id: 'muscle_soreness',
+      type: 'singleselect',
+      question: 'Do you experience slow recovery or muscle soreness after activity?',
+      sub: 'Deep recovery happens during specific sleep phases.',
+      options: [
+        { label: 'Yes, regularly', value: 'regularly' },
+        { label: 'Occasionally', value: 'occasionally' },
+        { label: 'No, I recover quickly', value: 'rarely' }
+      ]
+    }
+  ],
+  devices: [
+    {
+      id: 'monitor_metric',
+      type: 'singleselect',
+      question: 'Which health vital do you need to monitor at home?',
+      sub: 'Select the primary vital device you require.',
+      options: [
+        { label: 'Blood Pressure & Heart Rate', value: 'bp' },
+        { label: 'Blood Glucose & Sugar Levels', value: 'glucose' },
+        { label: 'Breathing, Asthma, or Nebulizing', value: 'respiratory' },
+        { label: 'Medication timings & reminders', value: 'pills' }
+      ]
+    },
+    {
+      id: 'clinical_diagnosis',
+      type: 'singleselect',
+      question: 'Has a doctor diagnosed you with high blood pressure or diabetes?',
+      sub: 'Helps us tailor alerts and report generation.',
+      options: [
+        { label: 'Yes, high blood pressure / hypertension', value: 'hypertension' },
+        { label: 'Yes, Type 1 or Type 2 Diabetes', value: 'diabetes' },
+        { label: 'Yes, both conditions', value: 'both' },
+        { label: 'No diagnostic history, tracking for general wellness', value: 'none' }
+      ]
+    },
+    {
+      id: 'sync_pref',
+      type: 'singleselect',
+      question: 'Do you want wireless sync with your telehealth profile?',
+      sub: 'Our smart devices automatically load reading logs to your doctor dashboard.',
+      options: [
+        { label: 'Yes, I want automatic Bluetooth syncing to my portal', value: 'sync' },
+        { label: 'Manual entry is fine', value: 'manual' }
+      ]
+    }
+  ],
+  maternal: [
+    {
+      id: 'maternal_stage',
+      type: 'singleselect',
+      question: 'What family planning or infant stage describes you best?',
+      sub: 'Select your current focus.',
+      options: [
+        { label: 'Actively trying to conceive', value: 'trying' },
+        { label: 'Currently pregnant (maternal support)', value: 'pregnant' },
+        { label: 'Caring for a newborn / infant health metrics', value: 'baby' },
+        { label: 'General cycle tracking', value: 'tracking' }
+      ]
+    },
+    {
+      id: 'maternal_needs',
+      type: 'multiselect',
+      question: 'What tools or support do you require?',
+      sub: 'Select all that apply.',
+      options: [
+        { label: 'Pregnancy & Ovulation screening tests', value: 'kits' },
+        { label: 'Maternal nutrition (Prenatals with Methylfolate)', value: 'vitamins' },
+        { label: 'Baby health indicators (Scales, non-contact thermometers)', value: 'child_devices' }
+      ]
+    }
+  ],
+  subscriptions: [
+    {
+      id: 'telehealth_use',
+      type: 'singleselect',
+      question: 'How often do you require doctor consults or therapy support?',
+      sub: 'Helps us select the best subscription plan.',
+      options: [
+        { label: 'Frequently (monthly checkups, therapy, or nutrition guidance)', value: 'high' },
+        { label: 'Occasionally (3-4 times a year for basic queries)', value: 'medium' },
+        { label: 'Only during emergencies or unexpected sickness', value: 'low' }
+      ]
+    },
+    {
+      id: 'delivery_needs',
+      type: 'singleselect',
+      question: 'Would you benefit from monthly home delivery of prescriptions?',
+      sub: 'Saves pharmacy trips and coordinates care.',
+      options: [
+        { label: 'Yes, automatic refills delivered home', value: 'yes' },
+        { label: 'No, I prefer local pharmacy pickup', value: 'no' }
+      ]
+    },
+    {
+      id: 'lab_interest',
+      type: 'singleselect',
+      question: 'Do you need comprehensive diagnostic blood lab tests?',
+      sub: 'Includes home blood draws or local Quest/Labcorp bookings.',
+      options: [
+        { label: 'Yes, I need active baseline labs', value: 'yes' },
+        { label: 'No, I have recent lab results', value: 'no' }
+      ]
+    }
+  ]
+};
 
-  // Custom states for other products (initialized dynamically)
+export default function ShopPage({ setPage }) {
+  const [summitMdPurchaseType, setSummitMdPurchaseType] = useState('single'); 
+  const [cartSuccess, setCartSuccess] = useState(null); 
+  const [activeTab, setActiveTab] = useState('all'); 
+
+  // Intake State
+  const [quizOpen, setQuizOpen] = useState(false);
+  const [quizBranch, setQuizBranch] = useState(null); // 'weightloss' | 'nutrition' | 'sleep' | 'devices' | 'maternal' | 'subscriptions'
+  const [quizStep, setQuizStep] = useState(0);
+  const [quizAnswers, setQuizAnswers] = useState({});
+  const [quizHeightFeet, setQuizHeightFeet] = useState('5');
+  const [quizHeightInches, setQuizHeightInches] = useState('8');
+  const [quizWeight, setQuizWeight] = useState('170');
+  const [quizDOB, setQuizDOB] = useState('1990-01-01');
+  const [quizLoading, setQuizLoading] = useState(false);
+  const [quizLoadingIndex, setQuizLoadingIndex] = useState(0);
+  const [quizRecommendation, setQuizRecommendation] = useState(null);
+  const [selectedPlanDuration, setSelectedPlanDuration] = useState('3month'); // '1month' | '3month' | '6month'
+
   const [purchaseTypes, setPurchaseTypes] = useState(() => {
     const initial = {};
     PRODUCTS.forEach(p => {
@@ -274,12 +541,224 @@ export default function ShopPage({ setPage }) {
     }, 3000);
   };
 
-  // Filtering products based on selected tab
+  // Launch Quiz from specific product click
+  const handleProductSelection = (product) => {
+    // Determine the branch based on product category & keywords
+    let branch = 'nutrition';
+    if (product.id.includes('weightloss')) {
+      branch = 'weightloss';
+    } else if (product.category === 'maternal') {
+      // split maternal between baby devices and prenatal nutrition
+      if (product.id === 'babyThermometer' || product.id === 'infantScale') {
+        branch = 'maternal';
+      } else {
+        branch = 'maternal';
+      }
+    } else if (product.category === 'devices') {
+      branch = 'devices';
+    } else if (product.category === 'subscriptions') {
+      branch = 'subscriptions';
+    } else if (product.id === 'sleep') {
+      branch = 'sleep';
+    }
+
+    setQuizBranch(branch);
+    setQuizStep(0);
+    setQuizAnswers({});
+    setQuizRecommendation(null);
+    setQuizOpen(true);
+  };
+
+  // Quiz Navigation
+  const currentBranchQuestions = QUESTIONS[quizBranch] || [];
+  const totalSteps = currentBranchQuestions.length + 2; // +1 for Contact details, +1 for results
+
+  const handleQuizNext = () => {
+    // Validate Vitals if on vitals step
+    if (quizBranch === 'weightloss' && currentBranchQuestions[quizStep]?.type === 'vitals') {
+      if (!quizHeightFeet || !quizHeightInches || !quizWeight || !quizDOB) {
+        alert('Please fill out all vitals values.');
+        return;
+      }
+    }
+
+    if (quizStep < currentBranchQuestions.length - 1) {
+      setQuizStep(quizStep + 1);
+    } else if (quizStep === currentBranchQuestions.length - 1) {
+      // Go to Contact step
+      setQuizStep(currentBranchQuestions.length);
+    } else if (quizStep === currentBranchQuestions.length) {
+      // Triggers evaluation loader
+      startClinicalEvaluation();
+    }
+  };
+
+  const handleQuizBack = () => {
+    if (quizStep > 0) {
+      setQuizStep(quizStep - 1);
+    } else {
+      setQuizOpen(false);
+      setQuizBranch(null);
+    }
+  };
+
+  const startClinicalEvaluation = () => {
+    setQuizLoading(true);
+    setQuizLoadingIndex(0);
+    const intervals = [
+      'Checking clinical safety profile & contraindications...',
+      'Calculating Body Mass Index (BMI) & metabolic rate...',
+      'Assigning medical recommendations and plan choices...'
+    ];
+
+    const timer = setInterval(() => {
+      setQuizLoadingIndex(prev => {
+        if (prev < intervals.length - 1) {
+          return prev + 1;
+        } else {
+          clearInterval(timer);
+          evaluateRecommendations();
+          return prev;
+        }
+      });
+    }, 1200);
+  };
+
+  const evaluateRecommendations = () => {
+    setQuizLoading(false);
+    
+    // Choose appropriate product recommendation based on branch answers
+    let recProduct = PRODUCTS.find(p => p.id === 'travel'); // Default fallback
+
+    if (quizBranch === 'weightloss') {
+      const isContraindicated = quizAnswers.contraindications === 'yes' || quizAnswers.pregnancy === 'yes';
+      if (isContraindicated) {
+        // Red flag alternative recommendation
+        recProduct = {
+          id: 'wellness_alternative',
+          name: 'SummitMD Wellness & Teleconsultation Plan',
+          category: 'subscriptions',
+          desc: 'A comprehensive medical program focusing on nutrition, general health consultation, and wellness coaching. Recommended because GLP-1 weight medications were contraindicated for you.',
+          image: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=400',
+          subPrice: 49,
+          oneTimePrice: null,
+          tag: 'Clinical Wellness',
+          badge: 'Alternative Recommendation',
+          isAlternative: true
+        };
+      } else {
+        const heightInches = (parseInt(quizHeightFeet) * 12) + parseInt(quizHeightInches);
+        const weightLbs = parseInt(quizWeight);
+        const bmi = ((weightLbs * 703) / (heightInches * heightInches)).toFixed(1);
+        
+        // Choose between Tirzepatide & Semaglutide based on goals and BMI
+        if (bmi >= 30 || quizAnswers.goals?.includes('lose_significant')) {
+          recProduct = PRODUCTS.find(p => p.id === 'weightloss_tirzepatide');
+        } else {
+          recProduct = PRODUCTS.find(p => p.id === 'weightloss_semaglutide');
+        }
+        recProduct = { ...recProduct, calculatedBmi: bmi };
+      }
+    } else if (quizBranch === 'nutrition') {
+      if (quizAnswers.focus?.includes('immunity')) {
+        recProduct = PRODUCTS.find(p => p.id === 'vitaminc') || PRODUCTS.find(p => p.id === 'travel');
+      } else if (quizAnswers.energy_crashes === 'daily') {
+        recProduct = PRODUCTS.find(p => p.id === 'daynight') || PRODUCTS.find(p => p.id === 'travel');
+      } else {
+        recProduct = PRODUCTS.find(p => p.id === 'travel');
+      }
+    } else if (quizBranch === 'sleep') {
+      if (quizAnswers.sleep_challenge?.includes('stress') || quizAnswers.stress_level === 'daily') {
+        recProduct = PRODUCTS.find(p => p.id === 'daynight');
+      } else {
+        recProduct = PRODUCTS.find(p => p.id === 'sleep');
+      }
+    } else if (quizBranch === 'devices') {
+      if (quizAnswers.monitor_metric === 'bp') {
+        recProduct = PRODUCTS.find(p => p.id === 'bpMonitor');
+      } else if (quizAnswers.monitor_metric === 'glucose') {
+        recProduct = PRODUCTS.find(p => p.id === 'glucoseMeter');
+      } else if (quizAnswers.monitor_metric === 'respiratory') {
+        recProduct = PRODUCTS.find(p => p.id === 'nebulizer');
+      } else {
+        recProduct = PRODUCTS.find(p => p.id === 'organizer');
+      }
+    } else if (quizBranch === 'maternal') {
+      if (quizAnswers.maternal_stage === 'pregnant' || quizAnswers.maternal_needs?.includes('vitamins')) {
+        recProduct = PRODUCTS.find(p => p.id === 'prenatalVitamins');
+      } else if (quizAnswers.maternal_stage === 'baby' || quizAnswers.maternal_needs?.includes('child_devices')) {
+        recProduct = PRODUCTS.find(p => p.id === 'babyThermometer');
+      } else {
+        recProduct = PRODUCTS.find(p => p.id === 'ovulationKit');
+      }
+    } else if (quizBranch === 'subscriptions') {
+      if (quizAnswers.telehealth_use === 'high') {
+        recProduct = PRODUCTS.find(p => p.id === 'telePlan');
+      } else if (quizAnswers.lab_interest === 'yes') {
+        recProduct = PRODUCTS.find(p => p.id === 'labBooking');
+      } else {
+        recProduct = PRODUCTS.find(p => p.id === 'medDelivery');
+      }
+    }
+
+    setQuizRecommendation(recProduct);
+    setQuizStep(totalSteps - 1); // Move to recommendation screen
+  };
+
+  const handleSelectOption = (questionId, value, isMulti = false) => {
+    if (isMulti) {
+      const currentList = quizAnswers[questionId] || [];
+      if (currentList.includes(value)) {
+        setQuizAnswers(prev => ({
+          ...prev,
+          [questionId]: currentList.filter(item => item !== value)
+        }));
+      } else {
+        setQuizAnswers(prev => ({
+          ...prev,
+          [questionId]: [...currentList, value]
+        }));
+      }
+    } else {
+      setQuizAnswers(prev => ({
+        ...prev,
+        [questionId]: value
+      }));
+    }
+  };
+
+  const handleCheckoutRecommendation = () => {
+    if (!quizRecommendation) return;
+
+    let finalPrice = quizRecommendation.subPrice || quizRecommendation.oneTimePrice;
+    let durationText = '';
+
+    if (quizRecommendation.subPrice) {
+      if (selectedPlanDuration === '3month') {
+        finalPrice = Math.round(quizRecommendation.subPrice * 0.85); // 15% off
+        durationText = ' (3-Month Subscription)';
+      } else if (selectedPlanDuration === '6month') {
+        finalPrice = Math.round(quizRecommendation.subPrice * 0.70); // 30% off
+        durationText = ' (6-Month Subscription)';
+      } else {
+        durationText = ' (Monthly Subscription)';
+      }
+    }
+
+    handleAddToCart(`${quizRecommendation.name}${durationText} - $${finalPrice}`);
+    setQuizOpen(false);
+  };
+
+  // Filter products based on selected tab
   const filteredProducts = PRODUCTS.filter(p => {
     if (activeTab === 'all') return true;
     if (activeTab === 'wellness') return p.category === 'wellness' || p.category === 'nutrition';
     return p.category === activeTab;
   });
+
+  const getProgressPercentage = () => {
+    return Math.min(Math.round((quizStep / (totalSteps - 1)) * 100), 100);
+  };
 
   return (
     <div className="landing-layout animate-fade-in" style={{ paddingTop: '100px', minHeight: '100vh', backgroundColor: '#f9fafb' }}>
@@ -648,6 +1127,250 @@ export default function ShopPage({ setPage }) {
           from { transform: translateY(100px); opacity: 0; }
           to { transform: translateY(0); opacity: 1; }
         }
+
+        /* TryYucca-Style Quiz Layout */
+        .yucca-quiz-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background-color: #F9F5F0;
+          color: #0f2e2f;
+          z-index: 10000;
+          display: flex;
+          flex-direction: column;
+          overflow-y: auto;
+          font-family: 'Inter', sans-serif;
+        }
+
+        .yucca-quiz-nav {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 20px 24px;
+          background-color: #F9F5F0;
+          position: sticky;
+          top: 0;
+          z-index: 10;
+        }
+
+        .yucca-brand {
+          font-family: var(--font-display);
+          font-weight: 800;
+          font-size: 1.35rem;
+          letter-spacing: -0.5px;
+          color: #0f2e2f;
+        }
+
+        .yucca-progress-container {
+          width: 100%;
+          height: 5px;
+          background-color: #e2e8f0;
+          position: sticky;
+          top: 70px;
+          z-index: 10;
+        }
+
+        .yucca-progress-bar {
+          height: 100%;
+          background-color: #00d2c4;
+          transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .yucca-quiz-content {
+          flex-grow: 1;
+          max-width: 640px;
+          width: 100%;
+          margin: 60px auto 140px auto;
+          padding: 0 24px;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .yucca-question-title {
+          font-family: var(--font-display);
+          font-size: 1.85rem;
+          font-weight: 800;
+          color: #0f2e2f;
+          line-height: 1.25;
+          letter-spacing: -0.5px;
+          margin-bottom: 8px;
+        }
+
+        .yucca-question-sub {
+          font-size: 1rem;
+          color: #64748b;
+          margin-bottom: 32px;
+          line-height: 1.5;
+        }
+
+        .yucca-option-card {
+          background-color: #ffffff;
+          border: 1.5px solid #e2e8f0;
+          border-radius: 16px;
+          padding: 20px;
+          margin-bottom: 12px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .yucca-option-card:hover {
+          border-color: #0f2e2f;
+          transform: translateY(-1px);
+        }
+
+        .yucca-option-card.active {
+          border-color: #0f2e2f;
+          box-shadow: 0 0 0 4px rgba(0, 210, 196, 0.12), 0 4px 10px rgba(15, 46, 47, 0.04);
+          background-color: #ffffff;
+        }
+
+        .yucca-radio-circle {
+          width: 22px;
+          height: 22px;
+          border-radius: 50%;
+          border: 2px solid #cbd5e1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+
+        .yucca-option-card.active .yucca-radio-circle {
+          border-color: #0f2e2f;
+        }
+
+        .yucca-option-card.active .yucca-radio-circle::after {
+          content: '';
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background-color: #0f2e2f;
+        }
+
+        .yucca-checkbox-square {
+          width: 22px;
+          height: 22px;
+          border-radius: 6px;
+          border: 2px solid #cbd5e1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+
+        .yucca-option-card.active .yucca-checkbox-square {
+          border-color: #0f2e2f;
+          background-color: #0f2e2f;
+          color: #ffffff;
+        }
+
+        .yucca-option-label {
+          font-weight: 700;
+          font-size: 0.95rem;
+          color: #0f2e2f;
+        }
+
+        .yucca-warning-card {
+          background-color: #fef2f2;
+          border: 1px solid #fee2e2;
+          color: #991b1b;
+          padding: 16px;
+          border-radius: 12px;
+          margin-top: 16px;
+          font-size: 0.85rem;
+          line-height: 1.4;
+          display: flex;
+          gap: 10px;
+          align-items: flex-start;
+        }
+
+        .yucca-quiz-footer {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          background-color: rgba(249, 245, 240, 0.95);
+          backdrop-filter: blur(8px);
+          padding: 24px;
+          border-top: 1px solid rgba(15, 46, 47, 0.05);
+          display: flex;
+          justify-content: center;
+          z-index: 10;
+        }
+
+        .yucca-footer-inner {
+          max-width: 640px;
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .yucca-back-btn {
+          border: none;
+          background: transparent;
+          color: #64748b;
+          font-weight: 800;
+          font-size: 0.95rem;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .yucca-next-btn {
+          background-color: #0f2e2f;
+          color: #ffffff;
+          border: none;
+          border-radius: 30px;
+          padding: 14px 36px;
+          font-weight: 800;
+          font-size: 0.95rem;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .yucca-next-btn:hover {
+          background-color: #07191a;
+          transform: translateY(-1px);
+        }
+
+        /* Form elements */
+        .yucca-input {
+          width: 100%;
+          padding: 16px;
+          border: 1.5px solid #cbd5e1;
+          border-radius: 12px;
+          font-size: 1.05rem;
+          color: #0f2e2f;
+          font-weight: 700;
+          background-color: #ffffff;
+          outline: none;
+          transition: border-color 0.2s;
+          margin-bottom: 20px;
+        }
+
+        .yucca-input:focus {
+          border-color: #0f2e2f;
+        }
+
+        .yucca-input-label {
+          font-size: 0.8rem;
+          font-weight: 800;
+          color: #0f2e2f;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          margin-bottom: 6px;
+          display: block;
+        }
       `}} />
 
       {/* Success Toast */}
@@ -661,13 +1384,28 @@ export default function ShopPage({ setPage }) {
         </div>
       )}
 
-      {/* Title Section */}
+      {/* Main Shop Header */}
       <div className="summitmd-shop-title-section container">
         <span style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '2px', color: '#00d2c4', fontWeight: 800, backgroundColor: '#0f2e2f', padding: '4px 10px', borderRadius: '4px', display: 'inline-block', marginBottom: '16px' }}>
           OFFICIAL HEALTH & WELLNESS STORE
         </span>
         <h1 className="summitmd-shop-title">Set up your foundational health.</h1>
-        <p className="summitmd-shop-subtitle">Discover nutrition, clinical monitoring devices, maternal diagnostics, and home care subscription bundles tailored to your daily habits.</p>
+        <p className="summitmd-shop-subtitle">Discover dynamic medical screening programs, diagnostic monitors, and personalized supplement stacks tailored to your metabolic blueprint.</p>
+        
+        {/* TryYucca explore treatment assessment CTA */}
+        <button 
+          onClick={() => {
+            setQuizBranch('weightloss'); // default entry branch
+            setQuizStep(0);
+            setQuizAnswers({});
+            setQuizRecommendation(null);
+            setQuizOpen(true);
+          }}
+          className="btn animate-pulse" 
+          style={{ marginTop: '24px', backgroundColor: '#00d2c4', color: '#0f2e2f', padding: '12px 24px', borderRadius: '30px', fontWeight: '800', border: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
+        >
+          Explore Treatments & Intake Assessment <ArrowRight size={16} />
+        </button>
       </div>
 
       <div className="container">
@@ -687,10 +1425,10 @@ export default function ShopPage({ setPage }) {
 
           <div className="summitmd-flagship-details">
             <div>
-              <span className="summitmd-tag-green">Best Seller</span>
+              <span className="summitmd-tag-green">Flagship Supplement</span>
               <h2 className="summitmd-flagship-title">SummitMd Foundational Powder</h2>
               <p className="summitmd-flagship-desc">
-                Your daily health foundation. 75 vitamins, minerals, and whole-food sourced ingredients in one daily scoop. Supports gut health, immunity, energy, and mental focus.
+                Your daily nutrient insurance stack. 75 highly bioavailable vitamins, organic minerals, and whole-food adaptogens in one single scoop. Optimizes cell longevity, focus, and digestion.
               </p>
 
               <div className="summitmd-option-list">
@@ -731,41 +1469,24 @@ export default function ShopPage({ setPage }) {
                   </div>
                 </div>
 
-                {/* One Time Purchase */}
-                <div 
-                  className={`summitmd-option-row${summitMdPurchaseType === 'onetime' ? ' active' : ''}`}
-                  onClick={() => setSummitMdPurchaseType('onetime')}
-                >
-                  <div className="summitmd-option-left">
-                    <div className="summitmd-radio-dot"></div>
-                    <div className="summitmd-option-info">
-                      <h4>One-Time Purchase</h4>
-                      <p>30 Servings (1 Pouch) • Standard pack</p>
-                    </div>
-                  </div>
-                  <div className="summitmd-option-price">
-                    <span className="summitmd-price-current">$99</span>
-                  </div>
-                </div>
-
               </div>
             </div>
 
             <div>
-              {/* Welcome Kit highlights */}
-              {summitMdPurchaseType !== 'onetime' && (
-                <div style={{ backgroundColor: '#f1f5f9', borderRadius: '12px', padding: '16px', marginBottom: '24px', fontSize: '0.8rem', color: '#475569' }}>
-                  <strong>🎁 FREE Welcome Kit Included:</strong> Premium Stainless Steel Canister, Shaker, Metal Scoop, and 5 Free Travel Packs ($45 value).
-                </div>
-              )}
+              <div style={{ backgroundColor: '#f1f5f9', borderRadius: '12px', padding: '16px', marginBottom: '24px', fontSize: '0.8rem', color: '#475569' }}>
+                <strong>🎁 FREE Welcome Kit Included:</strong> Premium Stainless Canister, Shaker Bottle, Metal Measuring Scoop, and 5 Free Travel Packs ($45 retail value).
+              </div>
 
               <button 
                 className="btn" 
                 style={{ width: '100%', backgroundColor: '#0f2e2f', color: '#ffffff', padding: '16px', borderRadius: '12px', fontWeight: '800', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-                onClick={() => handleAddToCart(summitMdPurchaseType === 'double' ? 'SummitMd Double Subscription' : summitMdPurchaseType === 'single' ? 'SummitMd Single Subscription' : 'SummitMd One-Time Pouch')}
+                onClick={() => {
+                  const product = PRODUCTS.find(p => p.id === 'travel');
+                  handleProductSelection(product);
+                }}
               >
-                <ShoppingCart size={18} />
-                {summitMdPurchaseType !== 'onetime' ? 'Subscribe Now' : 'Add to Cart'}
+                <Plus size={18} />
+                Get Started with Intake Quiz
               </button>
             </div>
           </div>
@@ -834,67 +1555,17 @@ export default function ShopPage({ setPage }) {
                   <h3 className="summitmd-product-title">{p.name}</h3>
                   <p className="summitmd-product-desc">{p.desc}</p>
                   
-                  {/* Selectors or static pricing details */}
-                  {hasSub && hasOneTime && (
-                    <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
-                      <button 
-                        onClick={() => handlePurchaseTypeChange(p.id, 'subscription')}
-                        style={{ 
-                          flex: 1, 
-                          padding: '8px', 
-                          borderRadius: '8px', 
-                          border: '1.5px solid', 
-                          borderColor: purchaseTypes[p.id] === 'subscription' ? '#0f2e2f' : '#cbd5e1', 
-                          backgroundColor: purchaseTypes[p.id] === 'subscription' ? 'rgba(15,46,47,0.03)' : '#ffffff', 
-                          fontSize: '0.75rem', 
-                          fontWeight: '700', 
-                          color: '#0f2e2f', 
-                          outline: 'none',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        Sub: ${p.subPrice}/mo
-                      </button>
-                      <button 
-                        onClick={() => handlePurchaseTypeChange(p.id, 'onetime')}
-                        style={{ 
-                          flex: 1, 
-                          padding: '8px', 
-                          borderRadius: '8px', 
-                          border: '1.5px solid', 
-                          borderColor: purchaseTypes[p.id] === 'onetime' ? '#0f2e2f' : '#cbd5e1', 
-                          backgroundColor: purchaseTypes[p.id] === 'onetime' ? 'rgba(15,46,47,0.03)' : '#ffffff', 
-                          fontSize: '0.75rem', 
-                          fontWeight: '700', 
-                          color: '#0f2e2f', 
-                          outline: 'none',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        One-time: ${p.oneTimePrice}
-                      </button>
-                    </div>
-                  )}
+                  <div style={{ marginBottom: '16px', fontSize: '0.95rem', color: '#0f2e2f', fontWeight: '800' }}>
+                    {hasSub ? `From $${p.subPrice}/mo` : `One-time: $${p.oneTimePrice}`}
+                  </div>
 
-                  {hasSub && !hasOneTime && (
-                    <div style={{ marginBottom: '16px', fontSize: '0.95rem', color: '#0f2e2f', fontWeight: '800' }}>
-                      Subscription: ${p.subPrice}/mo
-                    </div>
-                  )}
-
-                  {!hasSub && hasOneTime && (
-                    <div style={{ marginBottom: '16px', fontSize: '0.95rem', color: '#0f2e2f', fontWeight: '800' }}>
-                      One-time Price: ${p.oneTimePrice}
-                    </div>
-                  )}
-
-                  {/* Add to Cart button */}
+                  {/* Complete intake selector */}
                   <button 
                     className="btn" 
                     style={{ 
                       width: '100%', 
-                      backgroundColor: (hasSub && purchaseTypes[p.id] === 'subscription') ? '#0f2e2f' : 'transparent',
-                      color: (hasSub && purchaseTypes[p.id] === 'subscription') ? '#ffffff' : '#0f2e2f',
+                      backgroundColor: '#0f2e2f',
+                      color: '#ffffff',
                       border: '1.5px solid #0f2e2f',
                       borderRadius: '8px',
                       padding: '12px',
@@ -906,14 +1577,10 @@ export default function ShopPage({ setPage }) {
                       cursor: 'pointer',
                       transition: 'all 0.2s ease'
                     }}
-                    onClick={() => {
-                      const isSub = hasSub && purchaseTypes[p.id] === 'subscription';
-                      const choiceText = isSub ? 'Subscription' : 'One-Time';
-                      handleAddToCart(`${p.name} (${choiceText})`);
-                    }}
+                    onClick={() => handleProductSelection(p)}
                   >
-                    <ShoppingCart size={16} /> 
-                    {hasSub && purchaseTypes[p.id] === 'subscription' ? 'Subscribe Now' : 'Add to Cart'}
+                    <Plus size={16} /> 
+                    {hasSub ? 'Subscribe via Quiz' : 'Purchase via Quiz'}
                   </button>
                 </div>
               </div>
@@ -953,6 +1620,328 @@ export default function ShopPage({ setPage }) {
         </div>
 
       </div>
+
+      {/* ========================================== */}
+      {/* TRYYUCCA-STYLE INTENSE CLINICAL INTAKE WIZARD */}
+      {/* ========================================== */}
+      {quizOpen && (
+        <div className="yucca-quiz-overlay animate-fade-in">
+          
+          {/* Header Strip */}
+          <div className="yucca-quiz-nav">
+            <button className="yucca-back-btn" onClick={handleQuizBack}>
+              <ArrowLeft size={18} /> BACK
+            </button>
+            <div className="yucca-brand">SummitMD</div>
+            <div style={{ width: '60px' }}></div> {/* Spacer */}
+          </div>
+
+          {/* Top Progress Line */}
+          <div className="yucca-progress-container">
+            <div className="yucca-progress-bar" style={{ width: `${getProgressPercentage()}%` }}></div>
+          </div>
+
+          {/* Main Question Body */}
+          <div className="yucca-quiz-content">
+            
+            {/* 1. Quiz Loading Assessment State */}
+            {quizLoading ? (
+              <div style={{ textAlign: 'center', padding: '80px 20px' }}>
+                <Loader2 size={60} className="animate-spin" style={{ color: '#00d2c4', margin: '0 auto 24px auto' }} />
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 800 }}>Analyzing Medical Eligibility</h3>
+                <p style={{ color: '#64748b', marginTop: '8px', minHeight: '24px' }}>
+                  {quizLoadingIndex === 0 && 'Checking clinical safety profile & contraindications...'}
+                  {quizLoadingIndex === 1 && 'Calculating Body Mass Index (BMI) & metabolic rate...'}
+                  {quizLoadingIndex === 2 && 'Assigning medical recommendations and plan choices...'}
+                </p>
+              </div>
+            ) : (
+              <>
+                {/* 2. Step: Question Selector or Pre-Quiz Program Entry */}
+                {quizStep < currentBranchQuestions.length ? (
+                  <div>
+                    {/* Render active question */}
+                    {(() => {
+                      const q = currentBranchQuestions[quizStep];
+                      
+                      // BRANCH 1: General Options
+                      if (q.type === 'singleselect' || q.type === 'multiselect') {
+                        const isMulti = q.type === 'multiselect';
+                        return (
+                          <div>
+                            <h2 className="yucca-question-title">{q.question}</h2>
+                            <p className="yucca-question-sub">{q.sub}</p>
+                            
+                            <div className="options-stack">
+                              {q.options.map(opt => {
+                                const isSelected = isMulti 
+                                  ? (quizAnswers[q.id] || []).includes(opt.value)
+                                  : quizAnswers[q.id] === opt.value;
+                                
+                                return (
+                                  <div key={opt.value}>
+                                    <div 
+                                      className={`yucca-option-card${isSelected ? ' active' : ''}`}
+                                      onClick={() => handleSelectOption(q.id, opt.value, isMulti)}
+                                    >
+                                      {isMulti ? (
+                                        <div className="yucca-checkbox-square">
+                                          {isSelected && <Check size={14} />}
+                                        </div>
+                                      ) : (
+                                        <div className="yucca-radio-circle"></div>
+                                      )}
+                                      <span className="yucca-option-label">{opt.label}</span>
+                                    </div>
+                                    
+                                    {/* Warnings if contraindicated */}
+                                    {isSelected && opt.warning && (
+                                      <div className="yucca-warning-card animate-fade-in">
+                                        <Info size={16} style={{ flexShrink: 0 }} />
+                                        <span>{opt.warning}</span>
+                                      </div>
+                                    )}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        );
+                      }
+
+                      // BRANCH 2: Weight Loss Vitals Inputs
+                      if (q.type === 'vitals') {
+                        return (
+                          <div>
+                            <h2 className="yucca-question-title">{q.question}</h2>
+                            <p className="yucca-question-sub">{q.sub}</p>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                              <div>
+                                <label className="yucca-input-label">Height (Feet)</label>
+                                <select className="yucca-input" value={quizHeightFeet} onChange={e => setQuizHeightFeet(e.target.value)}>
+                                  <option value="4">4 ft</option>
+                                  <option value="5">5 ft</option>
+                                  <option value="6">6 ft</option>
+                                  <option value="7">7 ft</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className="yucca-input-label">Height (Inches)</label>
+                                <select className="yucca-input" value={quizHeightInches} onChange={e => setQuizHeightInches(e.target.value)}>
+                                  {Array.from({ length: 12 }, (_, i) => (
+                                    <option key={i} value={i}>{i} in</option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+
+                            <label className="yucca-input-label">Weight (lbs)</label>
+                            <input 
+                              type="number" 
+                              className="yucca-input" 
+                              value={quizWeight} 
+                              onChange={e => setQuizWeight(e.target.value)} 
+                              placeholder="e.g. 165" 
+                            />
+
+                            <label className="yucca-input-label">Date of Birth</label>
+                            <input 
+                              type="date" 
+                              className="yucca-input" 
+                              value={quizDOB} 
+                              onChange={e => setQuizDOB(e.target.value)} 
+                            />
+                          </div>
+                        );
+                      }
+                    })()}
+                  </div>
+                ) : quizStep === currentBranchQuestions.length ? (
+                  /* 3. Step: Universal Contact/Consent details */
+                  <div>
+                    <h2 className="yucca-question-title">Create your health profile</h2>
+                    <p className="yucca-question-sub">Almost done! Submit your contact details to review your customized recommendation plan.</p>
+
+                    <label className="yucca-input-label">Full Name</label>
+                    <input type="text" className="yucca-input" placeholder="e.g. Alex Harrison" required />
+
+                    <label className="yucca-input-label">Email Address</label>
+                    <input type="email" className="yucca-input" placeholder="alex@example.com" required />
+
+                    <label className="yucca-input-label">Phone Number</label>
+                    <input type="tel" className="yucca-input" placeholder="(555) 000-0000" required />
+
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', marginTop: '16px' }}>
+                      <input type="checkbox" id="consent" style={{ marginTop: '4px', transform: 'scale(1.2)' }} defaultChecked />
+                      <label htmlFor="consent" style={{ fontSize: '0.85rem', color: '#64748b', cursor: 'pointer' }}>
+                        I confirm that the health answers provided are accurate and complete, and I consent to telehealth evaluation by SummitMD clinical practitioners.
+                      </label>
+                    </div>
+                  </div>
+                ) : (
+                  /* 4. Step: Branded Recommendation plan details (TryYucca styled) */
+                  <div className="animate-fade-in" style={{ paddingBottom: '60px' }}>
+                    <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+                      <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: '#00d2c4', fontWeight: 800, backgroundColor: '#0f2e2f', padding: '6px 16px', borderRadius: '30px', display: 'inline-block' }}>
+                        Your Personalized Prescription Recommend
+                      </span>
+                    </div>
+
+                    <div style={{ backgroundColor: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 10px 25px rgba(15,46,47,0.05)' }}>
+                      <div style={{ padding: '24px', backgroundColor: '#e6ecea', borderBottom: '1px solid rgba(15,46,47,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div>
+                          <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0f2e2f' }}>{quizRecommendation?.name}</h3>
+                          <p style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '2px' }}>{quizRecommendation?.badge || 'Intake Evaluated'}</p>
+                        </div>
+                        <ShieldCheck size={32} style={{ color: '#00d2c4' }} />
+                      </div>
+
+                      <div style={{ padding: '32px 24px' }}>
+                        <p style={{ fontSize: '0.9rem', color: '#475569', lineHeight: '1.5', marginBottom: '24px' }}>
+                          {quizRecommendation?.desc}
+                        </p>
+
+                        {/* If weight loss, show BMI and safety report */}
+                        {quizBranch === 'weightloss' && (
+                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px', backgroundColor: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
+                            <div>
+                              <span style={{ fontSize: '0.75rem', color: '#64748b', display: 'block', textTransform: 'uppercase', fontWeight: 700 }}>Calculated BMI</span>
+                              <strong style={{ fontSize: '1.5rem', color: '#0f2e2f' }}>{quizRecommendation?.calculatedBmi || 'N/A'}</strong>
+                            </div>
+                            <div>
+                              <span style={{ fontSize: '0.75rem', color: '#64748b', display: 'block', textTransform: 'uppercase', fontWeight: 700 }}>Safety Assessment</span>
+                              <strong style={{ fontSize: '1rem', color: quizRecommendation?.isAlternative ? '#991b1b' : '#00d2c4' }}>
+                                {quizRecommendation?.isAlternative ? 'Contraindicated (Alternative Plan)' : 'Eligible for Prescription'}
+                              </strong>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Plan pricing duration toggles */}
+                        {quizRecommendation?.subPrice && (
+                          <div style={{ marginBottom: '24px' }}>
+                            <label className="yucca-input-label" style={{ marginBottom: '12px' }}>Select Subscription Length</label>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
+                              
+                              {/* 1 Month */}
+                              <div 
+                                onClick={() => setSelectedPlanDuration('1month')}
+                                style={{ 
+                                  border: '1.5px solid', 
+                                  borderColor: selectedPlanDuration === '1month' ? '#0f2e2f' : '#cbd5e1',
+                                  backgroundColor: selectedPlanDuration === '1month' ? 'rgba(0, 210, 196, 0.05)' : '#ffffff',
+                                  padding: '16px 8px',
+                                  borderRadius: '12px',
+                                  textAlign: 'center',
+                                  cursor: 'pointer',
+                                  transition: 'all 0.2s'
+                                }}
+                              >
+                                <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#64748b' }}>Monthly</span>
+                                <strong style={{ display: 'block', fontSize: '1.15rem', color: '#0f2e2f', marginTop: '4px' }}>${quizRecommendation.subPrice}</strong>
+                                <span style={{ fontSize: '0.65rem', color: '#64748b' }}>per month</span>
+                              </div>
+
+                              {/* 3 Months */}
+                              <div 
+                                onClick={() => setSelectedPlanDuration('3month')}
+                                style={{ 
+                                  border: '1.5px solid', 
+                                  borderColor: selectedPlanDuration === '3month' ? '#0f2e2f' : '#cbd5e1',
+                                  backgroundColor: selectedPlanDuration === '3month' ? 'rgba(0, 210, 196, 0.05)' : '#ffffff',
+                                  padding: '16px 8px',
+                                  borderRadius: '12px',
+                                  textAlign: 'center',
+                                  cursor: 'pointer',
+                                  position: 'relative',
+                                  transition: 'all 0.2s'
+                                }}
+                              >
+                                <span style={{ position: 'absolute', top: '-10px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#0f2e2f', color: '#ffffff', fontSize: '0.55rem', fontWeight: 800, padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase', width: 'max-content' }}>
+                                  Save 15%
+                                </span>
+                                <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#64748b', marginTop: '2px' }}>3 Months</span>
+                                <strong style={{ display: 'block', fontSize: '1.15rem', color: '#0f2e2f', marginTop: '4px' }}>${Math.round(quizRecommendation.subPrice * 0.85)}</strong>
+                                <span style={{ fontSize: '0.65rem', color: '#64748b' }}>per month</span>
+                              </div>
+
+                              {/* 6 Months */}
+                              <div 
+                                onClick={() => setSelectedPlanDuration('6month')}
+                                style={{ 
+                                  border: '1.5px solid', 
+                                  borderColor: selectedPlanDuration === '6month' ? '#0f2e2f' : '#cbd5e1',
+                                  backgroundColor: selectedPlanDuration === '6month' ? 'rgba(0, 210, 196, 0.05)' : '#ffffff',
+                                  padding: '16px 8px',
+                                  borderRadius: '12px',
+                                  textAlign: 'center',
+                                  cursor: 'pointer',
+                                  position: 'relative',
+                                  transition: 'all 0.2s'
+                                }}
+                              >
+                                <span style={{ position: 'absolute', top: '-10px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#00d2c4', color: '#0f2e2f', fontSize: '0.55rem', fontWeight: 800, padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase', width: 'max-content' }}>
+                                  Save 30%
+                                </span>
+                                <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#64748b', marginTop: '2px' }}>6 Months</span>
+                                <strong style={{ display: 'block', fontSize: '1.15rem', color: '#0f2e2f', marginTop: '4px' }}>${Math.round(quizRecommendation.subPrice * 0.70)}</strong>
+                                <span style={{ fontSize: '0.65rem', color: '#64748b' }}>per month</span>
+                              </div>
+
+                            </div>
+                          </div>
+                        )}
+
+                        <button 
+                          onClick={handleCheckoutRecommendation}
+                          className="btn" 
+                          style={{ width: '100%', backgroundColor: '#0f2e2f', color: '#ffffff', padding: '16px', borderRadius: '30px', fontWeight: '800', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', fontSize: '1.05rem' }}
+                        >
+                          <ShoppingCart size={18} />
+                          Secure Treatment Plan & Checkout
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+
+          </div>
+
+          {/* Quiz Action Navigation Footer */}
+          {!quizLoading && (
+            <div className="yucca-quiz-footer">
+              <div className="yucca-footer-inner">
+                {quizStep < totalSteps - 1 ? (
+                  <>
+                    <button className="yucca-back-btn" onClick={handleQuizBack}>
+                      <ArrowLeft size={16} /> Previous Step
+                    </button>
+                    <button className="yucca-next-btn" onClick={handleQuizNext}>
+                      Continue <ArrowRight size={16} />
+                    </button>
+                  </>
+                ) : (
+                  <div style={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
+                    <button 
+                      className="yucca-back-btn" 
+                      onClick={() => {
+                        setQuizStep(0);
+                        setQuizRecommendation(null);
+                      }}
+                    >
+                      Restart Assessment
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+        </div>
+      )}
 
     </div>
   );
