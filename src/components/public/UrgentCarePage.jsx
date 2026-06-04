@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { HeartPulse, Check, ArrowLeft, Stethoscope, Clock, ShieldAlert } from 'lucide-react';
 
 export default function UrgentCarePage({ setPage }) {
@@ -16,7 +16,7 @@ export default function UrgentCarePage({ setPage }) {
       </div>
 
       {/* Hero Section */}
-      <section className="container" style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '48px', alignItems: 'center', marginBottom: '60px' }}>
+      <section className="container tdh-subpage-grid-2col">
         <div>
           <span style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--color-accent)', fontWeight: 700 }}>24/7 Virtual Consultations</span>
           <h1 style={{ fontSize: '3rem', marginTop: '12px', marginBottom: '20px', color: 'var(--color-primary)' }}>Urgent Care, Whenever You Need It.</h1>
@@ -71,7 +71,7 @@ export default function UrgentCarePage({ setPage }) {
       {/* Process Section */}
       <section className="container" style={{ padding: '60px 0' }}>
         <h2 style={{ textAlign: 'center', marginBottom: '48px' }}>How Online Urgent Care Works</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '40px' }}>
+        <div className="tdh-subpage-grid-3col">
           <div style={{ textAlign: 'center' }}>
             <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'var(--color-accent-soft)', color: 'var(--color-accent)', fontWeight: 700, fontSize: '1.25rem', margin: '0 auto 16px auto' }} className="flex-center">1</div>
             <h4>Request Visit</h4>

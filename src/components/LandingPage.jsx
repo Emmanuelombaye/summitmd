@@ -3,42 +3,42 @@ import React, { useState, useEffect } from 'react';
 export default function LandingPage({ setPage }) {
   const careCards = [
     {
-      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--10f50226-5f20-40d6-88e8-a3a9bc6fa491/image1.png?quality=85&preferwebp=true',
+      img: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&q=80&w=400',
       title: '24/7 Care',
       desc: 'Talk to a medical provider anytime, day or night. Whether it\'s cold and flu symptoms, allergies or infections, get the care you need from anywhere.',
       cta: 'Learn more',
       page: 'urgent-care',
     },
     {
-      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--44eeb530-3246-48c5-88d0-e63f9e931581/image2.png?quality=85&preferwebp=true',
+      img: 'https://images.unsplash.com/photo-1579684389782-64d84b5e902a?auto=format&fit=crop&q=80&w=400',
       title: 'Primary Care',
       desc: 'Stay on top of your health with board-certified providers supporting your checkups, preventative care and prescriptions.',
       cta: 'Learn more',
       page: 'primary-care',
     },
     {
-      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--cac2bb6b-c62e-43e0-8657-92b31ef70eb5/emp_mental.jpg.webp?quality=90&width=800&preferwebp=true',
+      img: 'https://images.unsplash.com/photo-1527137341206-1a2ab818aa69?auto=format&fit=crop&q=80&w=400',
       title: 'Mental Health',
       desc: 'Connect with a therapist or psychiatrist and get the support you need—however you prefer to engage.',
       cta: 'Learn more',
       page: 'mental-health',
     },
     {
-      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--cccf04f6-a732-4fb8-9f9e-0357371cd144/card-obesity.png.webp?quality=90&width=800&preferwebp=true',
+      img: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&q=80&w=400',
       title: 'Condition Management',
       desc: 'Get personalized support for diabetes, hypertension, weight management and more—right from your phone.',
       cta: 'Learn more',
       page: 'chronic-care',
     },
     {
-      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--49d9fd7d-e78a-4b08-9474-13fe804249b8/emp_primary.jpg.webp?quality=90&width=800&preferwebp=true',
+      img: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=400',
       title: 'Specialty Care',
       desc: 'Get expert medical opinions, dermatology visits and other specialty care—without the wait.',
       cta: 'Learn more',
       page: 'specialty-wellness',
     },
     {
-      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--3d3f9cf2-d3a9-42e8-825a-34fd72f88fbd/header-bettersleep.png.webp?quality=90&preferwebp=true&width=800',
+      img: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=400',
       title: 'Everyday Habits',
       desc: 'Build lasting habits with support for better sleep, balanced nutrition and healthy lifestyle choices.',
       cta: 'Learn more',
@@ -203,9 +203,8 @@ export default function LandingPage({ setPage }) {
           </div>
           <div className="tdh-org-image">
             <img
-              src="https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--d96568a7-d0b3-4001-b66d-2fc51fc50006/employers_hero.jpg.webp?quality=90&width=800&preferwebp=true"
+              src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=800"
               alt="Healthcare organization partner"
-              onError={e => { e.target.src = 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80'; }}
             />
           </div>
         </div>

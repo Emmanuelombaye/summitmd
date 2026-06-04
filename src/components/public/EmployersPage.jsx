@@ -1,34 +1,34 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 
 export default function EmployersPage({ setPage }) {
   const [activeAccordion, setActiveAccordion] = useState(null);
-  const [accordionImg, setAccordionImg] = useState('https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--e00c475f-8030-4d9d-adfb-7376c4673b37/emp_default.png.webp?quality=90&width=800&preferwebp=true');
+  const [accordionImg, setAccordionImg] = useState('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=800');
 
   const accordionItems = [
     {
       title: 'A strategic partner',
       text: 'Entrusted to serve more than 12,000 clients worldwide, with 80% saying they consider us a strategic partner.*',
-      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--e00c475f-8030-4d9d-adfb-7376c4673b37/emp_default.png.webp?quality=90&width=800&preferwebp=true',
+      img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=800',
     },
     {
       title: 'Commitment to clinical quality',
       text: 'Committed to clinical innovation and continuous quality improvement under the leadership of a vast clinical team and chief medical officer.',
-      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--e165fc05-7a41-4780-8a56-f9e6c8ef2c28/emp_commitment.png.webp?quality=90&width=800&preferwebp=true',
+      img: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=800',
     },
     {
       title: 'Strong satisfaction rates',
       text: '90%+ member satisfaction and 4x higher telehealth utilization than the industry average.*',
-      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--00ad0a61-11a9-46f8-8109-9aca6783ad23/emp_member-satisfaction.png.webp?quality=90&width=800&preferwebp=true',
+      img: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=800',
     },
     {
       title: 'Addressing health disparities',
       text: 'Investments in more culturally aware care, such as hiring racially and ethnically diverse care providers and using data to address health disparities.',
-      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--bcfd74ee-1ee8-4d3d-95dc-6bd6c83f5e1e/emp_disparities.png.webp?quality=90&width=800&preferwebp=true',
+      img: 'https://images.unsplash.com/photo-1579684389782-64d84b5e902a?auto=format&fit=crop&q=80&w=800',
     },
     {
       title: 'Accredited and certified',
       text: 'Our solutions ensure the highest quality care, informed by industry standards.',
-      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--2454787d-a70a-4aa5-a2b0-6ec461f0f790/employers_accredited.png.webp?quality=90&width=800&preferwebp=true',
+      img: 'https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?auto=format&fit=crop&q=80&w=800',
     },
   ];
 
@@ -36,55 +36,55 @@ export default function EmployersPage({ setPage }) {
     {
       title: 'Primary Care',
       desc: 'Achieve better outcomes through convenient, high-quality primary care',
-      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--49d9fd7d-e78a-4b08-9474-13fe804249b8/emp_primary.jpg.webp?quality=90&width=800&preferwebp=true',
+      img: 'https://images.unsplash.com/photo-1579684389782-64d84b5e902a?auto=format&fit=crop&q=80&w=600',
       page: 'primary-care'
     },
     {
       title: 'Mental Health',
       desc: 'Offer easy access to licensed therapists while removing the stigma and barriers to care',
-      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--cac2bb6b-c62e-43e0-8657-92b31ef70eb5/emp_mental.jpg.webp?quality=90&width=800&preferwebp=true',
+      img: 'https://images.unsplash.com/photo-1527137341206-1a2ab818aa69?auto=format&fit=crop&q=80&w=600',
       page: 'mental-health'
     },
     {
       title: 'Integrated whole-person care',
       desc: 'Provide a unified employee experience across primary care, chronic care and mental healthcare',
-      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--ad26cc75-04db-49dd-b25c-7af77dd61701/emp_wpc.jpg.webp?quality=90&width=800&preferwebp=true',
+      img: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=600',
       page: 'chronic-care'
     },
     {
       title: 'Weight and obesity management',
       desc: 'Deliver a clinically led, personalized approach to weight and obesity care',
-      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--cccf04f6-a732-4fb8-9f9e-0357371cd144/card-obesity.png.webp?quality=90&width=800&preferwebp=true',
+      img: 'https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&q=80&w=600',
       page: 'weight-management'
     },
     {
       title: 'Diabetes care',
       desc: 'Discover how our evidence-based cardiometabolic program drives engagement and outcomes for people with diabetes',
-      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--ba192b1e-a23c-487d-a473-ba5783b42e78/emp_diabetes.png.webp?quality=90&width=800&preferwebp=true',
+      img: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&q=80&w=600',
       page: 'b2b-diabetes'
     },
     {
       title: 'Chronic care',
       desc: 'Address multicondition needs with solutions that offer cost savings and improved outcomes',
-      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--c4ea9c90-c9a0-450d-a95e-9315a601eb15/emp_chronic.jpg.webp?quality=90&width=800&preferwebp=true',
+      img: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&q=80&w=600',
       page: 'chronic-care'
     },
     {
       title: 'Hypertension',
       desc: 'See how combining smart tech with a human touch helps improve heart health for your population.',
-      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--4223529e-874c-4149-8aba-0e9a73fce782/GettyImages-1321906105.png.webp?quality=90&width=800&preferwebp=true',
+      img: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=600',
       page: 'hypertension'
     },
     {
       title: '24/7 Care',
       desc: 'Offer members around-the-clock access to on-demand care for urgent medical needs',
-      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--e7df5aee-b770-400d-98bc-b2288e3c0720/employers-card.jpg.webp?quality=90&width=800&preferwebp=true',
+      img: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&q=80&w=600',
       page: 'urgent-care'
     },
     {
       title: 'Employee Assistance Program',
       desc: 'Provide confidential support for life\'s challenges with our comprehensive EAP',
-      img: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&q=80',
+      img: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=600',
       page: 'eap'
     },
   ];
@@ -96,7 +96,7 @@ export default function EmployersPage({ setPage }) {
       <section
         className="tdh-hero emp-hero"
         style={{
-          backgroundImage: `url(https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--d96568a7-d0b3-4001-b66d-2fc51fc50006/employers_hero.jpg.webp?quality=90&width=1600&preferwebp=true)`
+          backgroundImage: `url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=1600')`
         }}
       >
         <div className="tdh-hero-overlay" style={{ background: 'linear-gradient(to right, rgba(10,30,60,0.8) 0%, rgba(10,30,60,0.4) 70%, transparent 100%)' }}></div>

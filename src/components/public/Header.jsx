@@ -152,7 +152,7 @@ const NAV_INDIVIDUALS = {
     { label: 'Contact Us', href: 'contact' },
   ],
   promo: {
-    bg: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--3d3f9cf2-d3a9-42e8-825a-34fd72f88fbd/header-bettersleep.png.webp?quality=90&preferwebp=true&width=800',
+    bg: '/better_sleep_promo.png',
     title: 'Stop racing thoughts and start sleeping better',
     cta: 'Try BetterSleep—30 days for $0',
     url: 'https://www.bettersleep.com/transform-your-sleep-SummitMD-30',
@@ -226,7 +226,7 @@ const NAV_ORGANIZATIONS = {
     { label: 'Contact Us', href: 'contact' },
   ],
   promo: {
-    bg: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--3f84695c-c1ad-437b-83f0-39bdbc15ff06/why-states-are-turning-to-virtual-care-to-transform-rural-health.jpg.webp?quality=90&preferwebp=true&width=800',
+    bg: '/rural_health_promo.png',
     title: 'Why States Are Turning To Virtual Care To Transform Rural Health',
     cta: 'Read more',
     href: 'library',
@@ -264,7 +264,7 @@ const NAV_CLINICIANS = {
     { label: 'Contact us', href: 'contact' },
   ],
   promo: {
-    bg: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--1b54cc2a-7248-4e84-9c7f-782fbd1eb931/header-providers.png.webp?quality=90&preferwebp=true&width=800',
+    bg: '/clinician_promo.png',
     title: 'Simplify your work. Amplify your impact.',
     cta: 'See open roles',
     url: 'https://teladoc.wd503.myworkdayjobs.com/en-US/SummitMD_is_hiring',

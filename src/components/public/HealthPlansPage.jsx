@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { ArrowLeft, Check, Landmark, ShieldAlert } from 'lucide-react';
 
 export default function HealthPlansPage({ setPage }) {
@@ -10,7 +10,7 @@ export default function HealthPlansPage({ setPage }) {
         </button>
       </div>
 
-      <section className="container" style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '48px', alignItems: 'center', marginBottom: '60px' }}>
+      <section className="container tdh-subpage-grid-2col">
         <div>
           <span style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--color-accent)', fontWeight: 700 }}>Insurers & Payor Partnerships</span>
           <h1 style={{ fontSize: '3rem', marginTop: '12px', marginBottom: '20px', color: 'var(--color-primary)' }}>Coordinating Care for Health Plans.</h1>
