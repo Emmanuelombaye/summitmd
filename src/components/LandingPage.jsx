@@ -69,7 +69,7 @@ export default function LandingPage({ setPage }) {
       
       {/* ===== HERO ===== */}
       <section className="tdh-hero" style={{
-        backgroundImage: `url(https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--17277e00-0756-4dae-a420-fff308fbd934/Home_hero_2026-3.jpg.webp?quality=90&preferwebp=true&width=1600)`
+        backgroundImage: `url('/hero banner.png')`
       }}>
         <div className="tdh-hero-overlay"></div>
         <div className="tdh-hero-content">
@@ -109,7 +109,11 @@ export default function LandingPage({ setPage }) {
                       src={card.img}
                       alt={card.title}
                       className="tdh-care-card-img"
-                      onError={e => { e.target.src = 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&q=80'; }}
+                      loading={i < 3 ? 'eager' : 'lazy'}
+                      decoding="async"
+                      width="400"
+                      height="240"
+                      onError={e => { e.target.src = 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&q=60'; }}
                     />
                   </div>
                   <div className="tdh-care-card-body">
