@@ -28,10 +28,10 @@ const PRODUCTS = [
   // Existing Nutrition Stacks
   {
     id: 'travel',
-    name: 'SummitMd Travel Packs',
+    name: 'SummitMd Foundational Powder',
     category: 'nutrition',
-    desc: 'Individual packets of the foundational SummitMd formula. Ideal for traveling, office, or active habits on-the-go.',
-    image: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=400',
+    desc: 'Daily nutrient insurance stack. 75 highly bioavailable vitamins, organic minerals, and whole-food adaptogens in one single scoop. Optimizes cell longevity, focus, and digestion.',
+    image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400',
     subPrice: 89,
     oneTimePrice: 109,
     tag: 'Popular'
@@ -266,236 +266,408 @@ const PRODUCTS = [
   }
 ];
 
-const QUESTIONS = {
-  weightloss: [
+// Helper function to return product specific questions dynamically
+function getQuestionsForProduct(product) {
+  if (!product) return [];
+  
+  const id = product.id;
+
+  // Weight Loss
+  if (id.includes('weightloss')) {
+    return [
+      {
+        id: 'goals',
+        type: 'multiselect',
+        question: 'What are your primary weight loss goals?',
+        sub: `Customize your intake parameters for ${product.name}.`,
+        options: [
+          { label: 'Lose 10-25 lbs', value: 'lose_moderate' },
+          { label: 'Lose 25-50 lbs', value: 'lose_significant' },
+          { label: 'Improve metabolic wellness & core energy', value: 'improve_metabolic' },
+          { label: 'Manage stress/emotional eating habits', value: 'manage_eating' }
+        ]
+      },
+      {
+        id: 'vitals',
+        type: 'vitals',
+        question: 'Provide your basic physical parameters',
+        sub: 'Height and weight parameters are required to calculate BMI for clinical evaluation.'
+      },
+      {
+        id: 'contraindications',
+        type: 'singleselect',
+        question: 'Thyroid Cancer Risk Screening',
+        sub: 'Do you or an immediate family member have a history of Medullary Thyroid Carcinoma (MTC) or MEN 2?',
+        options: [
+          { label: 'Yes, I or a family member have MTC/MEN2 history', value: 'yes', warning: 'Contraindicated: Due to safety guidelines, GLP-1 medications are not approved for individuals with an MTC or MEN2 history. We will suggest alternate treatments.' },
+          { label: 'No history', value: 'no' }
+        ]
+      },
+      {
+        id: 'pregnancy',
+        type: 'singleselect',
+        question: 'Pregnancy & Breastfeeding Check',
+        sub: 'Are you currently pregnant, lactating, or planning pregnancy within the next 12 months?',
+        options: [
+          { label: 'Yes', value: 'yes', warning: 'Contraindicated: GLP-1 programs are not safe during pregnancy or breastfeeding.' },
+          { label: 'No', value: 'no' }
+        ]
+      },
+      {
+        id: 'history',
+        type: 'multiselect',
+        question: 'Do you have a clinical history of any of the following?',
+        sub: 'Select all that apply to ensure safe prescribing.',
+        options: [
+          { label: 'Pancreatitis or active gallbladder stones', value: 'pancreatitis', warning: 'Precaution: Active pancreatic history requires additional medical clearance.' },
+          { label: 'Kidney function issues / renal disease', value: 'kidney' },
+          { label: 'Severe GI motility issues (e.g. gastroparesis)', value: 'gi' },
+          { label: 'None of the above', value: 'none' }
+        ]
+      }
+    ];
+  }
+
+  // Sleep supplement
+  if (id === 'sleep') {
+    return [
+      {
+        id: 'sleep_challenge',
+        type: 'multiselect',
+        question: 'What is your primary sleep challenge?',
+        sub: `Help us customize your ${product.name} protocol.`,
+        options: [
+          { label: 'Difficulty falling asleep (mind racing)', value: 'falling' },
+          { label: 'Waking up frequently during the night', value: 'waking' },
+          { label: 'Waking up tired/groggier than expected', value: 'unrefreshed' },
+          { label: 'High daytime stress blocking sleep cycles', value: 'stress' }
+        ]
+      },
+      {
+        id: 'stress_level',
+        type: 'singleselect',
+        question: 'How often do you feel tense, anxious, or highly stressed?',
+        sub: 'High cortisol levels directly block natural melatonin pathways.',
+        options: [
+          { label: 'Almost daily', value: 'daily' },
+          { label: 'A few times a week', value: 'weekly' },
+          { label: 'Rarely', value: 'rarely' }
+        ]
+      },
+      {
+        id: 'melatonin_pref',
+        type: 'singleselect',
+        question: 'Do you prefer a melatonin-free formulation?',
+        sub: 'AGZ Sleep Support uses organic adaptogens to calm the mind without synthetic hormones.',
+        options: [
+          { label: 'Yes, 100% Melatonin-Free adaptogens preferred', value: 'melatonin_free' },
+          { label: 'No preference', value: 'melatonin_ok' }
+        ]
+      }
+    ];
+  }
+
+  // Blood Pressure Monitor
+  if (id === 'bpMonitor') {
+    return [
+      {
+        id: 'bp_range',
+        type: 'singleselect',
+        question: 'What is your typical resting blood pressure range?',
+        sub: `For calibrating notifications on the ${product.name}.`,
+        options: [
+          { label: 'Normal (Under 120/80 mmHg)', value: 'normal' },
+          { label: 'Elevated (120-129 / under 80 mmHg)', value: 'elevated' },
+          { label: 'Stage 1/2 Hypertension (130+ / 80+ mmHg)', value: 'hypertension' },
+          { label: 'I do not monitor it currently', value: 'unknown' }
+        ]
+      },
+      {
+        id: 'bp_supervised',
+        type: 'singleselect',
+        question: 'Are you taking clinical medication for high blood pressure?',
+        sub: 'Helps configure automated report sharing with your primary doctor.',
+        options: [
+          { label: 'Yes, currently taking hypertension medications', value: 'yes_meds' },
+          { label: 'Yes, but managing through diet/lifestyle', value: 'yes_lifestyle' },
+          { label: 'No, tracking solely for general wellness', value: 'no' }
+        ]
+      }
+    ];
+  }
+
+  // Glucose Meter
+  if (id === 'glucoseMeter') {
+    return [
+      {
+        id: 'glucose_history',
+        type: 'singleselect',
+        question: 'What describes your diabetic status?',
+        sub: `Matching strip quantities for the ${product.name}.`,
+        options: [
+          { label: 'Type 1 Diabetes', value: 'type1' },
+          { label: 'Type 2 Diabetes', value: 'type2' },
+          { label: 'Pre-diabetes / Insulin resistance', value: 'prediabetes' },
+          { label: 'No diagnosis (tracking for keto/fasting)', value: 'keto' }
+        ]
+      },
+      {
+        id: 'glucose_refills',
+        type: 'singleselect',
+        question: 'How many times per day do you test your blood sugar?',
+        sub: 'Helps determine test strip monthly delivery requirements.',
+        options: [
+          { label: '3+ times daily', value: 'high' },
+          { label: '1 to 2 times daily', value: 'medium' },
+          { label: 'A few times a week', value: 'low' }
+        ]
+      }
+    ];
+  }
+
+  // Nebulizer
+  if (id === 'nebulizer') {
+    return [
+      {
+        id: 'neb_reason',
+        type: 'singleselect',
+        question: 'What respiratory condition requires aerosol therapy?',
+        sub: `Tailoring components for the ${product.name}.`,
+        options: [
+          { label: 'Asthma or exercise bronchospasms', value: 'asthma' },
+          { label: 'COPD, chronic bronchitis, or emphysema', value: 'copd' },
+          { label: 'Seasonal allergies / congestive relief', value: 'allergies' },
+          { label: 'Acute cough or cold recovery', value: 'acute' }
+        ]
+      },
+      {
+        id: 'neb_portability',
+        type: 'singleselect',
+        question: 'Will you use this device primarily while traveling or on-the-go?',
+        sub: 'Portable mesh nebulizers are silent and run on batteries or USB power.',
+        options: [
+          { label: 'Yes, pocket portability is essential', value: 'yes' },
+          { label: 'No, stationary home use is fine', value: 'no' }
+        ]
+      }
+    ];
+  }
+
+  // Smart Organizer
+  if (id === 'organizer') {
+    return [
+      {
+        id: 'pill_count',
+        type: 'singleselect',
+        question: 'How many daily medications do you manage?',
+        sub: `Determines slot layout for the ${product.name}.`,
+        options: [
+          { label: '1 to 3 pills daily', value: 'low' },
+          { label: '4 to 8 pills daily', value: 'medium' },
+          { label: '9+ pills daily', value: 'high' }
+        ]
+      },
+      {
+        id: 'pill_challenges',
+        type: 'multiselect',
+        question: 'What adherence challenges do you face?',
+        sub: 'Select all that apply to set alerts.',
+        options: [
+          { label: 'Forgetting if I already took a dosage', value: 'double' },
+          { label: 'Missing pill schedules when busy/traveling', value: 'missed' },
+          { label: 'Difficulty reading tiny pill labels', value: 'reading' },
+          { label: 'None, just want clean organization', value: 'none' }
+        ]
+      }
+    ];
+  }
+
+  // Compression Socks
+  if (id === 'socks') {
+    return [
+      {
+        id: 'socks_need',
+        type: 'multiselect',
+        question: 'What symptoms do you experience in your legs?',
+        sub: `Determines gradient rating for the ${product.name}.`,
+        options: [
+          { label: 'Ankle swelling or fluid accumulation (edema)', value: 'swelling' },
+          { label: 'Visible spider or varicose veins', value: 'veins' },
+          { label: 'Aching leg tiredness after a long shift', value: 'aching' },
+          { label: 'Poor lower circulation/cold feet', value: 'cold' }
+        ]
+      },
+      {
+        id: 'socks_posture',
+        type: 'singleselect',
+        question: 'What is your typical posture during work hours?',
+        sub: 'Helps determine compression pressure levels.',
+        options: [
+          { label: 'Prolonged standing (retail, nursing, teaching)', value: 'standing' },
+          { label: 'Prolonged sitting (office work, driving)', value: 'sitting' },
+          { label: 'Active running, travel, or flight commute', value: 'active' }
+        ]
+      }
+    ];
+  }
+
+  // Pregnancy & Ovulation
+  if (id === 'pregnancyKit' || id === 'ovulationKit') {
+    return [
+      {
+        id: 'kit_goal',
+        type: 'singleselect',
+        question: 'What is your primary tracking goal?',
+        sub: `Providing optimal diagnostic tools.`,
+        options: [
+          { label: 'Confirming early-stage pregnancy', value: 'pregnancy' },
+          { label: 'Detecting peak fertile cycle days for conception', value: 'conception' },
+          { label: 'Monitoring hormone regularity & cycles', value: 'cycles' }
+        ]
+      },
+      {
+        id: 'cycle_regularity',
+        type: 'singleselect',
+        question: 'How regular are your monthly cycle windows?',
+        sub: 'Ovulation peak dates fluctuate based on cycle regularity.',
+        options: [
+          { label: 'Very regular (consistent 28-30 days)', value: 'regular' },
+          { label: 'Irregular cycle lengths', value: 'irregular' },
+          { label: 'Do not track/Not sure', value: 'unknown' }
+        ]
+      }
+    ];
+  }
+
+  // Thermometer & Scale
+  if (id === 'babyThermometer' || id === 'infantScale') {
+    return [
+      {
+        id: 'pediatric_age',
+        type: 'singleselect',
+        question: 'What is the age of the infant or child?',
+        sub: 'We adjust reference ranges based on clinical pediatric baselines.',
+        options: [
+          { label: 'Newborn (0 to 3 months)', value: 'newborn' },
+          { label: 'Infant (3 to 12 months)', value: 'infant' },
+          { label: 'Toddler (1 to 3 years)', value: 'toddler' },
+          { label: 'Expecting a baby soon', value: 'pregnant' }
+        ]
+      },
+      {
+        id: 'device_primary',
+        type: 'singleselect',
+        question: 'What is your primary concern with pediatric checkups?',
+        sub: 'Ensures correct scale/thermometer selection.',
+        options: [
+          { label: 'Tracking weight logs for feeding sufficiency', value: 'weight' },
+          { label: 'Detecting fever temperatures safely without disturbance', value: 'fever' }
+        ]
+      }
+    ];
+  }
+
+  // Prenatals
+  if (id === 'prenatalVitamins') {
+    return [
+      {
+        id: 'maternal_stage',
+        type: 'singleselect',
+        question: 'What maternal stage matches your current status?',
+        sub: `Matching vitamin ingredients for ${product.name}.`,
+        options: [
+          { label: 'Pre-conception / planning to conceive', value: 'pre' },
+          { label: 'First Trimester (weeks 1-12)', value: 'first' },
+          { label: 'Second or Third Trimester', value: 'late' },
+          { label: 'Postpartum / active breastfeeding lactation support', value: 'post' }
+        ]
+      },
+      {
+        id: 'stomach_sensitivity',
+        type: 'singleselect',
+        question: 'Do you experience morning sickness or stomach sensitivity?',
+        sub: 'Our vitamins feature gentle chelated minerals to minimize digestive discomfort.',
+        options: [
+          { label: 'Yes, severe nausea', value: 'high' },
+          { label: 'Occasionally', value: 'medium' },
+          { label: 'No, typical tolerance', value: 'none' }
+        ]
+      }
+    ];
+  }
+
+  // Wellness / Nutrition supplements general
+  if (product.category === 'nutrition' || product.category === 'wellness') {
+    return [
+      {
+        id: 'wellness_goal',
+        type: 'multiselect',
+        question: `What are your core objectives for taking ${product.name}?`,
+        sub: 'Select all that apply to evaluate formulation compatibility.',
+        options: [
+          { label: 'Boost immune system resilience', value: 'immunity' },
+          { label: 'Increase mental clarity and focus', value: 'focus' },
+          { label: 'Enhance daily physical energy levels', value: 'energy' },
+          { label: 'Sustain muscle, joint, or bone integrity', value: 'joints' }
+        ]
+      },
+      {
+        id: 'absorption_pref',
+        type: 'singleselect',
+        question: 'Which supplement absorption type do you prefer?',
+        sub: 'Determines recommended stack ingredients.',
+        options: [
+          { label: 'Liquid drops (high absorption speed)', value: 'liquid' },
+          { label: 'Powder mix (added hydration and taste)', value: 'powder' },
+          { label: 'Capsules / Tablets (convenient for traveling)', value: 'capsules' }
+        ]
+      }
+    ];
+  }
+
+  // Care Subscriptions
+  if (product.category === 'subscriptions') {
+    return [
+      {
+        id: 'telehealth_purpose',
+        type: 'singleselect',
+        question: 'What is your primary medical target for virtual consultations?',
+        sub: 'Helps assign the correct provider registry.',
+        options: [
+          { label: '24/7 doctor consultations for acute issues', value: 'acute' },
+          { label: 'Therapist sessions & mental wellness support', value: 'therapy' },
+          { label: 'Prescription refills with home delivery coordination', value: 'delivery' },
+          { label: 'Diagnostic blood lab checkups', value: 'labs' }
+        ]
+      },
+      {
+        id: 'hsa_reimbursement',
+        type: 'singleselect',
+        question: 'Do you plan to use HSA/FSA funds for this subscription?',
+        sub: 'We support automated itemized receipt creation for easy reimbursement.',
+        options: [
+          { label: 'Yes, HSA/FSA reimbursement needed', value: 'hsa' },
+          { label: 'No, normal payment', value: 'cc' }
+        ]
+      }
+    ];
+  }
+
+  // General default fallback
+  return [
     {
-      id: 'goals',
+      id: 'general_intent',
       type: 'multiselect',
-      question: 'What are your primary weight loss goals?',
-      sub: 'Select all that apply to help us customize your treatment plan.',
+      question: `What is your primary intent for purchasing ${product.name}?`,
+      sub: 'Helps us customize checkout documentation.',
       options: [
-        { label: 'Lose 10-25 lbs', value: 'lose_moderate' },
-        { label: 'Lose 25+ lbs', value: 'lose_significant' },
-        { label: 'Improve metabolic health & daily energy', value: 'improve_metabolic' },
-        { label: 'Manage stress/emotional eating habits', value: 'manage_eating' }
-      ]
-    },
-    {
-      id: 'vitals',
-      type: 'vitals',
-      question: 'Provide your basic physical parameters',
-      sub: 'We use height and weight to calculate your BMI for clinical approval guidelines.'
-    },
-    {
-      id: 'contraindications',
-      type: 'singleselect',
-      question: 'Thyroid Cancer Risk Screening',
-      sub: 'Do you or an immediate family member have a history of Medullary Thyroid Carcinoma (MTC) or MEN 2?',
-      options: [
-        { label: 'Yes, there is history of MTC or MEN2', value: 'yes', warning: 'Contraindicated: Due to safety guidelines, GLP-1 medications are not approved for individuals with an MTC or MEN2 history. We will suggest alternate treatments.' },
-        { label: 'No history', value: 'no' }
-      ]
-    },
-    {
-      id: 'pregnancy',
-      type: 'singleselect',
-      question: 'Pregnancy & Gestational Health',
-      sub: 'Are you currently pregnant, breastfeeding, or planning to become pregnant in the next 12 months?',
-      options: [
-        { label: 'Yes', value: 'yes', warning: 'Contraindicated: GLP-1 weight loss programs are contraindicated during pregnancy and lactation.' },
-        { label: 'No', value: 'no' }
-      ]
-    },
-    {
-      id: 'history',
-      type: 'multiselect',
-      question: 'Do you have a history of any of the following conditions?',
-      sub: 'Select all that apply. Honest screening keeps you safe.',
-      options: [
-        { label: 'Pancreatitis or gallbladder stones', value: 'pancreatitis', warning: 'Precaution: Active pancreatic or gallbladder history requires extra medical review.' },
-        { label: 'Kidney disease or reduced renal function', value: 'kidney' },
-        { label: 'Severe gastrointestinal issues (e.g. gastroparesis)', value: 'gi' },
-        { label: 'None of the above', value: 'none' }
-      ]
-    },
-    {
-      id: 'other_meds',
-      type: 'singleselect',
-      question: 'Are you currently taking other GLP-1s or insulin?',
-      sub: 'Includes prescription brands like Wegovy, Ozempic, Mounjaro, or Zepbound.',
-      options: [
-        { label: 'Yes, taking other GLP-1 or insulin therapy', value: 'yes', warning: 'Precaution: Combining multiple GLP-1 therapies is generally not recommended.' },
-        { label: 'No, not taking any', value: 'no' }
+        { label: 'General preventative healthcare', value: 'prevention' },
+        { label: 'Doctor recommended integration', value: 'doctor' },
+        { label: 'Biohacking & physical optimizing', value: 'optimizing' }
       ]
     }
-  ],
-  nutrition: [
-    {
-      id: 'focus',
-      type: 'multiselect',
-      question: 'What is your primary health and wellness focus?',
-      sub: 'Select all that apply to guide your recommendation.',
-      options: [
-        { label: 'Support immune system strength', value: 'immunity' },
-        { label: 'Boost daily focus & sustain physical energy', value: 'energy' },
-        { label: 'Improve gut microbiome & digestive transit', value: 'gut' },
-        { label: 'Sustain active bone density & circulation', value: 'bone_fitness' }
-      ]
-    },
-    {
-      id: 'energy_crashes',
-      type: 'singleselect',
-      question: 'Do you experience afternoon energy crashes or brain fog?',
-      sub: 'Select the option that best describes your typical daily energy cycle.',
-      options: [
-        { label: 'Yes, almost every day', value: 'daily' },
-        { label: 'Sometimes, a few times a week', value: 'weekly' },
-        { label: 'Rarely or never', value: 'rarely' }
-      ]
-    },
-    {
-      id: 'diet_quality',
-      type: 'singleselect',
-      question: 'How would you rate your typical daily intake of nutrient-dense foods?',
-      sub: 'Helps us determine baseline mineral and vitamin gaps.',
-      options: [
-        { label: 'High (Eat 5+ servings of vegetables/greens daily)', value: 'high' },
-        { label: 'Moderate (Balanced meals but skip fresh greens often)', value: 'medium' },
-        { label: 'Low (Rarely consume fresh greens or whole-food stacks)', value: 'low' }
-      ]
-    }
-  ],
-  sleep: [
-    {
-      id: 'sleep_challenge',
-      type: 'multiselect',
-      question: 'What is your primary sleep obstacle?',
-      sub: 'Select all that apply to help choose your adaptogen stack.',
-      options: [
-        { label: 'Difficulty falling asleep (mind racing)', value: 'falling' },
-        { label: 'Waking up frequently in the middle of the night', value: 'waking' },
-        { label: 'Waking up feeling tired and unrefreshed', value: 'unrefreshed' },
-        { label: 'High daytime stress blocking melatonin cycles', value: 'stress' }
-      ]
-    },
-    {
-      id: 'stress_level',
-      type: 'singleselect',
-      question: 'How often do you feel tense, anxious, or highly stressed?',
-      sub: 'Mental tension affects physical recovery and sleep cycles.',
-      options: [
-        { label: 'Almost daily', value: 'daily' },
-        { label: 'A few times a week', value: 'weekly' },
-        { label: 'Rarely', value: 'rarely' }
-      ]
-    },
-    {
-      id: 'muscle_soreness',
-      type: 'singleselect',
-      question: 'Do you experience slow recovery or muscle soreness after activity?',
-      sub: 'Deep recovery happens during specific sleep phases.',
-      options: [
-        { label: 'Yes, regularly', value: 'regularly' },
-        { label: 'Occasionally', value: 'occasionally' },
-        { label: 'No, I recover quickly', value: 'rarely' }
-      ]
-    }
-  ],
-  devices: [
-    {
-      id: 'monitor_metric',
-      type: 'singleselect',
-      question: 'Which health vital do you need to monitor at home?',
-      sub: 'Select the primary vital device you require.',
-      options: [
-        { label: 'Blood Pressure & Heart Rate', value: 'bp' },
-        { label: 'Blood Glucose & Sugar Levels', value: 'glucose' },
-        { label: 'Breathing, Asthma, or Nebulizing', value: 'respiratory' },
-        { label: 'Medication timings & reminders', value: 'pills' }
-      ]
-    },
-    {
-      id: 'clinical_diagnosis',
-      type: 'singleselect',
-      question: 'Has a doctor diagnosed you with high blood pressure or diabetes?',
-      sub: 'Helps us tailor alerts and report generation.',
-      options: [
-        { label: 'Yes, high blood pressure / hypertension', value: 'hypertension' },
-        { label: 'Yes, Type 1 or Type 2 Diabetes', value: 'diabetes' },
-        { label: 'Yes, both conditions', value: 'both' },
-        { label: 'No diagnostic history, tracking for general wellness', value: 'none' }
-      ]
-    },
-    {
-      id: 'sync_pref',
-      type: 'singleselect',
-      question: 'Do you want wireless sync with your telehealth profile?',
-      sub: 'Our smart devices automatically load reading logs to your doctor dashboard.',
-      options: [
-        { label: 'Yes, I want automatic Bluetooth syncing to my portal', value: 'sync' },
-        { label: 'Manual entry is fine', value: 'manual' }
-      ]
-    }
-  ],
-  maternal: [
-    {
-      id: 'maternal_stage',
-      type: 'singleselect',
-      question: 'What family planning or infant stage describes you best?',
-      sub: 'Select your current focus.',
-      options: [
-        { label: 'Actively trying to conceive', value: 'trying' },
-        { label: 'Currently pregnant (maternal support)', value: 'pregnant' },
-        { label: 'Caring for a newborn / infant health metrics', value: 'baby' },
-        { label: 'General cycle tracking', value: 'tracking' }
-      ]
-    },
-    {
-      id: 'maternal_needs',
-      type: 'multiselect',
-      question: 'What tools or support do you require?',
-      sub: 'Select all that apply.',
-      options: [
-        { label: 'Pregnancy & Ovulation screening tests', value: 'kits' },
-        { label: 'Maternal nutrition (Prenatals with Methylfolate)', value: 'vitamins' },
-        { label: 'Baby health indicators (Scales, non-contact thermometers)', value: 'child_devices' }
-      ]
-    }
-  ],
-  subscriptions: [
-    {
-      id: 'telehealth_use',
-      type: 'singleselect',
-      question: 'How often do you require doctor consults or therapy support?',
-      sub: 'Helps us select the best subscription plan.',
-      options: [
-        { label: 'Frequently (monthly checkups, therapy, or nutrition guidance)', value: 'high' },
-        { label: 'Occasionally (3-4 times a year for basic queries)', value: 'medium' },
-        { label: 'Only during emergencies or unexpected sickness', value: 'low' }
-      ]
-    },
-    {
-      id: 'delivery_needs',
-      type: 'singleselect',
-      question: 'Would you benefit from monthly home delivery of prescriptions?',
-      sub: 'Saves pharmacy trips and coordinates care.',
-      options: [
-        { label: 'Yes, automatic refills delivered home', value: 'yes' },
-        { label: 'No, I prefer local pharmacy pickup', value: 'no' }
-      ]
-    },
-    {
-      id: 'lab_interest',
-      type: 'singleselect',
-      question: 'Do you need comprehensive diagnostic blood lab tests?',
-      sub: 'Includes home blood draws or local Quest/Labcorp bookings.',
-      options: [
-        { label: 'Yes, I need active baseline labs', value: 'yes' },
-        { label: 'No, I have recent lab results', value: 'no' }
-      ]
-    }
-  ]
-};
+  ];
+}
 
 export default function ShopPage({ setPage }) {
   const [summitMdPurchaseType, setSummitMdPurchaseType] = useState('single'); 
@@ -504,7 +676,7 @@ export default function ShopPage({ setPage }) {
 
   // Intake State
   const [quizOpen, setQuizOpen] = useState(false);
-  const [quizBranch, setQuizBranch] = useState(null); // 'weightloss' | 'nutrition' | 'sleep' | 'devices' | 'maternal' | 'subscriptions'
+  const [quizProduct, setQuizProduct] = useState(null);
   const [quizStep, setQuizStep] = useState(0);
   const [quizAnswers, setQuizAnswers] = useState({});
   const [quizHeightFeet, setQuizHeightFeet] = useState('5');
@@ -516,24 +688,6 @@ export default function ShopPage({ setPage }) {
   const [quizRecommendation, setQuizRecommendation] = useState(null);
   const [selectedPlanDuration, setSelectedPlanDuration] = useState('3month'); // '1month' | '3month' | '6month'
 
-  const [purchaseTypes, setPurchaseTypes] = useState(() => {
-    const initial = {};
-    PRODUCTS.forEach(p => {
-      if (p.subPrice && p.oneTimePrice) {
-        initial[p.id] = 'subscription';
-      } else if (p.subPrice) {
-        initial[p.id] = 'subscription';
-      } else {
-        initial[p.id] = 'onetime';
-      }
-    });
-    return initial;
-  });
-
-  const handlePurchaseTypeChange = (prodId, type) => {
-    setPurchaseTypes(prev => ({ ...prev, [prodId]: type }));
-  };
-
   const handleAddToCart = (productName) => {
     setCartSuccess(productName);
     setTimeout(() => {
@@ -541,28 +695,9 @@ export default function ShopPage({ setPage }) {
     }, 3000);
   };
 
-  // Launch Quiz from specific product click
+  // Launch Quiz from specific product card
   const handleProductSelection = (product) => {
-    // Determine the branch based on product category & keywords
-    let branch = 'nutrition';
-    if (product.id.includes('weightloss')) {
-      branch = 'weightloss';
-    } else if (product.category === 'maternal') {
-      // split maternal between baby devices and prenatal nutrition
-      if (product.id === 'babyThermometer' || product.id === 'infantScale') {
-        branch = 'maternal';
-      } else {
-        branch = 'maternal';
-      }
-    } else if (product.category === 'devices') {
-      branch = 'devices';
-    } else if (product.category === 'subscriptions') {
-      branch = 'subscriptions';
-    } else if (product.id === 'sleep') {
-      branch = 'sleep';
-    }
-
-    setQuizBranch(branch);
+    setQuizProduct(product);
     setQuizStep(0);
     setQuizAnswers({});
     setQuizRecommendation(null);
@@ -570,24 +705,24 @@ export default function ShopPage({ setPage }) {
   };
 
   // Quiz Navigation
-  const currentBranchQuestions = QUESTIONS[quizBranch] || [];
-  const totalSteps = currentBranchQuestions.length + 2; // +1 for Contact details, +1 for results
+  const currentProductQuestions = quizProduct ? getQuestionsForProduct(quizProduct) : [];
+  const totalSteps = currentProductQuestions.length + 2; // +1 for Contact details, +1 for results
 
   const handleQuizNext = () => {
     // Validate Vitals if on vitals step
-    if (quizBranch === 'weightloss' && currentBranchQuestions[quizStep]?.type === 'vitals') {
+    if (quizProduct && currentProductQuestions[quizStep]?.type === 'vitals') {
       if (!quizHeightFeet || !quizHeightInches || !quizWeight || !quizDOB) {
         alert('Please fill out all vitals values.');
         return;
       }
     }
 
-    if (quizStep < currentBranchQuestions.length - 1) {
+    if (quizStep < currentProductQuestions.length - 1) {
       setQuizStep(quizStep + 1);
-    } else if (quizStep === currentBranchQuestions.length - 1) {
+    } else if (quizStep === currentProductQuestions.length - 1) {
       // Go to Contact step
-      setQuizStep(currentBranchQuestions.length);
-    } else if (quizStep === currentBranchQuestions.length) {
+      setQuizStep(currentProductQuestions.length);
+    } else if (quizStep === currentProductQuestions.length) {
       // Triggers evaluation loader
       startClinicalEvaluation();
     }
@@ -598,7 +733,7 @@ export default function ShopPage({ setPage }) {
       setQuizStep(quizStep - 1);
     } else {
       setQuizOpen(false);
-      setQuizBranch(null);
+      setQuizProduct(null);
     }
   };
 
@@ -606,9 +741,9 @@ export default function ShopPage({ setPage }) {
     setQuizLoading(true);
     setQuizLoadingIndex(0);
     const intervals = [
-      'Checking clinical safety profile & contraindications...',
-      'Calculating Body Mass Index (BMI) & metabolic rate...',
-      'Assigning medical recommendations and plan choices...'
+      'Checking safety contraindications & parameters...',
+      'Evaluating product formulation match...',
+      'Generating clinician assessment report...'
     ];
 
     const timer = setInterval(() => {
@@ -627,18 +762,19 @@ export default function ShopPage({ setPage }) {
   const evaluateRecommendations = () => {
     setQuizLoading(false);
     
-    // Choose appropriate product recommendation based on branch answers
-    let recProduct = PRODUCTS.find(p => p.id === 'travel'); // Default fallback
+    // Choose appropriate product recommendation based on answers
+    let finalRec = quizProduct; // Recommends the selected product by default
 
-    if (quizBranch === 'weightloss') {
+    // If it's weightloss, perform active BMI/contraindication validation
+    if (quizProduct.id.includes('weightloss')) {
       const isContraindicated = quizAnswers.contraindications === 'yes' || quizAnswers.pregnancy === 'yes';
       if (isContraindicated) {
         // Red flag alternative recommendation
-        recProduct = {
+        finalRec = {
           id: 'wellness_alternative',
-          name: 'SummitMD Wellness & Teleconsultation Plan',
+          name: 'SummitMD General Wellness Consultation Plan',
           category: 'subscriptions',
-          desc: 'A comprehensive medical program focusing on nutrition, general health consultation, and wellness coaching. Recommended because GLP-1 weight medications were contraindicated for you.',
+          desc: 'A comprehensive medical program focusing on nutrition, general health consults, and wellness coaching. Recommended because GLP-1 weight medications were contraindicated for you.',
           image: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=400',
           subPrice: 49,
           oneTimePrice: null,
@@ -650,58 +786,11 @@ export default function ShopPage({ setPage }) {
         const heightInches = (parseInt(quizHeightFeet) * 12) + parseInt(quizHeightInches);
         const weightLbs = parseInt(quizWeight);
         const bmi = ((weightLbs * 703) / (heightInches * heightInches)).toFixed(1);
-        
-        // Choose between Tirzepatide & Semaglutide based on goals and BMI
-        if (bmi >= 30 || quizAnswers.goals?.includes('lose_significant')) {
-          recProduct = PRODUCTS.find(p => p.id === 'weightloss_tirzepatide');
-        } else {
-          recProduct = PRODUCTS.find(p => p.id === 'weightloss_semaglutide');
-        }
-        recProduct = { ...recProduct, calculatedBmi: bmi };
-      }
-    } else if (quizBranch === 'nutrition') {
-      if (quizAnswers.focus?.includes('immunity')) {
-        recProduct = PRODUCTS.find(p => p.id === 'vitaminc') || PRODUCTS.find(p => p.id === 'travel');
-      } else if (quizAnswers.energy_crashes === 'daily') {
-        recProduct = PRODUCTS.find(p => p.id === 'daynight') || PRODUCTS.find(p => p.id === 'travel');
-      } else {
-        recProduct = PRODUCTS.find(p => p.id === 'travel');
-      }
-    } else if (quizBranch === 'sleep') {
-      if (quizAnswers.sleep_challenge?.includes('stress') || quizAnswers.stress_level === 'daily') {
-        recProduct = PRODUCTS.find(p => p.id === 'daynight');
-      } else {
-        recProduct = PRODUCTS.find(p => p.id === 'sleep');
-      }
-    } else if (quizBranch === 'devices') {
-      if (quizAnswers.monitor_metric === 'bp') {
-        recProduct = PRODUCTS.find(p => p.id === 'bpMonitor');
-      } else if (quizAnswers.monitor_metric === 'glucose') {
-        recProduct = PRODUCTS.find(p => p.id === 'glucoseMeter');
-      } else if (quizAnswers.monitor_metric === 'respiratory') {
-        recProduct = PRODUCTS.find(p => p.id === 'nebulizer');
-      } else {
-        recProduct = PRODUCTS.find(p => p.id === 'organizer');
-      }
-    } else if (quizBranch === 'maternal') {
-      if (quizAnswers.maternal_stage === 'pregnant' || quizAnswers.maternal_needs?.includes('vitamins')) {
-        recProduct = PRODUCTS.find(p => p.id === 'prenatalVitamins');
-      } else if (quizAnswers.maternal_stage === 'baby' || quizAnswers.maternal_needs?.includes('child_devices')) {
-        recProduct = PRODUCTS.find(p => p.id === 'babyThermometer');
-      } else {
-        recProduct = PRODUCTS.find(p => p.id === 'ovulationKit');
-      }
-    } else if (quizBranch === 'subscriptions') {
-      if (quizAnswers.telehealth_use === 'high') {
-        recProduct = PRODUCTS.find(p => p.id === 'telePlan');
-      } else if (quizAnswers.lab_interest === 'yes') {
-        recProduct = PRODUCTS.find(p => p.id === 'labBooking');
-      } else {
-        recProduct = PRODUCTS.find(p => p.id === 'medDelivery');
+        finalRec = { ...quizProduct, calculatedBmi: bmi };
       }
     }
 
-    setQuizRecommendation(recProduct);
+    setQuizRecommendation(finalRec);
     setQuizStep(totalSteps - 1); // Move to recommendation screen
   };
 
@@ -862,95 +951,6 @@ export default function ShopPage({ setPage }) {
           font-size: 0.95rem;
           line-height: 1.6;
           margin-bottom: 24px;
-        }
-
-        /* Option selector */
-        .summitmd-option-list {
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-          margin-bottom: 24px;
-        }
-
-        .summitmd-option-row {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 16px;
-          border-radius: 12px;
-          border: 1.5px solid #e2e8f0;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        }
-
-        .summitmd-option-row:hover {
-          border-color: #0f2e2f;
-          background-color: rgba(15, 46, 47, 0.01);
-        }
-
-        .summitmd-option-row.active {
-          border-color: #0f2e2f;
-          background-color: rgba(15, 46, 47, 0.03);
-          box-shadow: 0 0 0 1px #0f2e2f;
-        }
-
-        .summitmd-option-left {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
-
-        .summitmd-radio-dot {
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          border: 2px solid #cbd5e1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-        }
-
-        .summitmd-option-row.active .summitmd-radio-dot {
-          border-color: #0f2e2f;
-        }
-
-        .summitmd-option-row.active .summitmd-radio-dot::after {
-          content: '';
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-          background-color: #0f2e2f;
-        }
-
-        .summitmd-option-info h4 {
-          margin: 0;
-          font-size: 0.95rem;
-          color: #0f2e2f;
-          font-weight: 700;
-        }
-
-        .summitmd-option-info p {
-          margin: 4px 0 0 0;
-          font-size: 0.8rem;
-          color: #64748b;
-        }
-
-        .summitmd-option-price {
-          text-align: right;
-        }
-
-        .summitmd-price-current {
-          font-size: 1.15rem;
-          font-weight: 800;
-          color: #0f2e2f;
-        }
-
-        .summitmd-price-strike {
-          font-size: 0.85rem;
-          color: #94a3b8;
-          text-decoration: line-through;
-          margin-right: 4px;
         }
 
         /* Tabs styling */
@@ -1390,21 +1390,18 @@ export default function ShopPage({ setPage }) {
           OFFICIAL HEALTH & WELLNESS STORE
         </span>
         <h1 className="summitmd-shop-title">Set up your foundational health.</h1>
-        <p className="summitmd-shop-subtitle">Discover dynamic medical screening programs, diagnostic monitors, and personalized supplement stacks tailored to your metabolic blueprint.</p>
+        <p className="summitmd-shop-subtitle">Complete a quick medical intake to purchase clinical products, prescription therapies, and smart diagnostic equipment.</p>
         
-        {/* TryYucca explore treatment assessment CTA */}
+        {/* Dynamic explore treatment assessment CTA */}
         <button 
           onClick={() => {
-            setQuizBranch('weightloss'); // default entry branch
-            setQuizStep(0);
-            setQuizAnswers({});
-            setQuizRecommendation(null);
-            setQuizOpen(true);
+            const defaultProd = PRODUCTS.find(p => p.id === 'weightloss_semaglutide');
+            handleProductSelection(defaultProd);
           }}
           className="btn animate-pulse" 
           style={{ marginTop: '24px', backgroundColor: '#00d2c4', color: '#0f2e2f', padding: '12px 24px', borderRadius: '30px', fontWeight: '800', border: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
         >
-          Explore Treatments & Intake Assessment <ArrowRight size={16} />
+          Start Clinical Intake Quiz <ArrowRight size={16} />
         </button>
       </div>
 
@@ -1430,46 +1427,6 @@ export default function ShopPage({ setPage }) {
               <p className="summitmd-flagship-desc">
                 Your daily nutrient insurance stack. 75 highly bioavailable vitamins, organic minerals, and whole-food adaptogens in one single scoop. Optimizes cell longevity, focus, and digestion.
               </p>
-
-              <div className="summitmd-option-list">
-                
-                {/* Double Subscription */}
-                <div 
-                  className={`summitmd-option-row${summitMdPurchaseType === 'double' ? ' active' : ''}`}
-                  onClick={() => setSummitMdPurchaseType('double')}
-                >
-                  <div className="summitmd-option-left">
-                    <div className="summitmd-radio-dot"></div>
-                    <div className="summitmd-option-info">
-                      <h4>Double Subscription</h4>
-                      <p>60 Servings (2 Pouches) • Save $30 • Free Welcome Kit</p>
-                    </div>
-                  </div>
-                  <div className="summitmd-option-price">
-                    <span className="summitmd-price-strike">$198</span>
-                    <span className="summitmd-price-current">$149/mo</span>
-                  </div>
-                </div>
-
-                {/* Single Subscription */}
-                <div 
-                  className={`summitmd-option-row${summitMdPurchaseType === 'single' ? ' active' : ''}`}
-                  onClick={() => setSummitMdPurchaseType('single')}
-                >
-                  <div className="summitmd-option-left">
-                    <div className="summitmd-radio-dot"></div>
-                    <div className="summitmd-option-info">
-                      <h4>Single Subscription</h4>
-                      <p>30 Servings (1 Pouch) • Save $20 • Free Welcome Kit</p>
-                    </div>
-                  </div>
-                  <div className="summitmd-option-price">
-                    <span className="summitmd-price-strike">$99</span>
-                    <span className="summitmd-price-current">$79/mo</span>
-                  </div>
-                </div>
-
-              </div>
             </div>
 
             <div>
@@ -1477,6 +1434,7 @@ export default function ShopPage({ setPage }) {
                 <strong>🎁 FREE Welcome Kit Included:</strong> Premium Stainless Canister, Shaker Bottle, Metal Measuring Scoop, and 5 Free Travel Packs ($45 retail value).
               </div>
 
+              {/* Complete intake selector - No direct Add to Cart */}
               <button 
                 className="btn" 
                 style={{ width: '100%', backgroundColor: '#0f2e2f', color: '#ffffff', padding: '16px', borderRadius: '12px', fontWeight: '800', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
@@ -1505,7 +1463,6 @@ export default function ShopPage({ setPage }) {
         <div className="summitmd-products-grid">
           {filteredProducts.map(p => {
             const hasSub = p.subPrice !== null && p.subPrice !== undefined;
-            const hasOneTime = p.oneTimePrice !== null && p.oneTimePrice !== undefined;
 
             return (
               <div className="summitmd-product-card" key={p.id}>
@@ -1559,7 +1516,7 @@ export default function ShopPage({ setPage }) {
                     {hasSub ? `From $${p.subPrice}/mo` : `One-time: $${p.oneTimePrice}`}
                   </div>
 
-                  {/* Complete intake selector */}
+                  {/* Complete intake selector - No direct Add to Cart */}
                   <button 
                     className="btn" 
                     style={{ 
@@ -1580,7 +1537,7 @@ export default function ShopPage({ setPage }) {
                     onClick={() => handleProductSelection(p)}
                   >
                     <Plus size={16} /> 
-                    {hasSub ? 'Subscribe via Quiz' : 'Purchase via Quiz'}
+                    {hasSub ? 'Check Eligibility & Subscribe' : 'Verify & Purchase'}
                   </button>
                 </div>
               </div>
@@ -1624,7 +1581,7 @@ export default function ShopPage({ setPage }) {
       {/* ========================================== */}
       {/* TRYYUCCA-STYLE INTENSE CLINICAL INTAKE WIZARD */}
       {/* ========================================== */}
-      {quizOpen && (
+      {quizOpen && quizProduct && (
         <div className="yucca-quiz-overlay animate-fade-in">
           
           {/* Header Strip */}
@@ -1658,11 +1615,11 @@ export default function ShopPage({ setPage }) {
             ) : (
               <>
                 {/* 2. Step: Question Selector or Pre-Quiz Program Entry */}
-                {quizStep < currentBranchQuestions.length ? (
+                {quizStep < currentProductQuestions.length ? (
                   <div>
                     {/* Render active question */}
                     {(() => {
-                      const q = currentBranchQuestions[quizStep];
+                      const q = currentProductQuestions[quizStep];
                       
                       // BRANCH 1: General Options
                       if (q.type === 'singleselect' || q.type === 'multiselect') {
@@ -1757,11 +1714,11 @@ export default function ShopPage({ setPage }) {
                       }
                     })()}
                   </div>
-                ) : quizStep === currentBranchQuestions.length ? (
+                ) : quizStep === currentProductQuestions.length ? (
                   /* 3. Step: Universal Contact/Consent details */
                   <div>
                     <h2 className="yucca-question-title">Create your health profile</h2>
-                    <p className="yucca-question-sub">Almost done! Submit your contact details to review your customized recommendation plan.</p>
+                    <p className="yucca-question-sub">Submit your contact details to review your clinical prescription assessment.</p>
 
                     <label className="yucca-input-label">Full Name</label>
                     <input type="text" className="yucca-input" placeholder="e.g. Alex Harrison" required />
@@ -1784,7 +1741,7 @@ export default function ShopPage({ setPage }) {
                   <div className="animate-fade-in" style={{ paddingBottom: '60px' }}>
                     <div style={{ textAlign: 'center', marginBottom: '24px' }}>
                       <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: '#00d2c4', fontWeight: 800, backgroundColor: '#0f2e2f', padding: '6px 16px', borderRadius: '30px', display: 'inline-block' }}>
-                        Your Personalized Prescription Recommend
+                        Recommended Clinical Plan
                       </span>
                     </div>
 
@@ -1792,7 +1749,7 @@ export default function ShopPage({ setPage }) {
                       <div style={{ padding: '24px', backgroundColor: '#e6ecea', borderBottom: '1px solid rgba(15,46,47,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div>
                           <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0f2e2f' }}>{quizRecommendation?.name}</h3>
-                          <p style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '2px' }}>{quizRecommendation?.badge || 'Intake Evaluated'}</p>
+                          <p style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '2px' }}>{quizRecommendation?.badge || 'Clinical Assessment Completed'}</p>
                         </div>
                         <ShieldCheck size={32} style={{ color: '#00d2c4' }} />
                       </div>
@@ -1803,7 +1760,7 @@ export default function ShopPage({ setPage }) {
                         </p>
 
                         {/* If weight loss, show BMI and safety report */}
-                        {quizBranch === 'weightloss' && (
+                        {quizProduct.id.includes('weightloss') && (
                           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px', backgroundColor: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
                             <div>
                               <span style={{ fontSize: '0.75rem', color: '#64748b', display: 'block', textTransform: 'uppercase', fontWeight: 700 }}>Calculated BMI</span>
