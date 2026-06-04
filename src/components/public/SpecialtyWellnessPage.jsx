@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { ArrowLeft, ArrowRight, ShieldCheck, CheckCircle, ExternalLink } from 'lucide-react';
 
 export default function SpecialtyWellnessPage({ setPage }) {
@@ -12,7 +12,7 @@ export default function SpecialtyWellnessPage({ setPage }) {
             <ArrowLeft size={16} /> Back to Home
           </button>
           <div style={{ fontWeight: 700, color: 'var(--color-primary)', fontSize: '1.1rem' }}>
-            Teladoc Health Specialty & Wellness
+            SummitMD Specialty & Wellness
           </div>
         </div>
       </div>
@@ -84,7 +84,7 @@ export default function SpecialtyWellnessPage({ setPage }) {
       {/* Main Title Header */}
       <section className="container" style={{ padding: '60px 0 20px 0', textAlign: 'center' }}>
         <h2 style={{ fontSize: '2rem', color: 'var(--color-primary)', fontWeight: 800 }}>
-          Some ways Teladoc Health can help
+          Some ways SummitMD can help
         </h2>
       </section>
 
@@ -235,7 +235,7 @@ export default function SpecialtyWellnessPage({ setPage }) {
       {/* Simplified subpage footer */}
       <footer style={{ backgroundColor: '#0F2A4A', color: 'rgba(255,255,255,0.7)', padding: '30px 0', textAlign: 'center', fontSize: '0.85rem' }}>
         <div className="container">
-          <p>&copy; 2026 Teladoc Health Health Systems, Inc. All rights reserved. Vitals synchronized via PeakHealth API.</p>
+          <p>&copy; 2026 SummitMD, Inc. All rights reserved. Vitals synchronized via PeakHealth API.</p>
         </div>
       </footer>
 

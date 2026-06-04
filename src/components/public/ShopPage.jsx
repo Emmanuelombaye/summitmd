@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Check, Info, ShoppingCart, Calendar, Heart, ShieldCheck, ArrowRight } from 'lucide-react';
 
 const PRODUCTS = [

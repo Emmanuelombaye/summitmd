@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Search, HelpCircle, ArrowLeft, Plus, Minus } from 'lucide-react';
 
 export default function FAQPage({ setPage }) {
@@ -7,16 +7,16 @@ export default function FAQPage({ setPage }) {
 
   const faqs = [
     {
-      q: "What is Teladoc Health?",
-      a: "Teladoc Health is a modern, virtual healthcare platform providing round-the-clock access to board-certified physicians, therapists, psychiatrists, and specialists. We allow you to consult from home via secure video calls."
+      q: "What is SummitMD?",
+      a: "SummitMD is a modern, virtual healthcare platform providing round-the-clock access to board-certified physicians, therapists, psychiatrists, and specialists. We allow you to consult from home via secure video calls."
     },
     {
       q: "How do I connect my PeakHealth records?",
-      a: "During registration, enter your PeakHealth Patient ID (MRN). Teladoc Health's sync layer automatically queries the PeakHealth API to fetch your medication lists, baseline vitals, and condition history to populate your dashboard."
+      a: "During registration, enter your PeakHealth Patient ID (MRN). SummitMD's sync layer automatically queries the PeakHealth API to fetch your medication lists, baseline vitals, and condition history to populate your dashboard."
     },
     {
       q: "Can doctors prescribe medications?",
-      a: "Yes. If clinically appropriate, Teladoc Health practitioners can submit prescriptions electronically to your local pharmacy. Note: We do not prescribe controlled substances (like narcotics or certain ADHD treatments) online."
+      a: "Yes. If clinically appropriate, SummitMD practitioners can submit prescriptions electronically to your local pharmacy. Note: We do not prescribe controlled substances (like narcotics or certain ADHD treatments) online."
     },
     {
       q: "How much does a virtual visit cost?",
@@ -24,7 +24,7 @@ export default function FAQPage({ setPage }) {
     },
     {
       q: "Is my medical data secure?",
-      a: "Absolutely. Teladoc Health is fully HIPAA-compliant. All video streams and chat interactions are encrypted (AES-256) and stored on secure health servers under strict clinical security guidelines."
+      a: "Absolutely. SummitMD is fully HIPAA-compliant. All video streams and chat interactions are encrypted (AES-256) and stored on secure health servers under strict clinical security guidelines."
     },
     {
       q: "How long is the waiting room queue?",

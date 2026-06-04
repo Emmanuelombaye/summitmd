@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Brain, Check, ArrowLeft, MessageSquare, ShieldCheck, Heart } from 'lucide-react';
 
 export default function MentalHealthPage({ setPage }) {
@@ -67,7 +67,7 @@ export default function MentalHealthPage({ setPage }) {
           <div>
             <h2 style={{ fontSize: '2rem', marginBottom: '20px' }}>A Secure, Judgment-Free Space</h2>
             <p style={{ color: 'var(--color-text-muted)', fontSize: '0.95rem', lineHeight: 1.8, marginBottom: '20px' }}>
-              We understand that talking about mental wellness requires absolute safety. Teladoc Health provides encrypted virtual environments, and all therapeutic charts are securely isolated under federal guidelines. PeakHealth connectivity allows you to sync reports with your main provider only if you grant explicit permission.
+              We understand that talking about mental wellness requires absolute safety. SummitMD provides encrypted virtual environments, and all therapeutic charts are securely isolated under federal guidelines. PeakHealth connectivity allows you to sync reports with your main provider only if you grant explicit permission.
             </p>
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center', color: 'var(--color-success)', fontWeight: 600, fontSize: '0.9rem' }}>
               <ShieldCheck size={18} /> HIPAA Compliant | AES-256 Encrypted Session Logs

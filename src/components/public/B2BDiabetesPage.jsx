@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { ArrowLeft, Check, TrendingDown, Target, ShieldCheck, HeartPulse } from 'lucide-react';
 
 export default function B2BDiabetesPage({ setPage }) {
@@ -94,7 +94,7 @@ export default function B2BDiabetesPage({ setPage }) {
           <div>
             <h3>Navigating the New Age of GLP-1s</h3>
             <p style={{ color: 'var(--color-text-muted)', fontSize: '0.95rem', marginTop: '12px', lineHeight: 1.7 }}>
-              Anti-obesity and GLP-1 medications are highly effective but carry substantial costs for employers and plan sponsors. Teladoc Health provides rigorous clinical checks, prior-authorization workflows, and integrated metabolic behavior counseling to ensure medications are utilized by candidates who benefit most.
+              Anti-obesity and GLP-1 medications are highly effective but carry substantial costs for employers and plan sponsors. SummitMD provides rigorous clinical checks, prior-authorization workflows, and integrated metabolic behavior counseling to ensure medications are utilized by candidates who benefit most.
             </p>
           </div>
           <div className="glass-card" style={{ padding: '30px', textAlign: 'center' }}>

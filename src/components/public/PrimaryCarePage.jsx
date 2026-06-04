@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Stethoscope, Check, ArrowLeft, Plus, Minus, ShieldCheck, Heart, UserCheck } from 'lucide-react';
 
 export default function PrimaryCarePage({ setPage }) {
@@ -6,19 +6,19 @@ export default function PrimaryCarePage({ setPage }) {
 
   const faqs = [
     {
-      q: "What is Primary Care from Teladoc Health?",
+      q: "What is Primary Care from SummitMD?",
       a: "Virtual primary care is ongoing, relationship-based care with a provider who helps you manage your health over time—all by phone or video. Choose a primary care provider who gets to know your health history and goals. Get help with preventive care, chronic conditions and new concerns. Receive a personalized care plan with next steps. Access a dedicated care team for ongoing support. Get referrals to in-person care when needed."
     },
     {
-      q: "Why choose Teladoc Health virtual primary care over physical alternatives?",
-      a: "We’re simplifying our language and processes to make it clearer and easier to understand the primary care experience we offer. While physical checkups can take weeks to schedule and hours of travel, Teladoc Health provides personalized care, trusted board-certified providers, and continuous support for both everyday and long-term health from home."
+      q: "Why choose SummitMD virtual primary care over physical alternatives?",
+      a: "We’re simplifying our language and processes to make it clearer and easier to understand the primary care experience we offer. While physical checkups can take weeks to schedule and hours of travel, SummitMD provides personalized care, trusted board-certified providers, and continuous support for both everyday and long-term health from home."
     },
     {
       q: "Who can use Primary Care?",
       a: "Virtual primary care is available to eligible adults and is a good fit for anyone looking for convenient, ongoing care. It is available for adults 18 and older. It is ideal if you don’t currently have a primary care provider, helpful if you want more consistent or convenient access to care, and a good option if it’s hard to get in-person appointments."
     },
     {
-      q: "Who are the primary care providers at Teladoc Health?",
+      q: "Who are the primary care providers at SummitMD?",
       a: "You’ll work with experienced, board-certified doctors and nurse practitioners trained to deliver high-quality care virtually. Providers specialize in family medicine, internal medicine, and related fields. They are experienced in building long-term relationships with patients, supported by a dedicated care team (nurses, medical assistants, care coordinators), and focused on whole-person care—both physical and mental health."
     },
     {
@@ -80,7 +80,7 @@ export default function PrimaryCarePage({ setPage }) {
             Virtual primary care that helps you stay on top of your health.
           </h1>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '1.1rem', marginBottom: '32px', lineHeight: 1.6 }}>
-            Get personalized primary care with Teladoc Health. Primary Care offers a suite of services to care for your physical and mental health. Connect with top providers from home or on the go.
+            Get personalized primary care with SummitMD. Primary Care offers a suite of services to care for your physical and mental health. Connect with top providers from home or on the go.
           </p>
           <div style={{ display: 'flex', gap: '16px' }}>
             <button className="btn btn-primary btn-lg" onClick={() => setPage('register')}>Get Started</button>

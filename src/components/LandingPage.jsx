@@ -1,44 +1,44 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 
 export default function LandingPage({ setPage }) {
   const careCards = [
     {
-      img: 'https://www.teladochealth.com/adobe/dynamicmedia/deliver/dm-aid--10f50226-5f20-40d6-88e8-a3a9bc6fa491/image1.png?quality=85&preferwebp=true',
+      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--10f50226-5f20-40d6-88e8-a3a9bc6fa491/image1.png?quality=85&preferwebp=true',
       title: '24/7 Care',
       desc: 'Talk to a medical provider anytime, day or night. Whether it\'s cold and flu symptoms, allergies or infections, get the care you need from anywhere.',
       cta: 'Learn more',
       page: 'urgent-care',
     },
     {
-      img: 'https://www.teladochealth.com/adobe/dynamicmedia/deliver/dm-aid--44eeb530-3246-48c5-88d0-e63f9e931581/image2.png?quality=85&preferwebp=true',
+      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--44eeb530-3246-48c5-88d0-e63f9e931581/image2.png?quality=85&preferwebp=true',
       title: 'Primary Care',
       desc: 'Stay on top of your health with board-certified providers supporting your checkups, preventative care and prescriptions.',
       cta: 'Learn more',
       page: 'primary-care',
     },
     {
-      img: 'https://www.teladochealth.com/adobe/dynamicmedia/deliver/dm-aid--cac2bb6b-c62e-43e0-8657-92b31ef70eb5/emp_mental.jpg.webp?quality=90&width=800&preferwebp=true',
+      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--cac2bb6b-c62e-43e0-8657-92b31ef70eb5/emp_mental.jpg.webp?quality=90&width=800&preferwebp=true',
       title: 'Mental Health',
       desc: 'Connect with a therapist or psychiatrist and get the support you need—however you prefer to engage.',
       cta: 'Learn more',
       page: 'mental-health',
     },
     {
-      img: 'https://www.teladochealth.com/adobe/dynamicmedia/deliver/dm-aid--cccf04f6-a732-4fb8-9f9e-0357371cd144/card-obesity.png.webp?quality=90&width=800&preferwebp=true',
+      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--cccf04f6-a732-4fb8-9f9e-0357371cd144/card-obesity.png.webp?quality=90&width=800&preferwebp=true',
       title: 'Condition Management',
       desc: 'Get personalized support for diabetes, hypertension, weight management and more—right from your phone.',
       cta: 'Learn more',
       page: 'chronic-care',
     },
     {
-      img: 'https://www.teladochealth.com/adobe/dynamicmedia/deliver/dm-aid--49d9fd7d-e78a-4b08-9474-13fe804249b8/emp_primary.jpg.webp?quality=90&width=800&preferwebp=true',
+      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--49d9fd7d-e78a-4b08-9474-13fe804249b8/emp_primary.jpg.webp?quality=90&width=800&preferwebp=true',
       title: 'Specialty Care',
       desc: 'Get expert medical opinions, dermatology visits and other specialty care—without the wait.',
       cta: 'Learn more',
       page: 'specialty-wellness',
     },
     {
-      img: 'https://www.teladochealth.com/adobe/dynamicmedia/deliver/dm-aid--3d3f9cf2-d3a9-42e8-825a-34fd72f88fbd/header-bettersleep.png.webp?quality=90&preferwebp=true&width=800',
+      img: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--3d3f9cf2-d3a9-42e8-825a-34fd72f88fbd/header-bettersleep.png.webp?quality=90&preferwebp=true&width=800',
       title: 'Everyday Habits',
       desc: 'Build lasting habits with support for better sleep, balanced nutrition and healthy lifestyle choices.',
       cta: 'Learn more',
@@ -57,14 +57,14 @@ export default function LandingPage({ setPage }) {
       
       {/* ===== HERO ===== */}
       <section className="tdh-hero" style={{
-        backgroundImage: `url(https://www.teladochealth.com/adobe/dynamicmedia/deliver/dm-aid--17277e00-0756-4dae-a420-fff308fbd934/Home_hero_2026-3.jpg.webp?quality=90&preferwebp=true&width=1600)`
+        backgroundImage: `url(https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--17277e00-0756-4dae-a420-fff308fbd934/Home_hero_2026-3.jpg.webp?quality=90&preferwebp=true&width=1600)`
       }}>
         <div className="tdh-hero-overlay"></div>
         <div className="tdh-hero-content">
           <div className="tdh-hero-inner tdh-hero-inner--center">
             <h1 className="tdh-hero-title">Connecting you to better health</h1>
             <div className="tdh-hero-desc">
-              <p>Teladoc Health connects patients and care providers for medical care, mental health, chronic condition management and more.</p>
+              <p>SummitMD connects patients and care providers for medical care, mental health, chronic condition management and more.</p>
             </div>
             <div className="tdh-hero-ctas">
               <a href="#" className="tdh-btn tdh-btn-primary-inverted" onClick={e => { e.preventDefault(); setPage('register'); }}>
@@ -144,7 +144,7 @@ export default function LandingPage({ setPage }) {
           <div className="tdh-org-content">
             <span className="tdh-org-pretitle">Organizations</span>
             <h2>A trusted partner for better outcomes</h2>
-            <p>Teladoc Health helps employers, health plans, hospitals and health systems deliver high-quality, cost-effective virtual care to the populations they serve.</p>
+            <p>SummitMD helps employers, health plans, hospitals and health systems deliver high-quality, cost-effective virtual care to the populations they serve.</p>
             <div className="tdh-org-ctas">
               <a href="#" className="tdh-btn tdh-btn-primary" onClick={e => { e.preventDefault(); setPage('employers'); }}>
                 For employers
@@ -159,7 +159,7 @@ export default function LandingPage({ setPage }) {
           </div>
           <div className="tdh-org-image">
             <img
-              src="https://www.teladochealth.com/adobe/dynamicmedia/deliver/dm-aid--d96568a7-d0b3-4001-b66d-2fc51fc50006/employers_hero.jpg.webp?quality=90&width=800&preferwebp=true"
+              src="https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--d96568a7-d0b3-4001-b66d-2fc51fc50006/employers_hero.jpg.webp?quality=90&width=800&preferwebp=true"
               alt="Healthcare organization partner"
               onError={e => { e.target.src = 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80'; }}
             />
@@ -188,7 +188,7 @@ export default function LandingPage({ setPage }) {
       <section className="tdh-cta-banner">
         <div className="tdh-cta-banner-inner">
           <h2>Start your journey to better health today</h2>
-          <p>Join millions of people who trust Teladoc Health for their virtual care needs.</p>
+          <p>Join millions of people who trust SummitMD for their virtual care needs.</p>
           <div className="tdh-cta-banner-btns">
             <a href="#" className="tdh-btn tdh-btn-primary-inverted" onClick={e => { e.preventDefault(); setPage('register'); }}>
               Get care now

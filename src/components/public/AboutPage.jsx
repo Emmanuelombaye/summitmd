@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+﻿import React, { useState, useRef } from 'react';
 import { 
   ArrowLeft, 
   ArrowRight, 
@@ -73,7 +73,7 @@ export default function AboutPage({ setPage }) {
   const carouselSlides = [
     {
       image: "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&q=80&w=600",
-      caption: "Team Teladoc Health’s ride to cure diabetes",
+      caption: "Team SummitMD’s ride to cure diabetes",
       location: "San Francisco, CA"
     },
     {
@@ -740,7 +740,7 @@ export default function AboutPage({ setPage }) {
               frameBorder="0" 
               allow="autoplay; fullscreen; picture-in-picture" 
               allowFullScreen
-              title="Teladoc Health Story Presentation"
+              title="SummitMD Story Presentation"
               style={{ border: 'none' }}
             ></iframe>
           </div>
@@ -750,7 +750,7 @@ export default function AboutPage({ setPage }) {
       {/* Footer */}
       <footer style={{ backgroundColor: '#0F2A4A', color: 'rgba(255,255,255,0.7)', padding: '30px 0', textAlign: 'center', fontSize: '0.85rem', marginTop: 'auto' }}>
         <div className="container">
-          <p>&copy; 2026 Teladoc Health Health Systems, Inc. All rights reserved. Our services are fully audited and HIPAA-compliant.</p>
+          <p>&copy; 2026 SummitMD, Inc. All rights reserved. Our services are fully audited and HIPAA-compliant.</p>
         </div>
       </footer>
 

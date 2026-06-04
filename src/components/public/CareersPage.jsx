@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { ArrowLeft, Users, Briefcase } from 'lucide-react';
 
 export default function CareersPage({ setPage }) {
@@ -11,7 +11,7 @@ export default function CareersPage({ setPage }) {
       </div>
 
       <section className="container" style={{ textAlign: 'center', marginBottom: '60px', maxWidth: '800px' }}>
-        <span style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--color-accent)', fontWeight: 700 }}>Careers at Teladoc Health</span>
+        <span style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--color-accent)', fontWeight: 700 }}>Careers at SummitMD</span>
         <h1 style={{ fontSize: '3rem', marginTop: '12px', marginBottom: '20px', color: 'var(--color-primary)' }}>Build the Future of Digital Care.</h1>
         <p style={{ color: 'var(--color-text-muted)', fontSize: '1.1rem' }}>
           Join our global team of software architects, data scientists, clinical coaches, and medical leaders mapping out modern, accessible patient records.
@@ -28,7 +28,7 @@ export default function CareersPage({ setPage }) {
             </div>
             <div style={{ padding: '24px', border: '1px solid var(--color-border)', borderRadius: '12px' }}>
               <h4>Full Medical Coverage</h4>
-              <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginTop: '8px' }}>Comprehensive health plans, dental/vision coverages, health savings match accounts, and free Teladoc Health access for family.</p>
+              <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginTop: '8px' }}>Comprehensive health plans, dental/vision coverages, health savings match accounts, and free SummitMD access for family.</p>
             </div>
             <div style={{ padding: '24px', border: '1px solid var(--color-border)', borderRadius: '12px' }}>
               <h4>Open Job Roles</h4>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { ArrowLeft, ArrowRight, Scale, Brain, HeartPulse, Activity, FileText, X, ChevronRight, ChevronDown, ChevronUp, Play, Pause } from 'lucide-react';
 
 export default function WeightManagementPage({ setPage }) {
@@ -70,7 +70,7 @@ export default function WeightManagementPage({ setPage }) {
 
   const faqs = [
     {
-      q: "What is the Teladoc Health Weight Management Program?",
+      q: "What is the SummitMD Weight Management Program?",
       a: "The Weight Management Program helps members build healthier habits with connected tools, personal insights and expert coaching. Members receive a connected scale that automatically uploads weight readings to the app. Coaching and guidance help with nutrition, activity and daily routines. All program features are provided at no cost for eligible members."
     },
     {
@@ -83,7 +83,7 @@ export default function WeightManagementPage({ setPage }) {
     },
     {
       q: "How does GLP-1 medication support fit into the Weight Management Program?",
-      a: "GLP-1 medications for weight loss may be available only to members who have access to an eligible program and receive clinical approval from a licensed Teladoc Health provider. Providers determine appropriateness based on guidelines and direct patients to pharmacies matching benefit rules. The companion program supplies behavioral and dietetic training specifically calibrated for patients on GLP-1 therapies."
+      a: "GLP-1 medications for weight loss may be available only to members who have access to an eligible program and receive clinical approval from a licensed SummitMD provider. Providers determine appropriateness based on guidelines and direct patients to pharmacies matching benefit rules. The companion program supplies behavioral and dietetic training specifically calibrated for patients on GLP-1 therapies."
     }
   ];
 
@@ -91,7 +91,7 @@ export default function WeightManagementPage({ setPage }) {
     {
       id: 'first-place',
       title: "Becoming the first place people go for care",
-      desc: "An in-depth report showing how Teladoc Health integrates weight management, virtual primary care, and mental health services to simplify the member care experience and deliver sustained clinical results.",
+      desc: "An in-depth report showing how SummitMD integrates weight management, virtual primary care, and mental health services to simplify the member care experience and deliver sustained clinical results.",
       content: "As organizations face rising healthcare complexity, virtual-first solutions are becoming the primary entry point for care. A comprehensive weight management solution cannot operate in a vacuum. By integrating mental health services, virtual nutrition clinics, and cellular devices directly with primary care coordinators, members bypass traditional clinical friction. Data shows that starting care in a connected virtual setting leads to 30% faster engagement and higher satisfaction scorecards across employer programs.",
       date: "May 2026",
       readTime: "6 min read"
@@ -108,7 +108,7 @@ export default function WeightManagementPage({ setPage }) {
       id: 'beyond-weight-loss',
       title: "Beyond weight loss: the critical role of long-term maintenance",
       desc: "Clinical outcomes from weight loss are only valuable if they last. Learn about our structured clinical transition and maintenance pathways that support members after the initial weight reduction.",
-      content: "Long-term tracking of weight loss programs reveals a common challenge: weight regain after the first year. Teladoc Health addresses this with a dedicated 'Maintenance Phase'. When members achieve their weight loss target or stabilize their dosage, their coaching adjustments transition from strict caloric restriction to metabolic conditioning and strength retention. Cellular scale compliance and metabolic reviews maintain metabolic health and lock in improvements in blood pressure and cholesterol.",
+      content: "Long-term tracking of weight loss programs reveals a common challenge: weight regain after the first year. SummitMD addresses this with a dedicated 'Maintenance Phase'. When members achieve their weight loss target or stabilize their dosage, their coaching adjustments transition from strict caloric restriction to metabolic conditioning and strength retention. Cellular scale compliance and metabolic reviews maintain metabolic health and lock in improvements in blood pressure and cholesterol.",
       date: "March 2026",
       readTime: "5 min read"
     },
@@ -116,7 +116,7 @@ export default function WeightManagementPage({ setPage }) {
       id: 'hidden-health-risks',
       title: "A smarter way to surface hidden health risks in your population",
       desc: "How integrated screening and biometric sync automatically flags patients at risk of chronic conditions like type-2 diabetes and hypertension before they progress.",
-      content: "Cardiometabolic risks often stay hidden until a major clinical event occurs. By utilizing cellular-connected devices (scales, cuffs, sensors) that sync measurements directly through the PeakHealth API, Teladoc Health's clinical system runs automated audits. If a member's weight spikes alongside elevated blood pressure readings, the platform alerts their care team automatically. Early intervention prevents minor weight gains from developing into severe chronic conditions.",
+      content: "Cardiometabolic risks often stay hidden until a major clinical event occurs. By utilizing cellular-connected devices (scales, cuffs, sensors) that sync measurements directly through the PeakHealth API, SummitMD's clinical system runs automated audits. If a member's weight spikes alongside elevated blood pressure readings, the platform alerts their care team automatically. Early intervention prevents minor weight gains from developing into severe chronic conditions.",
       date: "February 2026",
       readTime: "7 min read"
     }
@@ -652,7 +652,7 @@ export default function WeightManagementPage({ setPage }) {
         <div className="container">
           <div className="weight-hero-content animate-fade-in">
             <span style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '2px', color: '#a78bfa', fontWeight: 700, display: 'inline-block', marginBottom: '12px' }}>
-              Teladoc Health B2B Solutions
+              SummitMD B2B Solutions
             </span>
             <h1 style={{ fontSize: '3rem', fontWeight: 800, lineHeight: 1.15, marginBottom: '20px', color: '#ffffff', fontFamily: 'var(--font-display)' }}>
               A weight and obesity care solution that delivers results
@@ -852,7 +852,7 @@ export default function WeightManagementPage({ setPage }) {
               Navigating the new age of GLP-1s
             </h3>
             <p style={{ color: 'var(--color-text-muted)', fontSize: '1.05rem', lineHeight: 1.6, marginBottom: '24px' }}>
-              The mounting popularity of GLP-1 medications is changing how organizations address obesity. In this webinar, the American Diabetes Association and Teladoc Health discuss the opportunities and costs of medication therapies for the long-term management of chronic conditions.
+              The mounting popularity of GLP-1 medications is changing how organizations address obesity. In this webinar, the American Diabetes Association and SummitMD discuss the opportunities and costs of medication therapies for the long-term management of chronic conditions.
             </p>
             <button 
               className="btn btn-primary" 
@@ -929,20 +929,20 @@ export default function WeightManagementPage({ setPage }) {
                 <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#5c24e5', color: '#ffffff', display: 'flex', alignItems: 'center', justify: 'center', fontWeight: 700 }}>M</div>
                 <div>
                   <h5 style={{ fontWeight: 700, margin: 0 }}>Melissa</h5>
-                  <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--color-text-muted)', fontWeight: 600 }}>Teladoc Health Member</span>
+                  <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--color-text-muted)', fontWeight: 600 }}>SummitMD Member</span>
                 </div>
               </div>
             </div>
 
             <div className="glass-card" style={{ padding: '32px', border: '1px solid var(--color-border)', borderRadius: '16px', background: '#f8fafc' }}>
               <p style={{ fontSize: '1.1rem', fontStyle: 'italic', color: 'var(--color-primary)', lineHeight: 1.6, marginBottom: '20px' }}>
-                "Teladoc Health helps me maintain my glucose numbers and my weight, because in the long run, it helps with my overall health. It just makes my life easier."
+                "SummitMD helps me maintain my glucose numbers and my weight, because in the long run, it helps with my overall health. It just makes my life easier."
               </p>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#5c24e5', color: '#ffffff', display: 'flex', alignItems: 'center', justify: 'center', fontWeight: 700 }}>B</div>
                 <div>
                   <h5 style={{ fontWeight: 700, margin: 0 }}>Beverly</h5>
-                  <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--color-text-muted)', fontWeight: 600 }}>Teladoc Health Member</span>
+                  <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--color-text-muted)', fontWeight: 600 }}>SummitMD Member</span>
                 </div>
               </div>
             </div>
@@ -1010,7 +1010,7 @@ export default function WeightManagementPage({ setPage }) {
       <section className="disclosures-section">
         <div className="container">
           <div className="disclosure-item">
-            *Livongo is now part of Teladoc Health, and we are in a brand transition phase. You may receive Livongo-branded and Teladoc Health-branded products during this transition. Other than brand name, there is no difference between products.
+            *Livongo is now part of SummitMD, and we are in a brand transition phase. You may receive Livongo-branded and SummitMD-branded products during this transition. Other than brand name, there is no difference between products.
           </div>
           <div className="disclosure-item">
             <sup>1</sup> GLP-1s are available only where medically appropriate, as prescribed by an authorized healthcare provider and where permitted under applicable state and federal law.
@@ -1019,7 +1019,7 @@ export default function WeightManagementPage({ setPage }) {
             <sup>2</sup> Full program fees at risk are available to commercial populations with at least 10 observable members. Outcomes for enrolled members who have been active for 6 months (engage with a connected device, complete a coaching session, share clinical data with the care team or log in to the participant portal) will be assessed in each annual measurement period. Measurement applies to the whole population using those who are observable. Credit will be applied to the entire population.
           </div>
           <div className="disclosure-item">
-            <sup>3</sup> Teladoc Health data, DS-12600.
+            <sup>3</sup> SummitMD data, DS-12600.
           </div>
           <div className="disclosure-item">
             <sup>4</sup> Blackburn G. (1995). Effect of degree of weight loss on health benefits. Obesity Research 3: 211S-216S. Reference for 10%: NIH, NHLBI Obesity Education Initiative. Clinical Guidelines on the Identification, Evaluation, and Treatment of Overweight and Obesity in Adults. Available online.
@@ -1028,7 +1028,7 @@ export default function WeightManagementPage({ setPage }) {
             <sup>5</sup> Dzubur, Eldin. Long-term benefits of digital mental health program use during months of poor chronic disease management. 2023.
           </div>
           <div className="disclosure-item" style={{ marginTop: '16px', borderTop: '1px solid #cbd5e1', paddingTop: '16px' }}>
-            The testimonials, opinions and statements reflect one individual's personal experience with Teladoc Health. Results and experiences may vary from person to person and will be unique to each individual. The testimonials are voluntarily provided and are not paid.
+            The testimonials, opinions and statements reflect one individual's personal experience with SummitMD. Results and experiences may vary from person to person and will be unique to each individual. The testimonials are voluntarily provided and are not paid.
           </div>
         </div>
       </section>
@@ -1036,7 +1036,7 @@ export default function WeightManagementPage({ setPage }) {
       {/* Footer */}
       <footer style={{ backgroundColor: '#0F2A4A', color: 'rgba(255,255,255,0.7)', padding: '30px 0', textAlign: 'center', fontSize: '0.85rem' }}>
         <div className="container">
-          <p>&copy; 2026 Teladoc Health Health Systems, Inc. All rights reserved. Vitals synchronized via PeakHealth API.</p>
+          <p>&copy; 2026 SummitMD, Inc. All rights reserved. Vitals synchronized via PeakHealth API.</p>
         </div>
       </footer>
 
@@ -1193,7 +1193,7 @@ export default function WeightManagementPage({ setPage }) {
                     />
                     <h5 style={{ fontWeight: 800, margin: '0 0 8px 0', fontSize: '0.95rem' }}>Navigating the New Age of GLP-1s</h5>
                     <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', lineHeight: 1.4 }}>
-                      Join the ADA and Teladoc Health clinical leadership to analyze weight management algorithms, cellular reporting, and benefits cost models.
+                      Join the ADA and SummitMD clinical leadership to analyze weight management algorithms, cellular reporting, and benefits cost models.
                     </p>
                   </div>
                   <div>
@@ -1256,7 +1256,7 @@ export default function WeightManagementPage({ setPage }) {
                   {/* Simulated Video Player */}
                   <div className="mock-video-container">
                     <div className="mock-video-title">
-                      Webinar Session: Navigating the New Age of GLP-1s (ADA & Teladoc Health Partnership)
+                      Webinar Session: Navigating the New Age of GLP-1s (ADA & SummitMD Partnership)
                     </div>
                     
                     {/* Simulated Slide Content Display */}
@@ -1409,7 +1409,7 @@ export default function WeightManagementPage({ setPage }) {
                 {activeArticle.content}
               </div>
               <p>
-                To explore how Teladoc Health can deploy these specific structural models and customize a whole-person care campaign for your workforce population, click the B2B Consultation request form.
+                To explore how SummitMD can deploy these specific structural models and customize a whole-person care campaign for your workforce population, click the B2B Consultation request form.
               </p>
               
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--color-border)', paddingTop: '24px', marginTop: '32px' }}>

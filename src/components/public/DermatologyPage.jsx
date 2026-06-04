@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Sparkles, Check, ArrowLeft, Camera, ShieldCheck, HeartPulse } from 'lucide-react';
 
 export default function DermatologyPage({ setPage }) {

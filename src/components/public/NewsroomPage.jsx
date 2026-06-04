@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { ArrowLeft, Rss, Calendar } from 'lucide-react';
 
 export default function NewsroomPage({ setPage }) {
@@ -12,9 +12,9 @@ export default function NewsroomPage({ setPage }) {
 
       <section className="container" style={{ textAlign: 'center', marginBottom: '60px', maxWidth: '800px' }}>
         <span style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--color-accent)', fontWeight: 700 }}>Press & Media Announcements</span>
-        <h1 style={{ fontSize: '3rem', marginTop: '12px', marginBottom: '20px', color: 'var(--color-primary)' }}>Teladoc Health Newsroom</h1>
+        <h1 style={{ fontSize: '3rem', marginTop: '12px', marginBottom: '20px', color: 'var(--color-primary)' }}>SummitMD Newsroom</h1>
         <p style={{ color: 'var(--color-text-muted)', fontSize: '1.1rem' }}>
-          Explore the latest announcements, research statistics, partner integrations, and corporate expansions from Teladoc Health.
+          Explore the latest announcements, research statistics, partner integrations, and corporate expansions from SummitMD.
         </p>
       </section>
 
@@ -24,8 +24,8 @@ export default function NewsroomPage({ setPage }) {
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '8px' }}>
               <Calendar size={14} /> June 3, 2026
             </div>
-            <h4>Teladoc Health Integrates PeakHealth FHIR v4 API standards</h4>
-            <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', marginTop: '8px' }}>Teladoc Health today finalized a data integration agreement with PeakHealth networks, allowing subscribers to securely sync clinical history profiles and vital observations.</p>
+            <h4>SummitMD Integrates PeakHealth FHIR v4 API standards</h4>
+            <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', marginTop: '8px' }}>SummitMD today finalized a data integration agreement with PeakHealth networks, allowing subscribers to securely sync clinical history profiles and vital observations.</p>
           </div>
 
           <div className="glass-card" style={{ padding: '24px' }}>

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 export default function TDHFooter({ setPage }) {
   const goto = (href) => {
@@ -16,18 +16,18 @@ export default function TDHFooter({ setPage }) {
               <a href="#" onClick={e => { e.preventDefault(); setPage('landing'); }}>
                 <img
                   src="/logo.png"
-                  alt="Teladoc Health"
+                  alt="SummitMD"
                   style={{ filter: 'brightness(0) invert(1)', maxWidth: '180px' }}
                 />
               </a>
             </div>
             <div className="tdh-footer-social">
               {[
-                { icon: 'f', label: 'facebook', url: 'https://www.facebook.com/teladochealth' },
-                { icon: '📷', label: 'instagram', url: 'https://instagram.com/teladochealth' },
+                { icon: 'f', label: 'facebook', url: 'https://www.facebook.com/SummitMD' },
+                { icon: '📷', label: 'instagram', url: 'https://instagram.com/SummitMD' },
                 { icon: 'in', label: 'linkedin', url: 'https://www.linkedin.com/company/teladoc-health' },
                 { icon: '▶', label: 'youtube', url: 'https://www.youtube.com/user/TeladocVideos' },
-                { icon: '𝕏', label: 'x', url: 'https://www.twitter.com/teladochealth' },
+                { icon: '𝕏', label: 'x', url: 'https://www.twitter.com/SummitMD' },
               ].map((s) => (
                 <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer" aria-label={s.label} className="tdh-footer-social-icon">
                   {s.icon}
@@ -36,7 +36,7 @@ export default function TDHFooter({ setPage }) {
             </div>
             <address className="tdh-footer-address">
               <strong>Headquarters</strong><br />
-              Teladoc Health, Inc.<br />
+              SummitMD, Inc.<br />
               155 East 44th Street,<br />
               Suite 1700<br />
               New York, NY 10017
@@ -83,7 +83,7 @@ export default function TDHFooter({ setPage }) {
               {[
                 { label: 'Provider Resources', href: 'providers-signup' },
                 { label: 'How It Works', href: 'how-it-works' },
-                { label: 'Provider Careers', external: true, url: 'https://teladoc.wd1.myworkdayjobs.com/en-US/teladochealth_is_hiring' },
+                { label: 'Provider Careers', external: true, url: 'https://teladoc.wd1.myworkdayjobs.com/en-US/SummitMD_is_hiring' },
               ].map(l => (
                 <li key={l.label}>
                   {l.external
@@ -105,7 +105,7 @@ export default function TDHFooter({ setPage }) {
                 { label: 'Careers', href: 'careers' },
                 { label: 'Industry Events', href: 'newsroom' },
                 { label: 'Newsroom', href: 'newsroom' },
-                { label: 'Investors', external: true, url: 'https://ir.teladochealth.com' },
+                { label: 'Investors', external: true, url: 'https://ir.SummitMD.com' },
               ].map(l => (
                 <li key={l.label}>
                   {l.external
@@ -138,15 +138,15 @@ export default function TDHFooter({ setPage }) {
         {/* Footer bottom */}
         <div className="tdh-footer-bottom">
           <div className="tdh-footer-copy">
-            <p>© {new Date().getFullYear()} Teladoc Health, Inc.</p>
+            <p>© {new Date().getFullYear()} SummitMD, Inc.</p>
             <p className="tdh-footer-propel">PL015954.A</p>
           </div>
           <div className="tdh-footer-badges">
             <a href="https://go.onelink.me/agxg/f6blsn9h" target="_blank" rel="noopener noreferrer">
-              <img src="https://www.teladochealth.com/content/dam/tdh-www/us/en/images/app-badge-apple.png" alt="Apple App Store" style={{ height: '40px', borderRadius: '8px' }} onError={e => { e.target.style.display='none'; }} />
+              <img src="https://www.SummitMD.com/content/dam/tdh-www/us/en/images/app-badge-apple.png" alt="Apple App Store" style={{ height: '40px', borderRadius: '8px' }} onError={e => { e.target.style.display='none'; }} />
             </a>
             <a href="https://go.onelink.me/agxg/ov06wfm5" target="_blank" rel="noopener noreferrer">
-              <img src="https://www.teladochealth.com/content/dam/tdh-www/us/en/images/app-badge-google.png" alt="Google Play Store" style={{ height: '40px', borderRadius: '8px' }} onError={e => { e.target.style.display='none'; }} />
+              <img src="https://www.SummitMD.com/content/dam/tdh-www/us/en/images/app-badge-google.png" alt="Google Play Store" style={{ height: '40px', borderRadius: '8px' }} onError={e => { e.target.style.display='none'; }} />
             </a>
           </div>
         </div>

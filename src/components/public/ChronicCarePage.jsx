@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Droplets, Check, ArrowLeft, Heart, ShieldCheck, Activity } from 'lucide-react';
 
 export default function ChronicCarePage({ setPage }) {
@@ -70,7 +70,7 @@ export default function ChronicCarePage({ setPage }) {
           <div>
             <h2 style={{ fontSize: '2rem', marginBottom: '20px' }}>Seamless Device Syncing via FHIR</h2>
             <p style={{ color: 'var(--color-text-muted)', fontSize: '0.95rem', lineHeight: 1.8, marginBottom: '20px' }}>
-              You don't need to manually write down blood pressure levels or glucose values. Teladoc Health's platform links with active wireless health gadgets and writes `Observation` records directly to PeakHealth. During your consult, your doctor can immediately plot your vitals history in real-time graphs.
+              You don't need to manually write down blood pressure levels or glucose values. SummitMD's platform links with active wireless health gadgets and writes `Observation` records directly to PeakHealth. During your consult, your doctor can immediately plot your vitals history in real-time graphs.
             </p>
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center', color: 'var(--color-success)', fontWeight: 600, fontSize: '0.9rem' }}>
               <ShieldCheck size={18} /> Direct Bluetooth & Cellular Sync | Real-time Doctor Alerts

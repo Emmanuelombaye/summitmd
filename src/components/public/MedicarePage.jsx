@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { ArrowLeft, Check, ShieldCheck, Heart } from 'lucide-react';
 
 export default function MedicarePage({ setPage }) {
@@ -15,7 +15,7 @@ export default function MedicarePage({ setPage }) {
           <span style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--color-accent)', fontWeight: 700 }}>Senior & Medicare Coverage</span>
           <h1 style={{ fontSize: '3rem', marginTop: '12px', marginBottom: '20px', color: 'var(--color-primary)' }}>Virtual Care for Medicare Beneficiaries.</h1>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '1.1rem', marginBottom: '32px' }}>
-            Teladoc Health partners with Medicare Advantage plans to offer senior-focused virtual consultations, remote patient monitoring for blood pressure/blood glucose, and specialist wellness examinations.
+            SummitMD partners with Medicare Advantage plans to offer senior-focused virtual consultations, remote patient monitoring for blood pressure/blood glucose, and specialist wellness examinations.
           </p>
           <button className="btn btn-primary btn-lg" onClick={() => setPage('register')}>Verify Medicare Coverage</button>
         </div>

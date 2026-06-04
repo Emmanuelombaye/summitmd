@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { ArrowLeft, ArrowRight, CheckCircle, Smartphone, Heart, HelpCircle, ChevronDown, ChevronUp, ShieldCheck } from 'lucide-react';
 
 export default function HypertensionPage({ setPage }) {
@@ -10,7 +10,7 @@ export default function HypertensionPage({ setPage }) {
 
   const faqs = [
     {
-      q: "What is the Teladoc Health Hypertension Management program?",
+      q: "What is the SummitMD Hypertension Management program?",
       a: "The Hypertension Management program helps people with high blood pressure understand and improve their readings using a connected blood pressure monitor, personal insights and expert coaching. Members receive a connected blood pressure monitor that uploads readings automatically to the app. Coaching and health guidance are part of the program, and everything is included at no cost for eligible members."
     },
     {
@@ -23,7 +23,7 @@ export default function HypertensionPage({ setPage }) {
     },
     {
       q: "What do I get with the Hypertension Management program?",
-      a: "Members receive a connected blood pressure monitor and ongoing guidance. The monitor uploads readings automatically to your app and does not require Wi-Fi. The Teladoc Health app offers tools for tracking weight, activity, and food, and coaches provide support on lifestyle habits linked to blood pressure."
+      a: "Members receive a connected blood pressure monitor and ongoing guidance. The monitor uploads readings automatically to your app and does not require Wi-Fi. The SummitMD app offers tools for tracking weight, activity, and food, and coaches provide support on lifestyle habits linked to blood pressure."
     },
     {
       q: "How does the Hypertension Management program help me manage my blood pressure?",
@@ -41,7 +41,7 @@ export default function HypertensionPage({ setPage }) {
             <ArrowLeft size={16} /> Back to Home
           </button>
           <div style={{ fontWeight: 700, color: 'var(--color-primary)', fontSize: '1.1rem' }}>
-            Teladoc Health Hypertension Management
+            SummitMD Hypertension Management
           </div>
         </div>
       </div>
@@ -244,7 +244,7 @@ export default function HypertensionPage({ setPage }) {
               Tools and support, tailored to you
             </h3>
             <p style={{ color: 'var(--color-text-muted)', fontSize: '1.05rem', lineHeight: 1.6 }}>
-              Your health goals and challenges are unique, so your Teladoc Health program should be too. You'll get personalized insights on your readings and one-on-one support from expert coaches, all to help you take charge of your health.
+              Your health goals and challenges are unique, so your SummitMD program should be too. You'll get personalized insights on your readings and one-on-one support from expert coaches, all to help you take charge of your health.
             </p>
           </div>
         </div>
@@ -338,7 +338,7 @@ export default function HypertensionPage({ setPage }) {
       {/* Footer */}
       <footer style={{ backgroundColor: '#0F2A4A', color: 'rgba(255,255,255,0.7)', padding: '30px 0', textAlign: 'center', fontSize: '0.85rem', marginTop: 'auto' }}>
         <div className="container">
-          <p>&copy; 2026 Teladoc Health Health Systems, Inc. All rights reserved. Vitals synchronized via PeakHealth API.</p>
+          <p>&copy; 2026 SummitMD, Inc. All rights reserved. Vitals synchronized via PeakHealth API.</p>
         </div>
       </footer>
 

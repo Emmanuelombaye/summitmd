@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { ArrowLeft, Mail, Phone, MapPin } from 'lucide-react';
 
 export default function ContactPage({ setPage }) {
@@ -11,7 +11,7 @@ export default function ContactPage({ setPage }) {
       </div>
 
       <section className="container" style={{ textAlign: 'center', marginBottom: '60px', maxWidth: '800px' }}>
-        <span style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--color-accent)', fontWeight: 700 }}>Contact Teladoc Health</span>
+        <span style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--color-accent)', fontWeight: 700 }}>Contact SummitMD</span>
         <h1 style={{ fontSize: '3rem', marginTop: '12px', marginBottom: '20px', color: 'var(--color-primary)' }}>Get In Touch With Us.</h1>
         <p style={{ color: 'var(--color-text-muted)', fontSize: '1.1rem' }}>
           Have general inquiries, technical billing issues, or wish to connect PeakHealth interfaces? Reach our patient coordinator teams directly.
@@ -25,10 +25,10 @@ export default function ContactPage({ setPage }) {
           
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <li style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <Phone size={20} style={{ color: 'var(--color-accent)' }} /> <span>General Patient Care: 1-800-TELADOC (835-2362)</span>
+              <Phone size={20} style={{ color: 'var(--color-accent)' }} /> <span>General Patient Care: 1-800-SUMMITMD (768-8463)</span>
             </li>
             <li style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <Mail size={20} style={{ color: 'var(--color-accent)' }} /> <span>Email Support: support@teladochealth.com</span>
+              <Mail size={20} style={{ color: 'var(--color-accent)' }} /> <span>Email Support: support@SummitMD.com</span>
             </li>
             <li style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
               <MapPin size={20} style={{ color: 'var(--color-accent)' }} /> <span>HQ: 482 Pinehurst Dr, Seattle, WA 98101</span>

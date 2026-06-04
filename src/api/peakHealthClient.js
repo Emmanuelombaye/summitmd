@@ -1,4 +1,4 @@
-// PeakHealth FHIR API Client Mock
+﻿// PeakHealth FHIR API Client Mock
 // This layer mimics FHIR JSON structures (v4) for easy replacement with a live server.
 
 const DEFAULT_PROVIDERS = [
@@ -64,10 +64,10 @@ const DEFAULT_PATIENT = {
   gender: "male",
   birthDate: "1988-11-14",
   address: [{ text: "482 Pinehurst Dr, Seattle, WA 98101", city: "Seattle", state: "WA", postalCode: "98101" }],
-  managingOrganization: { display: "Teladoc Health Northwest Group" },
+  managingOrganization: { display: "SummitMD Northwest Group" },
   extension: [
     {
-      url: "http://teladoc.org/fhir/StructureDefinition/insurance-info",
+      url: "http://summitmd.com/fhir/StructureDefinition/insurance-info",
       valueCodeableConcept: {
         text: "Blue Shield PPO - Gold Plan",
         coding: [{ code: "BS-PPO-G", display: "Blue Shield Premium Plan" }]

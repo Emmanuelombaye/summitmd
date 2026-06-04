@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 
 const NAV_SHOPS = {
   label: 'Shops',
@@ -92,7 +92,7 @@ const NAV_INDIVIDUALS = {
       href: 'mental-health',
       desc: 'Find therapy that works best for you.',
       sub: [
-        { label: 'Teladoc Health Mental Health', href: 'mental-health' },
+        { label: 'SummitMD Mental Health', href: 'mental-health' },
         { label: 'BetterHelp', external: true, url: 'https://www.betterhelp.com/teladoc-health/' },
       ],
     },
@@ -130,7 +130,7 @@ const NAV_INDIVIDUALS = {
         { label: 'Overview', href: 'specialty-wellness' },
         { label: 'Dermatology', href: 'dermatology' },
         { label: 'Expert Medical Opinion', href: 'specialty-wellness' },
-        { label: 'BetterSleep—Try for $0', external: true, url: 'https://www.bettersleep.com/transform-your-sleep-teladochealth-30' },
+        { label: 'BetterSleep—Try for $0', external: true, url: 'https://www.bettersleep.com/transform-your-sleep-SummitMD-30' },
       ],
     },
     {
@@ -148,14 +148,14 @@ const NAV_INDIVIDUALS = {
     { label: 'FAQs', href: 'faq' },
     { label: 'About Us', href: 'about' },
     { label: 'Our Impact', href: 'our-impact' },
-    { label: 'Teladoc Health Library', href: 'library' },
+    { label: 'SummitMD Library', href: 'library' },
     { label: 'Contact Us', href: 'contact' },
   ],
   promo: {
-    bg: 'https://www.teladochealth.com/adobe/dynamicmedia/deliver/dm-aid--3d3f9cf2-d3a9-42e8-825a-34fd72f88fbd/header-bettersleep.png.webp?quality=90&preferwebp=true&width=800',
+    bg: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--3d3f9cf2-d3a9-42e8-825a-34fd72f88fbd/header-bettersleep.png.webp?quality=90&preferwebp=true&width=800',
     title: 'Stop racing thoughts and start sleeping better',
     cta: 'Try BetterSleep—30 days for $0',
-    url: 'https://www.bettersleep.com/transform-your-sleep-teladochealth-30',
+    url: 'https://www.bettersleep.com/transform-your-sleep-SummitMD-30',
   },
 };
 
@@ -226,7 +226,7 @@ const NAV_ORGANIZATIONS = {
     { label: 'Contact Us', href: 'contact' },
   ],
   promo: {
-    bg: 'https://www.teladochealth.com/adobe/dynamicmedia/deliver/dm-aid--3f84695c-c1ad-437b-83f0-39bdbc15ff06/why-states-are-turning-to-virtual-care-to-transform-rural-health.jpg.webp?quality=90&preferwebp=true&width=800',
+    bg: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--3f84695c-c1ad-437b-83f0-39bdbc15ff06/why-states-are-turning-to-virtual-care-to-transform-rural-health.jpg.webp?quality=90&preferwebp=true&width=800',
     title: 'Why States Are Turning To Virtual Care To Transform Rural Health',
     cta: 'Read more',
     href: 'library',
@@ -252,22 +252,22 @@ const NAV_CLINICIANS = {
       label: 'Provider Careers',
       href: 'careers',
       external: true,
-      url: 'https://teladoc.wd503.myworkdayjobs.com/en-US/teladochealth_is_hiring',
+      url: 'https://teladoc.wd503.myworkdayjobs.com/en-US/SummitMD_is_hiring',
       desc: 'Interested in joining our world-class team? View our openings.',
-      sub: [{ label: 'View openings', external: true, url: 'https://teladoc.wd503.myworkdayjobs.com/en-US/teladochealth_is_hiring' }],
+      sub: [{ label: 'View openings', external: true, url: 'https://teladoc.wd503.myworkdayjobs.com/en-US/SummitMD_is_hiring' }],
     },
   ],
   explore: [
-    { label: 'Join Our Team', external: true, url: 'https://teladoc.wd503.myworkdayjobs.com/en-US/teladochealth_is_hiring' },
+    { label: 'Join Our Team', external: true, url: 'https://teladoc.wd503.myworkdayjobs.com/en-US/SummitMD_is_hiring' },
     { label: 'About Us', href: 'about' },
     { label: 'Our Impact', href: 'our-impact' },
     { label: 'Contact us', href: 'contact' },
   ],
   promo: {
-    bg: 'https://www.teladochealth.com/adobe/dynamicmedia/deliver/dm-aid--1b54cc2a-7248-4e84-9c7f-782fbd1eb931/header-providers.png.webp?quality=90&preferwebp=true&width=800',
+    bg: 'https://www.SummitMD.com/adobe/dynamicmedia/deliver/dm-aid--1b54cc2a-7248-4e84-9c7f-782fbd1eb931/header-providers.png.webp?quality=90&preferwebp=true&width=800',
     title: 'Simplify your work. Amplify your impact.',
     cta: 'See open roles',
-    url: 'https://teladoc.wd503.myworkdayjobs.com/en-US/teladochealth_is_hiring',
+    url: 'https://teladoc.wd503.myworkdayjobs.com/en-US/SummitMD_is_hiring',
     external: true,
   },
 };
@@ -304,7 +304,7 @@ export default function TDHHeader({ setPage }) {
         <a className="tdh-logo" href="#" onClick={e => { e.preventDefault(); goto('landing'); }}>
           <img
             src="/logo.png"
-            alt="Teladoc Health"
+            alt="SummitMD"
             className="tdh-logo-img"
           />
         </a>

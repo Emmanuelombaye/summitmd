@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { ArrowLeft, Check, Landmark, ShieldAlert } from 'lucide-react';
 
 export default function HealthPlansPage({ setPage }) {
@@ -15,7 +15,7 @@ export default function HealthPlansPage({ setPage }) {
           <span style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--color-accent)', fontWeight: 700 }}>Insurers & Payor Partnerships</span>
           <h1 style={{ fontSize: '3rem', marginTop: '12px', marginBottom: '20px', color: 'var(--color-primary)' }}>Coordinating Care for Health Plans.</h1>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '1.1rem', marginBottom: '32px' }}>
-            Integrate virtual clinical care lines with existing benefit schedules. Teladoc Health utilizes FHIR interoperability to verify insurance eligibility instantly and report outcomes safely.
+            Integrate virtual clinical care lines with existing benefit schedules. SummitMD utilizes FHIR interoperability to verify insurance eligibility instantly and report outcomes safely.
           </p>
           <button className="btn btn-primary btn-lg" onClick={() => alert("Contact Sales Form Loaded")}>Partner With Us</button>
         </div>

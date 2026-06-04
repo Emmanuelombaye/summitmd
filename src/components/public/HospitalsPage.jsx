@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { ArrowLeft, Check, LayoutGrid, HeartPulse } from 'lucide-react';
 
 export default function HospitalsPage({ setPage }) {

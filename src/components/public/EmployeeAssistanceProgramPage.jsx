@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { ArrowLeft, ArrowRight, Brain, HeartPulse, FileText, X, ChevronRight, ChevronDown, ChevronUp, Play, Pause, CheckCircle } from 'lucide-react';
 
 export default function EmployeeAssistanceProgramPage({ setPage }) {
@@ -101,7 +101,7 @@ export default function EmployeeAssistanceProgramPage({ setPage }) {
     },
     {
       q: "How do employees access these resources?",
-      a: "Employees can log in to the Teladoc Health or BetterHelp app or call our dedicated support line. The multi-front door approach helps boost utilization, and single sign-on enables seamless transitions between medical and EAP platforms."
+      a: "Employees can log in to the SummitMD or BetterHelp app or call our dedicated support line. The multi-front door approach helps boost utilization, and single sign-on enables seamless transitions between medical and EAP platforms."
     },
     {
       q: "How does Wellbound support personalized navigation?",
@@ -112,8 +112,8 @@ export default function EmployeeAssistanceProgramPage({ setPage }) {
       a: "Once the EAP session limit has been reached, employees can continue receiving therapy from the same provider through their medical benefits if the provider is in-network. This prevents care disruption, which is a major drawback of legacy EAP systems."
     },
     {
-      q: "Is Wellbound a Teladoc Health or BetterHelp service?",
-      a: "Wellbound is an integrated service offered and contracted through Teladoc Health that leverages the diverse and extensive network of BetterHelp providers to offer therapy within days."
+      q: "Is Wellbound a SummitMD or BetterHelp service?",
+      a: "Wellbound is an integrated service offered and contracted through SummitMD that leverages the diverse and extensive network of BetterHelp providers to offer therapy within days."
     },
     {
       q: "Are any professional development and organizational support services included?",
@@ -659,7 +659,7 @@ export default function EmployeeAssistanceProgramPage({ setPage }) {
               Meet Wellbound: a smarter EAP for today’s workforce
             </h1>
             <p style={{ color: '#f1f5f9', fontSize: '1.2rem', marginBottom: '36px', lineHeight: 1.6, opacity: 0.95 }}>
-              Wellbound is a new type of employee assistance program from Teladoc Health designed to boost utilization, improve care continuity and provide seamless, personalized support. Learn how we’re transforming EAPs from an underused resource into a powerful on-ramp for long-term employee wellness.
+              Wellbound is a new type of employee assistance program from SummitMD designed to boost utilization, improve care continuity and provide seamless, personalized support. Learn how we’re transforming EAPs from an underused resource into a powerful on-ramp for long-term employee wellness.
             </p>
             <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
               <button 
@@ -831,7 +831,7 @@ export default function EmployeeAssistanceProgramPage({ setPage }) {
             </div>
 
             <div className="service-column-card">
-              <h4 className="service-column-title" style={{ borderBottomColor: '#bbf7d0' }}>Teladoc Health Services**</h4>
+              <h4 className="service-column-title" style={{ borderBottomColor: '#bbf7d0' }}>SummitMD Services**</h4>
               <ul className="service-items-list">
                 <li className="service-item">
                   <CheckCircle size={18} className="service-item-bullet" />
@@ -1157,16 +1157,16 @@ export default function EmployeeAssistanceProgramPage({ setPage }) {
       <section className="disclosures-section">
         <div className="container">
           <div className="disclosure-item">
-            *Services provided by Teladoc Health Health affiliates and partners.
+            *Services provided by SummitMD affiliates and partners.
           </div>
           <div className="disclosure-item">
-            **Seamless connection to Teladoc Health Health programs is available to organizations that offer these services to their employees. Contracting for these services is separate from Wellbound.
+            **Seamless connection to SummitMD programs is available to organizations that offer these services to their employees. Contracting for these services is separate from Wellbound.
           </div>
           <div className="disclosure-item">
-            <sup>1</sup> Teladoc Health B2B Brand Tracker. Sept. 2024.
+            <sup>1</sup> SummitMD B2B Brand Tracker. Sept. 2024.
           </div>
           <div className="disclosure-item">
-            <sup>2</sup> Includes 1.) Teladoc Health Medical Group Providers, plus all BetterHelp network providers who provided services from Jan. 1, 2023-Nov. 3, 2023.
+            <sup>2</sup> Includes 1.) SummitMD Medical Group Providers, plus all BetterHelp network providers who provided services from Jan. 1, 2023-Nov. 3, 2023.
           </div>
           <div className="disclosure-item">
             <sup>3</sup> Includes health interactions across Integrated Care and BetterHelp segments.
@@ -1189,7 +1189,7 @@ export default function EmployeeAssistanceProgramPage({ setPage }) {
       {/* Footer */}
       <footer style={{ backgroundColor: '#0F2A4A', color: 'rgba(255,255,255,0.7)', padding: '30px 0', textAlign: 'center', fontSize: '0.85rem' }}>
         <div className="container">
-          <p>&copy; 2026 Teladoc Health Health Systems, Inc. All rights reserved. Vitals synchronized via PeakHealth API.</p>
+          <p>&copy; 2026 SummitMD, Inc. All rights reserved. Vitals synchronized via PeakHealth API.</p>
         </div>
       </footer>
 
@@ -1338,7 +1338,7 @@ export default function EmployeeAssistanceProgramPage({ setPage }) {
             <div className="modal-body" style={{ padding: '24px' }}>
               <div className="mock-video-container">
                 <div className="mock-video-title">
-                  Teladoc Health Presentation: Overcoming Low Legacy EAP Engagement
+                  SummitMD Presentation: Overcoming Low Legacy EAP Engagement
                 </div>
                 
                 <div style={{ 
@@ -1391,7 +1391,7 @@ export default function EmployeeAssistanceProgramPage({ setPage }) {
                         <div>
                           <h4 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '12px' }}>Whole-Person Medical Integration</h4>
                           <p style={{ fontSize: '0.9rem', color: '#cbd5e1', lineHeight: 1.5 }}>
-                            "When physical issues like chronic sleep loss or metabolic spikes complicate mental wellness, Care Advocates route members directly into Teladoc Health's clinical care pipelines."
+                            "When physical issues like chronic sleep loss or metabolic spikes complicate mental wellness, Care Advocates route members directly into SummitMD's clinical care pipelines."
                           </p>
                         </div>
                       )}

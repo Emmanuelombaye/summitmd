@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Activity, ShieldCheck, Heart } from 'lucide-react';
 import { peakHealthClient } from '../api/peakHealthClient';
 
@@ -7,7 +7,7 @@ export default function AuthPage({ mode, setPage, setUser }) {
   
   // Registration States
   const [name, setName] = useState('Alex Harrison');
-  const [email, setEmail] = useState('alex.harrison@teladochealth.com');
+  const [email, setEmail] = useState('alex.harrison@SummitMD.com');
   const [password, setPassword] = useState('password123');
   const [gender, setGender] = useState('male');
   const [birthDate, setBirthDate] = useState('1988-11-14');
@@ -35,7 +35,7 @@ export default function AuthPage({ mode, setPage, setUser }) {
         birthDate,
         extension: [
           {
-            url: "http://teladoc.org/fhir/StructureDefinition/insurance-info",
+            url: "http://summitmd.com/fhir/StructureDefinition/insurance-info",
             valueCodeableConcept: { text: insurance }
           }
         ]
@@ -53,14 +53,14 @@ export default function AuthPage({ mode, setPage, setUser }) {
         <div className="nav-brand" style={{ color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }} onClick={() => setPage('landing')}>
           <img
             src="/logo.png"
-            alt="Teladoc Health"
+            alt="SummitMD"
             style={{ filter: 'brightness(0) invert(1)', height: '24px' }}
           />
         </div>
         
         <div className="auth-sidebar-mid">
           <h2>Virtual Healthcare<br />at your service.</h2>
-          <p>Teladoc Health works together with the PeakHealth network to provide real-time insurance verification and unified medical history synchronization.</p>
+          <p>SummitMD works together with the PeakHealth network to provide real-time insurance verification and unified medical history synchronization.</p>
         </div>
 
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center', opacity: 0.8, fontSize: '0.8rem' }}>
@@ -88,7 +88,7 @@ export default function AuthPage({ mode, setPage, setUser }) {
             onMouseEnter={e => e.currentTarget.style.opacity = 1}
             onMouseLeave={e => e.currentTarget.style.opacity = 0.85}
           >
-            ← Back to Teladoc Health
+            ← Back to SummitMD
           </a>
         </div>
 

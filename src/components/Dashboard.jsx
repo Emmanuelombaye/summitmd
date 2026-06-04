@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { 
   Activity, Calendar, HeartPulse, UserCheck, MessageSquare, Plus, Bell, ShieldCheck, 
   Settings, LogOut, ChevronRight, Stethoscope, FileHeart
@@ -67,7 +67,7 @@ export default function Dashboard({ user, setPage, activePortalTab, setActivePor
           <div className="sidebar-logo" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <img
               src="/logo.png"
-              alt="Teladoc Health"
+              alt="SummitMD"
               style={{ filter: 'brightness(0) invert(1)', height: '18px' }}
             />
           </div>

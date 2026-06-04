@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { Camera, Mic, Volume2, ShieldCheck, HeartPulse, Send, PhoneOff, Video, VideoOff, MicOff } from 'lucide-react';
 
 export default function VirtualVisit({ user, setPage }) {
@@ -69,7 +69,7 @@ export default function VirtualVisit({ user, setPage }) {
         <div className="waiting-room-container" style={{ paddingTop: '40px' }}>
           <div className="glass-card" style={{ padding: '40px', textAlign: 'center', marginBottom: '24px' }}>
             <HeartPulse size={48} style={{ color: 'var(--color-accent)', margin: '0 auto 16px auto' }} />
-            <h2 style={{ fontSize: '1.75rem', marginBottom: '8px' }}>Teladoc Health Virtual Waiting Room</h2>
+            <h2 style={{ fontSize: '1.75rem', marginBottom: '8px' }}>SummitMD Virtual Waiting Room</h2>
             <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', marginBottom: '32px' }}>Your medical consultant is ready to begin. Please complete your hardware configuration verification.</p>
 
             <div className="device-check-grid">

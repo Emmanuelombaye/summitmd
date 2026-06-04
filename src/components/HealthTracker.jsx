@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Activity, Plus, ShieldCheck, HeartPulse } from 'lucide-react';
 import { peakHealthClient } from '../api/peakHealthClient';

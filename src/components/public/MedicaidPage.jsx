@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { ArrowLeft, Check, ShieldCheck, Heart } from 'lucide-react';
 
 export default function MedicaidPage({ setPage }) {
@@ -15,7 +15,7 @@ export default function MedicaidPage({ setPage }) {
           <span style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--color-accent)', fontWeight: 700 }}>State Sponsored Health Coverage</span>
           <h1 style={{ fontSize: '3rem', marginTop: '12px', marginBottom: '20px', color: 'var(--color-primary)' }}>Virtual Care for Medicaid Members.</h1>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '1.1rem', marginBottom: '32px' }}>
-            Teladoc Health partners with state Medicaid programs to offer 24/7 doctor consults, mental health sessions, and chronic disease tracking at little to no cost for eligible individuals and families.
+            SummitMD partners with state Medicaid programs to offer 24/7 doctor consults, mental health sessions, and chronic disease tracking at little to no cost for eligible individuals and families.
           </p>
           <button className="btn btn-primary btn-lg" onClick={() => setPage('register')}>Check Medicaid Eligibility</button>
         </div>

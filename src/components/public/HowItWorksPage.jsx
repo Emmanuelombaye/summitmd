@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { UserCheck, Stethoscope, FileText, ArrowLeft, ArrowRight, ShieldCheck } from 'lucide-react';
 
 export default function HowItWorksPage({ setPage }) {
@@ -19,7 +19,7 @@ export default function HowItWorksPage({ setPage }) {
         <span style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--color-accent)', fontWeight: 700 }}>Step-by-step Guide</span>
         <h1 style={{ fontSize: '3rem', marginTop: '12px', marginBottom: '20px', color: 'var(--color-primary)' }}>Healthcare Made Simple.</h1>
         <p style={{ color: 'var(--color-text-muted)', fontSize: '1.1rem' }}>
-          From setting up your account to consulting with doctors and picking up your prescriptions—here is how Teladoc Health virtual care works.
+          From setting up your account to consulting with doctors and picking up your prescriptions—here is how SummitMD virtual care works.
         </p>
       </section>
 
@@ -32,7 +32,7 @@ export default function HowItWorksPage({ setPage }) {
             </div>
             <h3 style={{ fontSize: '1.25rem', marginBottom: '12px' }}>1. Create Your Profile</h3>
             <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', flexGrow: 1 }}>
-              Set up your Teladoc Health profile. Enter your health insurance details (or select Self-Pay) and connect your PeakHealth Patient ID to import medical history.
+              Set up your SummitMD profile. Enter your health insurance details (or select Self-Pay) and connect your PeakHealth Patient ID to import medical history.
             </p>
           </div>
 

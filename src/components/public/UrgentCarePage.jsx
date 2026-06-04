@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { HeartPulse, Check, ArrowLeft, Stethoscope, Clock, ShieldAlert } from 'lucide-react';
 
 export default function UrgentCarePage({ setPage }) {
@@ -75,7 +75,7 @@ export default function UrgentCarePage({ setPage }) {
           <div style={{ textAlign: 'center' }}>
             <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'var(--color-accent-soft)', color: 'var(--color-accent)', fontWeight: 700, fontSize: '1.25rem', margin: '0 auto 16px auto' }} className="flex-center">1</div>
             <h4>Request Visit</h4>
-            <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginTop: '8px' }}>Log in to your Teladoc Health portal, select Urgent Care, and answer a brief symptom intake checklist.</p>
+            <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginTop: '8px' }}>Log in to your SummitMD portal, select Urgent Care, and answer a brief symptom intake checklist.</p>
           </div>
           <div style={{ textAlign: 'center' }}>
             <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'var(--color-accent-soft)', color: 'var(--color-accent)', fontWeight: 700, fontSize: '1.25rem', margin: '0 auto 16px auto' }} className="flex-center">2</div>
