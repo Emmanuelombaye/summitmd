@@ -99,7 +99,7 @@ ul { list-style: none; }
 /* Hero image optimized for mobile — show the right portion where the person is standing */
 @media (max-width: 768px) {
   .tdh-hero {
-    background-position: 72% center;
+    background-position: right center;
     background-size: cover;
   }
 }
@@ -917,7 +917,7 @@ ul { list-style: none; }
   position: relative;
   min-height: 580px;
   background-size: cover;
-  background-position: 72% top;
+  background-position: right top;
   background-repeat: no-repeat;
   display: flex;
   align-items: center;
