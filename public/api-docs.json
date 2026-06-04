@@ -1,0 +1,85 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "PeakHealth FHIR v4 API Documentation",
+    "description": "PeakHealth network FHIR-compliant API specification, used for secure patient observations, appointments, and vitals synchronization.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://teladoc-peakhealth.vercel.app/fhir",
+      "description": "PeakHealth Mock FHIR Server"
+    }
+  ],
+  "paths": {
+    "/Patient": {
+      "get": {
+        "summary": "Get Patient Info",
+        "description": "Retrieves Patient details in FHIR JSON structure (v4).",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resourceType": { "type": "string", "example": "Patient" },
+                    "id": { "type": "string", "example": "pat-901" },
+                    "name": { "type": "array", "items": { "type": "object" } },
+                    "gender": { "type": "string", "example": "male" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Observation": {
+      "get": {
+        "summary": "Get Observation List",
+        "description": "Retrieves vital sign observations (Blood Pressure, Glucose, Weight) in FHIR format.",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add Observation",
+        "description": "Creates a new vital signs observation record.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": { "type": "string" },
+                  "value": { "type": "number" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created successfully"
+          }
+        }
+      }
+    },
+    "/Appointment": {
+      "get": {
+        "summary": "Get Scheduled Appointments",
+        "description": "Retrieves the FHIR Appointment resources for the patient.",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    }
+  }
+}

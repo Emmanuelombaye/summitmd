@@ -1,0 +1,52 @@
+{
+  "resourceType": "CapabilityStatement",
+  "id": "peakhealth-fhir-mock",
+  "status": "active",
+  "date": "2026-06-04",
+  "publisher": "Teladoc Health & PeakHealth Coordination Group",
+  "kind": "capability",
+  "software": {
+    "name": "PeakHealth Front-End Mock Server Integration",
+    "version": "1.0.0"
+  },
+  "fhirVersion": "4.0.1",
+  "format": [
+    "json"
+  ],
+  "rest": [
+    {
+      "mode": "server",
+      "documentation": "PeakHealth Mock FHIR Server for Clinical Telehealth client testing",
+      "resource": [
+        {
+          "type": "Patient",
+          "interaction": [
+            { "code": "read" },
+            { "code": "update" }
+          ]
+        },
+        {
+          "type": "Practitioner",
+          "interaction": [
+            { "code": "read" }
+          ]
+        },
+        {
+          "type": "Observation",
+          "interaction": [
+            { "code": "read" },
+            { "code": "create" }
+          ]
+        },
+        {
+          "type": "Appointment",
+          "interaction": [
+            { "code": "read" },
+            { "code": "create" },
+            { "code": "delete" }
+          ]
+        }
+      ]
+    }
+  ]
+}
