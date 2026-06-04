@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, ArrowRight, Scale, Brain, HeartPulse, Activity, FileText, X, ChevronRight, ChevronDown, ChevronUp, Play, Pause } from 'lucide-react';
 
 export default function WeightManagementPage({ setPage }) {
@@ -1006,32 +1006,7 @@ export default function WeightManagementPage({ setPage }) {
         </div>
       </section>
 
-      {/* Styled Footnotes & Disclosures Section */}
-      <section className="disclosures-section">
-        <div className="container">
-          <div className="disclosure-item">
-            *Livongo is now part of SummitMD, and we are in a brand transition phase. You may receive Livongo-branded and SummitMD-branded products during this transition. Other than brand name, there is no difference between products.
-          </div>
-          <div className="disclosure-item">
-            <sup>1</sup> GLP-1s are available only where medically appropriate, as prescribed by an authorized healthcare provider and where permitted under applicable state and federal law.
-          </div>
-          <div className="disclosure-item">
-            <sup>2</sup> Full program fees at risk are available to commercial populations with at least 10 observable members. Outcomes for enrolled members who have been active for 6 months (engage with a connected device, complete a coaching session, share clinical data with the care team or log in to the participant portal) will be assessed in each annual measurement period. Measurement applies to the whole population using those who are observable. Credit will be applied to the entire population.
-          </div>
-          <div className="disclosure-item">
-            <sup>3</sup> SummitMD data, DS-12600.
-          </div>
-          <div className="disclosure-item">
-            <sup>4</sup> Blackburn G. (1995). Effect of degree of weight loss on health benefits. Obesity Research 3: 211S-216S. Reference for 10%: NIH, NHLBI Obesity Education Initiative. Clinical Guidelines on the Identification, Evaluation, and Treatment of Overweight and Obesity in Adults. Available online.
-          </div>
-          <div className="disclosure-item">
-            <sup>5</sup> Dzubur, Eldin. Long-term benefits of digital mental health program use during months of poor chronic disease management. 2023.
-          </div>
-          <div className="disclosure-item" style={{ marginTop: '16px', borderTop: '1px solid #cbd5e1', paddingTop: '16px' }}>
-            The testimonials, opinions and statements reflect one individual's personal experience with SummitMD. Results and experiences may vary from person to person and will be unique to each individual. The testimonials are voluntarily provided and are not paid.
-          </div>
-        </div>
-      </section>
+
 
       {/* Footer */}
       <footer style={{ backgroundColor: '#0F2A4A', color: 'rgba(255,255,255,0.7)', padding: '30px 0', textAlign: 'center', fontSize: '0.85rem' }}>
