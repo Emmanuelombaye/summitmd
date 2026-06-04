@@ -1,0 +1,18 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bg_prenatal" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#fff1f2"/>
+        <stop offset="100%" stop-color="#ffe4e6"/>
+      </linearGradient>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#bg_prenatal)"/>
+    <!-- Pink bottle / pregnancy support -->
+    <g transform="translate(160, 60)" filter="drop-shadow(0px 8px 16px rgba(244,63,94,0.15))">
+      <path d="M 20 30 L 60 30 L 65 45 L 65 130 L 15 130 Z" fill="#e11d48"/>
+      <rect x="28" y="12" width="24" height="18" fill="#fff" rx="2"/>
+      <rect x="22" y="50" width="36" height="60" fill="#fff" rx="2"/>
+      <circle cx="40" cy="80" r="14" fill="#ffe4e6"/>
+      <!-- Hearts icon -->
+      <path d="M 40 76 C 40 76 37 72 34 74 C 31 76 34 82 40 86 C 46 82 49 76 46 74 C 43 72 40 76 40 76 Z" fill="#e11d48"/>
+    </g>
+  </svg>

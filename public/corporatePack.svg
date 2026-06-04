@@ -1,0 +1,22 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bg_corp" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#faf5ff"/>
+        <stop offset="100%" stop-color="#f3e8ff"/>
+      </linearGradient>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#bg_corp)"/>
+    <!-- Buildings & Community -->
+    <g transform="translate(130, 60)" fill="#7c3aed" opacity="0.85" filter="drop-shadow(0px 8px 16px rgba(124,58,237,0.15))">
+      <rect x="10" y="40" width="35" height="80" rx="3"/>
+      <rect x="50" y="10" width="45" height="110" rx="4" fill="#6d28d9"/>
+      <rect x="100" y="60" width="30" height="60" rx="3"/>
+      <!-- Little window dots -->
+      <rect x="60" y="25" width="8" height="10" fill="#fff" rx="1"/>
+      <rect x="77" y="25" width="8" height="10" fill="#fff" rx="1"/>
+      <rect x="60" y="45" width="8" height="10" fill="#fff" rx="1"/>
+      <rect x="77" y="45" width="8" height="10" fill="#fff" rx="1"/>
+      <rect x="20" y="55" width="6" height="8" fill="#fff" rx="1"/>
+      <rect x="20" y="70" width="6" height="8" fill="#fff" rx="1"/>
+    </g>
+  </svg>

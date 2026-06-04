@@ -1,0 +1,22 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bg_dn" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#f5f3ff"/>
+        <stop offset="100%" stop-color="#ddd6fe"/>
+      </linearGradient>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#bg_dn)"/>
+    <!-- Two bottles stack -->
+    <g transform="translate(110, 60)">
+      <!-- Day pouch -->
+      <path d="M 10 20 L 70 20 L 75 40 L 75 130 L 5 130 Z" fill="#0f2e2f" filter="drop-shadow(0px 6px 12px rgba(0,0,0,0.15))"/>
+      <rect x="15" y="50" width="50" height="60" fill="#fff" rx="2"/>
+      <text x="40" y="85" font-family="system-ui" font-size="10" font-weight="700" text-anchor="middle" fill="#0f2e2f">DAY</text>
+    </g>
+    <g transform="translate(200, 70)">
+      <!-- Night bottle -->
+      <path d="M 15 25 L 65 25 L 70 40 L 70 120 L 10 120 Z" fill="#6240e8" filter="drop-shadow(0px 6px 12px rgba(0,0,0,0.2))"/>
+      <rect x="20" y="50" width="40" height="50" fill="#fff" rx="2"/>
+      <text x="40" y="80" font-family="system-ui" font-size="8" font-weight="700" text-anchor="middle" fill="#6240e8">NIGHT</text>
+    </g>
+  </svg>

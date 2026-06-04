@@ -1,0 +1,21 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bg_sleep" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#1a1c29"/>
+        <stop offset="100%" stop-color="#2a1b4e"/>
+      </linearGradient>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#bg_sleep)"/>
+    <!-- Moon & Stars -->
+    <circle cx="300" cy="80" r="30" fill="#fef08a" opacity="0.15"/>
+    <path d="M 300 50 A 30 30 0 1 0 330 80 A 24 24 0 1 1 300 50 Z" fill="#fef08a"/>
+    <g transform="translate(150, 70)">
+      <!-- Sleep Bottle -->
+      <path d="M 25 30 L 75 30 L 80 50 L 80 140 L 20 140 L 20 50 Z" fill="#6240e8" filter="drop-shadow(0px 8px 20px rgba(0,0,0,0.3))"/>
+      <rect x="35" y="15" width="30" height="15" rx="2" fill="#e2e8f0"/>
+      <!-- Label -->
+      <rect x="25" y="60" width="50" height="60" rx="3" fill="#ffffff"/>
+      <text x="50" y="85" font-family="system-ui" font-size="10" font-weight="700" text-anchor="middle" fill="#6240e8">AGZ</text>
+      <text x="50" y="105" font-family="system-ui" font-size="8" font-weight="500" text-anchor="middle" fill="#0f2e2f">Sleep</text>
+    </g>
+  </svg>

@@ -1,0 +1,16 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bg_socks" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#eff6ff"/>
+        <stop offset="100%" stop-color="#dbeafe"/>
+      </linearGradient>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#bg_socks)"/>
+    <!-- Graduated Compression Socks vector -->
+    <g transform="translate(150, 50)" stroke="#1e3a8a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="drop-shadow(0px 8px 16px rgba(30,58,138,0.12))">
+      <!-- Sock 1 -->
+      <path d="M 20 20 L 20 120 Q 20 140 40 145 L 70 150 Q 80 150 80 140 L 70 120" />
+      <!-- Sock 2 -->
+      <path d="M 60 30 L 60 110 Q 60 130 80 135 L 110 140 Q 120 140 120 130 L 110 110" opacity="0.6"/>
+    </g>
+  </svg>

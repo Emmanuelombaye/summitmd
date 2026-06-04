@@ -1,0 +1,16 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bg_electro" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#ecfeff"/>
+        <stop offset="100%" stop-color="#cffafe"/>
+      </linearGradient>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#bg_electro)"/>
+    <!-- Hydration/Lightning vector -->
+    <g transform="translate(160, 60)" filter="drop-shadow(0px 8px 16px rgba(0,185,196,0.15))">
+      <!-- Pouch sachets -->
+      <path d="M 10 30 L 50 10 L 70 120 L 30 140 Z" fill="#00d2c4"/>
+      <!-- Lightning bolt logo -->
+      <path d="M 40 45 L 25 75 L 45 75 L 35 110 L 55 65 L 35 65 Z" fill="#fff"/>
+    </g>
+  </svg>

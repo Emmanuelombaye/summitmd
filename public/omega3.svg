@@ -1,0 +1,19 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bg_omega" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#ecfeff"/>
+        <stop offset="100%" stop-color="#cffafe"/>
+      </linearGradient>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#bg_omega)"/>
+    <!-- Fish outline -->
+    <path d="M 250 80 Q 290 60 310 90 Q 290 120 250 100 L 230 115 L 235 90 L 230 65 Z" fill="#0891b2" opacity="0.2"/>
+    <!-- Gold bottle -->
+    <g transform="translate(160, 60)">
+      <path d="M 20 30 L 60 30 L 65 45 L 65 130 L 15 130 L 15 45 Z" fill="#ca8a04" filter="drop-shadow(0px 8px 16px rgba(202,138,4,0.15))"/>
+      <rect x="28" y="12" width="24" height="18" fill="#fff" rx="2"/>
+      <rect x="22" y="50" width="36" height="60" fill="#fff" rx="2"/>
+      <text x="40" y="75" font-family="system-ui" font-size="9" font-weight="700" text-anchor="middle" fill="#ca8a04">Omega 3</text>
+      <text x="40" y="92" font-family="system-ui" font-size="7" font-weight="600" text-anchor="middle" fill="#1e293b">Fish Oil</text>
+    </g>
+  </svg>

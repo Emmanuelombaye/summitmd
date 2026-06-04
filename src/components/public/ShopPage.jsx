@@ -31,7 +31,7 @@ const PRODUCTS = [
     name: 'SummitMd Foundational Powder',
     category: 'nutrition',
     desc: 'Daily nutrient insurance stack. 75 highly bioavailable vitamins, organic minerals, and whole-food adaptogens in one single scoop. Optimizes cell longevity, focus, and digestion.',
-    image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400',
+    image: '/travel.svg',
     subPrice: 89,
     oneTimePrice: 109,
     tag: 'Popular'
@@ -41,7 +41,7 @@ const PRODUCTS = [
     name: 'AGZ Sleep Support',
     category: 'nutrition',
     desc: 'Nightly sleep and recovery support. Re-adjust cortisol levels, calm your mind, and support muscle recovery using adaptogens.',
-    image: 'https://images.unsplash.com/photo-1611079830514-f72f43c0c13e?w=400',
+    image: '/sleep_support.png',
     subPrice: 38,
     oneTimePrice: 48,
     badge: 'Melatonin Free'
@@ -51,7 +51,7 @@ const PRODUCTS = [
     name: 'AG Vitamin D3 + K2',
     category: 'nutrition',
     desc: 'Highly absorbable liquid drops designed for daily bone density, circulatory, and immune support. Ideal supplement to SummitMd.',
-    image: 'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?w=400',
+    image: '/d3k2.svg',
     subPrice: 16,
     oneTimePrice: 20
   },
@@ -60,7 +60,7 @@ const PRODUCTS = [
     name: 'AG Omega3',
     category: 'nutrition',
     desc: 'Pure molecularly distilled fish oil containing optimal EPA & DHA. Supports healthy cholesterol, brain focus, and joints.',
-    image: 'https://images.unsplash.com/photo-1616679911721-eff6eec18fcd?w=400',
+    image: '/omega3.svg',
     subPrice: 32,
     oneTimePrice: 40
   },
@@ -69,7 +69,7 @@ const PRODUCTS = [
     name: 'Day & Night Bundle',
     category: 'nutrition',
     desc: 'Complete daily foundations stack. Includes SummitMd Next Gen Pouch + AGZ Nightly Sleep Support for 24-hour biological balance.',
-    image: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=400',
+    image: '/daynight.svg',
     subPrice: 109,
     oneTimePrice: 139,
     tag: 'Best Value'
@@ -81,7 +81,7 @@ const PRODUCTS = [
     name: 'Teleconsultation Subscription',
     category: 'subscriptions',
     desc: 'Unlimited 24/7 access to primary doctors, therapists, and certified nutritionists. Includes e-prescriptions and messaging.',
-    image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400',
+    image: '/telePlan.svg',
     subPrice: 29,
     oneTimePrice: 45,
     tag: 'Fastest Revenue',
@@ -92,7 +92,7 @@ const PRODUCTS = [
     name: 'Home Medicine Delivery',
     category: 'subscriptions',
     desc: 'Automatic monthly prescription refills delivered to your door. Includes real-time packaging updates and pharmacist advice.',
-    image: 'https://images.unsplash.com/photo-1586015555751-63bb77f4322a?w=400',
+    image: '/medDelivery.svg',
     subPrice: 10,
     oneTimePrice: 15,
     tag: 'Home Delivery'
@@ -102,7 +102,7 @@ const PRODUCTS = [
     name: 'Lab Test Booking & Panel',
     category: 'subscriptions',
     desc: 'Comprehensive diagnostic blood panel (cholesterol, thyroid, metabolic). Includes professional home collection & online results review.',
-    image: 'https://images.unsplash.com/photo-1579154204601-01588f351e67?w=400',
+    image: '/labBooking.svg',
     subPrice: null,
     oneTimePrice: 89,
     tag: 'Fastest Revenue'
@@ -112,7 +112,7 @@ const PRODUCTS = [
     name: 'Corporate Wellness Package',
     category: 'subscriptions',
     desc: 'Complete health plan for corporate teams (5+ members). Includes customized virtual workshops, EAP syncing, and primary care credits.',
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400',
+    image: '/corporatePack.svg',
     subPrice: 199,
     oneTimePrice: null,
     tag: 'Corporate B2B'
@@ -124,7 +124,7 @@ const PRODUCTS = [
     name: 'Blood Pressure Monitor',
     category: 'devices',
     desc: 'FDA-cleared automatic upper-arm cuff. Features Bluetooth sync to the Teladoc app for live blood pressure logs.',
-    image: 'https://images.unsplash.com/photo-1628595308585-f37754946764?w=400',
+    image: '/bp_monitor.png',
     subPrice: 12,
     oneTimePrice: 59,
     badge: 'FDA Cleared'
@@ -134,7 +134,7 @@ const PRODUCTS = [
     name: 'Smart Glucose Meter Kit',
     category: 'devices',
     desc: 'Pocket-sized smart blood glucose reader. Includes 50 test strips, 50 lancets, and automatic reading uploads to your health profile.',
-    image: 'https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=400',
+    image: '/glucoseMeter.svg',
     subPrice: 15,
     oneTimePrice: 39,
     badge: 'Diabetes Care'
@@ -153,7 +153,7 @@ const PRODUCTS = [
     name: 'Smart Pill Organizer',
     category: 'devices',
     desc: '7-day lockable medication organizer. Features LED alarms, voice prompts, and Bluetooth app notifications to prevent missed doses.',
-    image: 'https://images.unsplash.com/photo-1550572017-edd951b55104?w=400',
+    image: '/organizer.svg',
     subPrice: null,
     oneTimePrice: 18
   },
@@ -162,7 +162,7 @@ const PRODUCTS = [
     name: 'Graduated Compression Socks',
     category: 'devices',
     desc: 'Three pairs of premium 20-30 mmHg compression socks. Reduces foot swelling, improves circulation, and supports chronic vein health.',
-    image: 'https://images.unsplash.com/photo-1582966772680-860e372bb558?w=400',
+    image: '/socks.svg',
     subPrice: null,
     oneTimePrice: 22
   },
@@ -173,7 +173,7 @@ const PRODUCTS = [
     name: 'Pregnancy Test Kits (5-Pack)',
     category: 'maternal',
     desc: 'Over 99% accurate early detection pregnancy sticks. Displays digital clear text results with a rapid 3-minute response time.',
-    image: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=400',
+    image: '/pregnancyKit.svg',
     subPrice: 10,
     oneTimePrice: 14,
     badge: '99% Accurate'
@@ -183,7 +183,7 @@ const PRODUCTS = [
     name: 'Ovulation Predictor (20-Pack)',
     category: 'maternal',
     desc: 'Digital hormone tracking tests to identify your 5 most fertile days. Includes premium tracking calendar and guide.',
-    image: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?w=400',
+    image: '/ovulationKit.svg',
     subPrice: null,
     oneTimePrice: 29
   },
@@ -202,7 +202,7 @@ const PRODUCTS = [
     name: 'Infant Precision Scale',
     category: 'maternal',
     desc: 'Digital weighing scale for newborns and toddlers. Features curved spill-safe design, weight lock tare function, and lb/oz display.',
-    image: 'https://images.unsplash.com/photo-1519689680058-324335c77ebe?w=400',
+    image: '/infant_scale.png',
     subPrice: null,
     oneTimePrice: 49
   },
@@ -211,7 +211,7 @@ const PRODUCTS = [
     name: 'Maternal Prenatal Vitamins',
     category: 'maternal',
     desc: 'High-purity prenatal supplements featuring active L-methylfolate, plant-based DHA, and chelated iron. Gentle on empty stomachs.',
-    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400',
+    image: '/prenatalVitamins.svg',
     subPrice: 27,
     oneTimePrice: 34,
     tag: 'Doctor Recommended'
@@ -223,7 +223,7 @@ const PRODUCTS = [
     name: 'Broad-Spectrum Multivitamins',
     category: 'wellness',
     desc: 'Whole-food multivitamin complex. Features targeted immune support, natural energy cofactors, and complete mineral bioavailability.',
-    image: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=400',
+    image: '/multivitamins.svg',
     subPrice: 19,
     oneTimePrice: 24
   },
@@ -232,7 +232,7 @@ const PRODUCTS = [
     name: 'Buffered Vitamin C (1000mg)',
     category: 'wellness',
     desc: 'Premium vitamin C with bioflavonoids to support antibody production, iron absorption, and capillary tissue elasticity.',
-    image: 'https://images.unsplash.com/photo-1607619056574-7b8d304e3b24?w=400',
+    image: '/vitamin_c.png',
     subPrice: 12,
     oneTimePrice: 15
   },
@@ -241,7 +241,7 @@ const PRODUCTS = [
     name: 'Chelated Zinc (50mg)',
     category: 'wellness',
     desc: 'High-bioavailability chelated zinc gluconate. Key micro-mineral supporting cellular repair, skin health, and natural defenses.',
-    image: 'https://images.unsplash.com/photo-1584017912466-b3794e5d4b17?w=400',
+    image: '/zinc.png',
     subPrice: 9,
     oneTimePrice: 12
   },
@@ -250,7 +250,7 @@ const PRODUCTS = [
     name: 'Hydration Electrolyte Packs',
     category: 'wellness',
     desc: '30 single-serve rapid hydration powder packets. Restores key sodium, potassium, and magnesium salts during recovery.',
-    image: 'https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=400',
+    image: '/electrolytes.svg',
     subPrice: 20,
     oneTimePrice: 25,
     tag: 'Daily Drink'
@@ -260,7 +260,7 @@ const PRODUCTS = [
     name: 'Premium First-Aid Kit',
     category: 'wellness',
     desc: '150-piece hospital-grade medical kit. Packed with sterile gauze, wraps, emergency shears, sanitizers, and diagnostic guide.',
-    image: 'https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=400',
+    image: '/firstaid.svg',
     subPrice: null,
     oneTimePrice: 29
   }

@@ -1,0 +1,18 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bg_vitc" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#fff7ed"/>
+        <stop offset="100%" stop-color="#ffedd5"/>
+      </linearGradient>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#bg_vitc)"/>
+    <!-- Orange slices and bottle -->
+    <circle cx="280" cy="90" r="30" fill="#f97316" opacity="0.15"/>
+    <path d="M 280 60 A 30 30 0 0 1 310 90 L 280 90 Z" fill="#ea580c"/>
+    <g transform="translate(150, 60)" filter="drop-shadow(0px 8px 16px rgba(234,88,12,0.15))">
+      <path d="M 20 30 L 60 30 L 65 45 L 65 130 L 15 130 Z" fill="#f97316"/>
+      <rect x="28" y="12" width="24" height="18" fill="#fff" rx="2"/>
+      <rect x="22" y="50" width="36" height="60" fill="#fff" rx="2"/>
+      <text x="40" y="85" font-family="system-ui" font-size="12" font-weight="900" fill="#f97316" text-anchor="middle">C</text>
+    </g>
+  </svg>

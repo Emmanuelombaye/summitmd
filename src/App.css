@@ -3207,7 +3207,7 @@ ul { list-style: none; }
 
 .tdh-footer-main {
   display: grid;
-  grid-template-columns: 260px repeat(5, 1fr);
+  grid-template-columns: 280px 1fr;
   gap: 40px;
   padding-bottom: 60px;
   border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -3257,6 +3257,12 @@ ul { list-style: none; }
 
 .tdh-footer-tagline strong { color: rgba(255,255,255,0.7); font-style: italic; }
 
+.tdh-footer-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 32px;
+}
+
 .tdh-footer-nav-col { grid-column: auto; }
 
 .tdh-footer-col-heading {
@@ -3266,11 +3272,25 @@ ul { list-style: none; }
   text-transform: uppercase;
   color: rgba(255,255,255,0.45);
   margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.tdh-footer-nav-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.tdh-footer-chevron {
+  display: none;
+}
 
-.tdh-footer-nav-col ul li a {
+.tdh-footer-col-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+}
+
+.tdh-footer-col-list li a {
   font-size: 0.875rem;
   color: rgba(255,255,255,0.65);
   text-decoration: none;
@@ -3278,7 +3298,7 @@ ul { list-style: none; }
   display: block;
 }
 
-.tdh-footer-nav-col ul li a:hover { color: white; text-decoration: none; }
+.tdh-footer-col-list li a:hover { color: white; text-decoration: none; }
 
 .tdh-footer-bottom {
   display: flex;
@@ -3339,13 +3359,15 @@ ul { list-style: none; }
    RESPONSIVE
    ============================================================ */
 @media (max-width: 1200px) {
-  .tdh-footer-main { grid-template-columns: 220px repeat(5, 1fr); gap: 24px; }
+  .tdh-footer-main { grid-template-columns: 220px 1fr; gap: 24px; }
+  .tdh-footer-nav-grid { gap: 20px; }
   .tdh-mega-menu--4col .tdh-mega-inner { grid-template-columns: 180px 180px 160px 220px; }
 }
 
 @media (max-width: 1024px) {
-  .tdh-footer-main { grid-template-columns: 1fr 1fr 1fr; }
-  .tdh-footer-company { grid-column: 1 / -1; }
+  .tdh-footer-main { grid-template-columns: 1fr; }
+  .tdh-footer-company { grid-column: auto; }
+  .tdh-footer-nav-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
   .tdh-org-inner { grid-template-columns: 1fr; gap: 40px; }
   .tdh-stats-inner { grid-template-columns: 1fr 1fr; }
   .tdh-mega-menu--4col .tdh-mega-inner,
@@ -3356,7 +3378,51 @@ ul { list-style: none; }
 @media (max-width: 768px) {
   .tdh-primary-nav { display: none; }
   .tdh-care-card { flex: 0 0 calc(82vw); }
-  .tdh-footer-main { grid-template-columns: 1fr 1fr; }
+  .tdh-footer-main { display: flex; flex-direction: column; gap: 32px; }
+  .tdh-footer-nav-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .tdh-footer-nav-col {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    grid-column: auto;
+  }
+  .tdh-footer-col-heading {
+    padding: 16px 0;
+    margin-bottom: 0;
+    cursor: pointer;
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .tdh-footer-chevron {
+    display: block;
+    transition: transform 0.3s ease;
+    color: rgba(255, 255, 255, 0.55);
+  }
+  .tdh-footer-nav-col.is-open .tdh-footer-chevron {
+    transform: rotate(180deg);
+  }
+  .tdh-footer-col-list {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .tdh-footer-nav-col.is-open .tdh-footer-col-list {
+    max-height: 400px;
+    padding-bottom: 20px;
+    padding-top: 4px;
+  }
   .tdh-stats-inner { grid-template-columns: 1fr 1fr; gap: 16px; }
   .tdh-hero-title { font-size: 2rem; }
 
@@ -3398,7 +3464,7 @@ ul { list-style: none; }
 }
 
 @media (max-width: 480px) {
-  .tdh-footer-main { grid-template-columns: 1fr; }
+  .tdh-footer-main { display: flex; flex-direction: column; }
   .tdh-cta-banner h2 { font-size: 1.625rem; }
   .tdh-stats-inner { grid-template-columns: 1fr 1fr; }
   .emp-stats-grid { grid-template-columns: 1fr; }
