@@ -69,8 +69,26 @@ export default function LandingPage({ setPage }) {
       
       {/* ===== HERO ===== */}
       <section className="tdh-hero" style={{
-        backgroundImage: `url('/hero banner clean.png')`
+        backgroundImage: `url('/hero banner.png')`
       }}>
+        {/* Transparent overlay buttons for desktop view (aligned with baked-in buttons in image) */}
+        <div className="tdh-hero-desktop-overlays">
+          <button 
+            type="button" 
+            id="hero-get-care-desktop"
+            className="tdh-hero-overlay-btn tdh-hero-overlay-btn-left" 
+            onClick={() => setPage('register')}
+            aria-label="Get care now"
+          />
+          <button 
+            type="button" 
+            id="hero-no-insurance-desktop"
+            className="tdh-hero-overlay-btn tdh-hero-overlay-btn-right" 
+            onClick={() => setPage('no-insurance')}
+            aria-label="No insurance needed"
+          />
+        </div>
+
         <div className="tdh-hero-overlay"></div>
         <div className="tdh-hero-content">
           <div className="tdh-hero-inner tdh-hero-inner--center">
@@ -79,10 +97,20 @@ export default function LandingPage({ setPage }) {
               <p>SummitMD connects patients and care providers for medical care, mental health, chronic condition management and more.</p>
             </div>
             <div className="tdh-hero-ctas">
-              <button type="button" className="tdh-btn tdh-btn-primary-inverted" onClick={() => setPage('register')}>
+              <button 
+                type="button" 
+                id="hero-get-care-mobile"
+                className="tdh-btn tdh-btn-primary-inverted" 
+                onClick={() => setPage('register')}
+              >
                 Get care now
               </button>
-              <button type="button" className="tdh-btn tdh-btn-secondary-inverted" onClick={() => setPage('no-insurance')}>
+              <button 
+                type="button" 
+                id="hero-no-insurance-mobile"
+                className="tdh-btn tdh-btn-secondary-inverted" 
+                onClick={() => setPage('no-insurance')}
+              >
                 No insurance needed
               </button>
             </div>
