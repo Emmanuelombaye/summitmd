@@ -99,6 +99,7 @@ ul { list-style: none; }
 /* Hero image optimized for mobile — show the right portion where the person is standing */
 @media (max-width: 768px) {
   .tdh-hero {
+    background-image: url('/hero banner clean.png') !important;
     background-position: 73% center;
     background-size: cover;
   }
@@ -1699,6 +1700,7 @@ ul { list-style: none; }
   .tdh-hero {
     aspect-ratio: auto;
     min-height: 420px;
+    background-image: url('/hero banner clean.png') !important;
     background-size: cover;
     background-position: 73% center;
     display: flex;
