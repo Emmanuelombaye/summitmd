@@ -69,7 +69,7 @@ export default function LandingPage({ setPage }) {
       
       {/* ===== HERO ===== */}
       <section className="tdh-hero" style={{
-        backgroundImage: `url('/hero banner.png')`
+        backgroundImage: `url('/hero banner clean.png')`
       }}>
         <div className="tdh-hero-overlay"></div>
         <div className="tdh-hero-content">
