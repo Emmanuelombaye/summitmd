@@ -69,6 +69,29 @@ export default function AuthPage({ mode, setPage, setUser }) {
       </div>
 
       <div className="auth-main">
+        {/* ← Back to site escape link */}
+        <div style={{ padding: '20px 0 0 0', maxWidth: '440px', margin: '0 auto', width: '100%' }}>
+          <a
+            href="#"
+            onClick={e => { e.preventDefault(); setPage('landing'); }}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontSize: '0.85rem',
+              fontWeight: '600',
+              color: 'var(--color-accent)',
+              textDecoration: 'none',
+              opacity: 0.85,
+              transition: 'opacity 0.2s',
+            }}
+            onMouseEnter={e => e.currentTarget.style.opacity = 1}
+            onMouseLeave={e => e.currentTarget.style.opacity = 0.85}
+          >
+            ← Back to Teladoc Health
+          </a>
+        </div>
+
         <div className="auth-card">
           <h2>{isLogin ? "Welcome back" : "Create your account"}</h2>
           <p>{isLogin ? "Sign in to access your dashboard and message practitioners." : "Fill in your details to check insurance eligibility instantly."}</p>

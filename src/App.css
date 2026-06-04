@@ -2132,6 +2132,11 @@ ul { list-style: none; }
   grid-template-columns: 200px 180px 260px;
 }
 
+/* Individuals override — wider ways column for 2-col card grid */
+.tdh-mega-menu--individuals .tdh-mega-inner {
+  grid-template-columns: 430px 155px 240px;
+}
+
 /* 4-col layout (Organizations) */
 .tdh-mega-menu--4col .tdh-mega-inner {
   grid-template-columns: 200px 200px 170px 240px;

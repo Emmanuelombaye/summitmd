@@ -81,7 +81,8 @@ export default function TDHFooter({ setPage }) {
             <div className="tdh-footer-col-heading">Clinicians</div>
             <ul>
               {[
-                { label: 'Commitment to Quality', href: 'providers' },
+                { label: 'Provider Resources', href: 'providers-signup' },
+                { label: 'How It Works', href: 'how-it-works' },
                 { label: 'Provider Careers', external: true, url: 'https://teladoc.wd1.myworkdayjobs.com/en-US/teladochealth_is_hiring' },
               ].map(l => (
                 <li key={l.label}>

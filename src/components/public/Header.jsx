@@ -84,11 +84,12 @@ const NAV_INDIVIDUALS = {
       desc: 'Skip the trip and get same-day care for common conditions.',
       sub: [
         { label: 'Overview', href: 'urgent-care' },
-        { label: 'Get Care Now', href: 'register', external: true, url: 'https://member.teladoc.com/registrations/get_started' },
+        { label: 'Get Care Now', href: 'register' },
       ],
     },
     {
       label: 'Mental Health',
+      href: 'mental-health',
       desc: 'Find therapy that works best for you.',
       sub: [
         { label: 'Teladoc Health Mental Health', href: 'mental-health' },
@@ -374,71 +375,86 @@ export default function TDHHeader({ setPage }) {
               <svg className="tdh-chevron" viewBox="0 0 16 16" width="14" height="14"><path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill="currentColor"/></svg>
             </button>
             {activeMenu === 'individuals' && (
-              <div className="tdh-mega-menu tdh-mega-menu--3col">
+              <div className="tdh-mega-menu tdh-mega-menu--3col tdh-mega-menu--individuals">
                 <div className="tdh-mega-inner">
+
+                  {/* ── Ways We Help — 2-column card grid ── */}
                   <div className="tdh-mega-col tdh-mega-col--dynamic">
                     <div className="tdh-mega-col-header">Ways we help</div>
-                    <ul className="tdh-mega-ways-list" style={{ gap: '12px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                       {NAV_INDIVIDUALS.ways.map((w, i) => (
-                        <li key={i} style={{ padding: '6px 10px', borderRadius: '8px' }}>
-                          <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            {w.href ? (
-                              <a 
-                                href="#" 
-                                className="tdh-mega-way-link-title" 
-                                onClick={e => { e.preventDefault(); goto(w.href); }} 
-                                style={{ fontWeight: '700', fontSize: '0.95rem', color: 'var(--tdh-navy)', textDecoration: 'none' }}
-                              >
-                                {w.label}
-                              </a>
-                            ) : (
-                              <span style={{ fontWeight: '700', fontSize: '0.95rem', color: 'var(--tdh-navy)' }}>{w.label}</span>
-                            )}
-                            <p style={{ margin: '3px 0 6px 0', fontSize: '0.78rem', color: '#64748b', fontWeight: 'normal', lineHeight: '1.4' }}>{w.desc}</p>
-                            {w.sub && (
-                              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 12px', alignItems: 'center' }}>
-                                {w.sub.map((subItem, sIdx) => {
-                                  const isGetCare = subItem.label === 'Get Care Now';
-                                  return (
-                                    <a 
-                                      key={sIdx}
-                                      href={subItem.external ? subItem.url : "#"} 
-                                      target={subItem.external ? "_blank" : undefined}
-                                      rel={subItem.external ? "noopener noreferrer" : undefined}
-                                      onClick={e => {
-                                        if (!subItem.external) {
-                                          e.preventDefault();
-                                          goto(subItem.href);
-                                        } else if (isGetCare) {
-                                          e.preventDefault();
-                                          goto('register');
-                                        }
-                                      }}
-                                      style={{ 
-                                        fontSize: '0.75rem', 
-                                        color: isGetCare ? '#ffffff' : 'var(--tdh-purple)', 
-                                        backgroundColor: isGetCare ? 'var(--tdh-purple)' : 'transparent',
-                                        padding: isGetCare ? '2px 8px' : '0',
-                                        borderRadius: isGetCare ? '12px' : '0',
-                                        fontWeight: '700', 
-                                        textDecoration: isGetCare ? 'none' : 'underline',
-                                        display: 'inline-flex',
-                                        alignItems: 'center',
-                                        gap: '2px',
-                                        cursor: 'pointer'
-                                      }}
-                                    >
-                                      {subItem.label} {subItem.external && !isGetCare ? '↗' : ''}
-                                    </a>
-                                  );
-                                })}
-                              </div>
-                            )}
-                          </div>
-                        </li>
+                        <div
+                          key={i}
+                          style={{
+                            padding: '10px 12px',
+                            borderRadius: '10px',
+                            background: '#f4f6ff',
+                            border: '1px solid #e2e8f8',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '4px',
+                            cursor: 'default',
+                            transition: 'background 0.15s',
+                          }}
+                          onMouseEnter={e => e.currentTarget.style.background = '#eaf0ff'}
+                          onMouseLeave={e => e.currentTarget.style.background = '#f4f6ff'}
+                        >
+                          {w.href ? (
+                            <a
+                              href="#"
+                              className="tdh-mega-way-link-title"
+                              onClick={ev => { ev.preventDefault(); goto(w.href); }}
+                              style={{ fontWeight: '700', fontSize: '0.84rem', color: 'var(--tdh-navy)', textDecoration: 'none', lineHeight: '1.25' }}
+                            >
+                              {w.label}
+                            </a>
+                          ) : (
+                            <span style={{ fontWeight: '700', fontSize: '0.84rem', color: 'var(--tdh-navy)', lineHeight: '1.25' }}>{w.label}</span>
+                          )}
+                          <p style={{ margin: 0, fontSize: '0.71rem', color: '#64748b', lineHeight: '1.35', fontWeight: 'normal' }}>{w.desc}</p>
+                          {w.sub && (
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 8px', marginTop: '2px' }}>
+                              {w.sub.map((subItem, sIdx) => {
+                                const isGetCare = subItem.label === 'Get Care Now';
+                                return (
+                                  <a
+                                    key={sIdx}
+                                    href={subItem.external ? subItem.url : '#'}
+                                    target={subItem.external ? '_blank' : undefined}
+                                    rel={subItem.external ? 'noopener noreferrer' : undefined}
+                                    onClick={ev => {
+                                      if (!subItem.external) {
+                                        ev.preventDefault();
+                                        goto(subItem.href);
+                                      }
+                                    }}
+                                    style={{
+                                      fontSize: '0.69rem',
+                                      color: isGetCare ? '#fff' : 'var(--tdh-purple)',
+                                      backgroundColor: isGetCare ? 'var(--tdh-purple)' : 'transparent',
+                                      padding: isGetCare ? '2px 8px' : '0',
+                                      borderRadius: isGetCare ? '12px' : '0',
+                                      fontWeight: '700',
+                                      textDecoration: isGetCare ? 'none' : 'underline',
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      gap: '2px',
+                                      cursor: 'pointer',
+                                      whiteSpace: 'nowrap',
+                                    }}
+                                  >
+                                    {subItem.label}{subItem.external && !isGetCare ? ' ↗' : ''}
+                                  </a>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   </div>
+
+                  {/* ── Explore column ── */}
                   <div className="tdh-mega-col tdh-mega-col--static">
                     <div className="tdh-mega-col-header">Explore</div>
                     <ul className="tdh-mega-explore-list">
@@ -449,6 +465,8 @@ export default function TDHHeader({ setPage }) {
                       ))}
                     </ul>
                   </div>
+
+                  {/* ── Promo card ── */}
                   <div className="tdh-mega-col tdh-mega-col--promo tdh-mega-col--promo-plum">
                     <div className="tdh-mega-promo" style={{ backgroundImage: `url(${NAV_INDIVIDUALS.promo.bg})` }}>
                       <div className="tdh-mega-promo-body">
@@ -459,6 +477,7 @@ export default function TDHHeader({ setPage }) {
                       </div>
                     </div>
                   </div>
+
                 </div>
               </div>
             )}
