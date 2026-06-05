@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Check, Info, ShoppingCart, Calendar, Heart, ShieldCheck, ArrowRight, ArrowLeft, Loader2, Star, Plus } from 'lucide-react';
+import { startPartnerEnrollment } from '../../api/partnerEnrollmentClient';
 
 const PRODUCTS = [
   // Flagship Clinical Programs
@@ -687,6 +688,7 @@ export default function ShopPage({ setPage }) {
   const [quizLoadingIndex, setQuizLoadingIndex] = useState(0);
   const [quizRecommendation, setQuizRecommendation] = useState(null);
   const [selectedPlanDuration, setSelectedPlanDuration] = useState('3month'); // '1month' | '3month' | '6month'
+  const [enrollmentSubmitting, setEnrollmentSubmitting] = useState(false);
 
   const handleAddToCart = (productName) => {
     setCartSuccess(productName);
@@ -816,7 +818,7 @@ export default function ShopPage({ setPage }) {
     }
   };
 
-  const handleCheckoutRecommendation = () => {
+  const handleCheckoutRecommendation = async () => {
     if (!quizRecommendation) return;
 
     let finalPrice = quizRecommendation.subPrice || quizRecommendation.oneTimePrice;
@@ -834,8 +836,23 @@ export default function ShopPage({ setPage }) {
       }
     }
 
-    handleAddToCart(`${quizRecommendation.name}${durationText} - $${finalPrice}`);
-    setQuizOpen(false);
+    const cartLabel = `${quizRecommendation.name}${durationText} - $${finalPrice}`;
+
+    setEnrollmentSubmitting(true);
+    try {
+      const result = await startPartnerEnrollment({
+        product: quizRecommendation,
+        category: quizRecommendation.category,
+      });
+      window.location.assign(result.enrollment_url);
+      return;
+    } catch (err) {
+      console.warn('[Partner enrollment] Falling back to local cart flow:', err);
+      handleAddToCart(cartLabel);
+      setQuizOpen(false);
+    } finally {
+      setEnrollmentSubmitting(false);
+    }
   };
 
   // Filter products based on selected tab
@@ -1852,11 +1869,12 @@ export default function ShopPage({ setPage }) {
 
                         <button 
                           onClick={handleCheckoutRecommendation}
+                          disabled={enrollmentSubmitting}
                           className="btn" 
-                          style={{ width: '100%', backgroundColor: '#0f2e2f', color: '#ffffff', padding: '16px', borderRadius: '30px', fontWeight: '800', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', fontSize: '1.05rem' }}
+                          style={{ width: '100%', backgroundColor: '#0f2e2f', color: '#ffffff', padding: '16px', borderRadius: '30px', fontWeight: '800', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: enrollmentSubmitting ? 'wait' : 'pointer', opacity: enrollmentSubmitting ? 0.8 : 1, fontSize: '1.05rem' }}
                         >
-                          <ShoppingCart size={18} />
-                          Secure Treatment Plan & Checkout
+                          {enrollmentSubmitting ? <Loader2 size={18} className="animate-spin" /> : <ShoppingCart size={18} />}
+                          {enrollmentSubmitting ? 'Redirecting to secure enrollment...' : 'Secure Treatment Plan & Checkout'}
                         </button>
                       </div>
                     </div>
