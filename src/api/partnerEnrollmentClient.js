@@ -1,10 +1,23 @@
-const PARTNER_API_BASE =
-  import.meta.env.VITE_PARTNER_API_BASE ||
-  "https://kvopgyhcjcniaocjozje.supabase.co/functions/v1/partner-api";
-const PARTNER_BRAND_SLUG = (import.meta.env.VITE_PARTNER_BRAND_SLUG || "").trim();
+const DEFAULT_PARTNER_API =
+  "https://vzzmdbdvcofajgrjgajq.supabase.co/functions/v1/partner-api";
+
+const PARTNER_API_BASE = (
+  import.meta.env.VITE_PARTNER_API_BASE || DEFAULT_PARTNER_API
+).replace(/\/$/, "");
+
+const PARTNER_BRAND_SLUG = (
+  import.meta.env.VITE_PARTNER_BRAND_SLUG || "summit-md"
+).trim();
+
+/** Production: always use server proxy. Dev: .env.local or same proxy via Vite. */
+const PARTNER_ENROLLMENT_ENDPOINT = (
+  import.meta.env.VITE_PARTNER_ENROLLMENT_ENDPOINT || "/api/enroll-start"
+).trim();
+
 const PARTNER_API_KEY = (import.meta.env.VITE_PARTNER_API_KEY || "").trim();
-const PARTNER_ENROLLMENT_ENDPOINT = (import.meta.env.VITE_PARTNER_ENROLLMENT_ENDPOINT || "").trim();
-const PARTNER_PORTAL_ORIGIN = (import.meta.env.VITE_PARTNER_PORTAL_ORIGIN || "").trim();
+const PARTNER_PORTAL_ORIGIN = (
+  import.meta.env.VITE_PARTNER_PORTAL_ORIGIN || "https://www.peak-health.io"
+).trim();
 const PARTNER_RETURN_URL = (import.meta.env.VITE_PARTNER_RETURN_URL || "").trim();
 const PRODUCT_MAP_JSON = (import.meta.env.VITE_PARTNER_PRODUCT_MAP_JSON || "").trim();
 
@@ -21,13 +34,11 @@ function parseProductMap() {
 const PRODUCT_ID_MAP = parseProductMap();
 
 export function partnerDocsLinks() {
-  const base = PARTNER_API_BASE.replace(/\/$/, "");
   return {
-    docsUi: `${base}?action=docs_ui`,
-    openApi: `${base}?action=openapi`,
-    connect: PARTNER_BRAND_SLUG
-      ? `${base}?action=connect&brand_slug=${encodeURIComponent(PARTNER_BRAND_SLUG)}`
-      : null,
+    docsUi: `${PARTNER_API_BASE}?action=docs_ui`,
+    openApi: `${PARTNER_API_BASE}?action=openapi`,
+    connect: `${PARTNER_API_BASE}?action=connect&brand_slug=${encodeURIComponent(PARTNER_BRAND_SLUG)}`,
+    brandSlug: PARTNER_BRAND_SLUG,
   };
 }
 
@@ -38,36 +49,42 @@ function resolveProductId(product) {
 }
 
 export async function startPartnerEnrollment({ product, category }) {
-  if (!PARTNER_BRAND_SLUG) {
-    throw new Error("Partner enrollment not configured: missing VITE_PARTNER_BRAND_SLUG.");
-  }
-
   const payload = {
-    action: "enrollment_start",
-    brand_slug: PARTNER_BRAND_SLUG,
     ...(category ? { category } : {}),
     ...(resolveProductId(product) ? { product_id: resolveProductId(product) } : {}),
-    ...(PARTNER_PORTAL_ORIGIN ? { portal_origin: PARTNER_PORTAL_ORIGIN } : {}),
     ...(PARTNER_RETURN_URL ? { return_url: PARTNER_RETURN_URL } : {}),
   };
 
-  const endpoint = PARTNER_ENROLLMENT_ENDPOINT || PARTNER_API_BASE;
+  const endpoint = PARTNER_ENROLLMENT_ENDPOINT;
   const headers = { "Content-Type": "application/json" };
 
-  // Preferred production pattern: call your own backend endpoint.
-  if (!PARTNER_ENROLLMENT_ENDPOINT && PARTNER_API_KEY) {
+  // Direct API + key — local-only fallback (never in production builds)
+  const useDirectApi =
+    endpoint === PARTNER_API_BASE ||
+    (!PARTNER_ENROLLMENT_ENDPOINT.includes("/api/") && PARTNER_API_KEY);
+
+  if (useDirectApi) {
+    if (!PARTNER_API_KEY) {
+      throw new Error(
+        "Set PARTNER_API_KEY in .env.local for direct API mode, or use /api/enroll-start.",
+      );
+    }
     headers["X-Partner-Api-Key"] = PARTNER_API_KEY;
-  }
-  if (!PARTNER_ENROLLMENT_ENDPOINT && !PARTNER_API_KEY) {
-    throw new Error(
-      "Partner enrollment not configured: set VITE_PARTNER_ENROLLMENT_ENDPOINT (preferred) or VITE_PARTNER_API_KEY for local testing.",
-    );
+    Object.assign(payload, {
+      action: "enrollment_start",
+      brand_slug: PARTNER_BRAND_SLUG,
+      ...(PARTNER_PORTAL_ORIGIN ? { portal_origin: PARTNER_PORTAL_ORIGIN } : {}),
+    });
   }
 
-  const res = await fetch(endpoint, {
+  const res = await fetch(useDirectApi ? PARTNER_API_BASE : endpoint, {
     method: "POST",
     headers,
-    body: JSON.stringify(payload),
+    body: JSON.stringify(
+      useDirectApi
+        ? payload
+        : payload,
+    ),
   });
 
   const text = await res.text();
