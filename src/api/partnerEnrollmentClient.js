@@ -42,6 +42,16 @@ export function partnerDocsLinks() {
   };
 }
 
+export function getPatientPortalLoginUrl() {
+  const origin = PARTNER_PORTAL_ORIGIN.replace(/\/$/, "");
+  return `${origin}/care/${PARTNER_BRAND_SLUG}/login`;
+}
+
+export function getPatientPortalUrl() {
+  const origin = PARTNER_PORTAL_ORIGIN.replace(/\/$/, "");
+  return `${origin}/care/${PARTNER_BRAND_SLUG}/patient`;
+}
+
 function resolveProductId(product) {
   if (!product?.id) return undefined;
   const mapped = PRODUCT_ID_MAP[product.id];

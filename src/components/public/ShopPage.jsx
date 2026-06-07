@@ -1,6 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Check, Info, ShoppingCart, Calendar, Heart, ShieldCheck, ArrowRight, ArrowLeft, Loader2, Star, Plus } from 'lucide-react';
-import { startPartnerEnrollment } from '../../api/partnerEnrollmentClient';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Check, Info, ShoppingCart, Calendar, Heart, ShieldCheck, ArrowRight, ArrowLeft, Loader2, Star, Plus, LogIn, ExternalLink } from 'lucide-react';
+import { startPartnerEnrollment, getPatientPortalLoginUrl } from '../../api/partnerEnrollmentClient';
+import {
+  INTAKE_TOTAL_STEPS,
+  INTAKE_STEP_LABELS,
+  STEP_CONTACT,
+  STEP_LOADING,
+  STEP_PLAN,
+  STEP_PORTAL,
+  buildClinicalSteps,
+  validateClinicalStep,
+  validateContactStep,
+  resolveVitalsStepQuestion,
+  intakeProgressPercent,
+} from '../../lib/shopIntakeSteps';
 
 const PRODUCTS = [
   // Flagship Clinical Programs
@@ -689,6 +702,11 @@ export default function ShopPage({ setPage }) {
   const [quizRecommendation, setQuizRecommendation] = useState(null);
   const [selectedPlanDuration, setSelectedPlanDuration] = useState('3month'); // '1month' | '3month' | '6month'
   const [enrollmentSubmitting, setEnrollmentSubmitting] = useState(false);
+  const [contactName, setContactName] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
+  const [contactPhone, setContactPhone] = useState('');
+  const [contactConsent, setContactConsent] = useState(false);
+  const [portalHandoff, setPortalHandoff] = useState({ enrollment_url: null, patient_login_url: null });
 
   const handleAddToCart = (productName) => {
     setCartSuccess(productName);
@@ -703,34 +721,61 @@ export default function ShopPage({ setPage }) {
     setQuizStep(0);
     setQuizAnswers({});
     setQuizRecommendation(null);
+    setContactName('');
+    setContactEmail('');
+    setContactPhone('');
+    setContactConsent(false);
+    setPortalHandoff({ enrollment_url: null, patient_login_url: null });
     setQuizOpen(true);
   };
 
-  // Quiz Navigation
-  const currentProductQuestions = quizProduct ? getQuestionsForProduct(quizProduct) : [];
-  const totalSteps = currentProductQuestions.length + 2; // +1 for Contact details, +1 for results
+  const clinicalSteps = useMemo(
+    () => (quizProduct ? buildClinicalSteps(getQuestionsForProduct(quizProduct)) : []),
+    [quizProduct],
+  );
 
   const handleQuizNext = () => {
-    // Validate Vitals if on vitals step
-    if (quizProduct && currentProductQuestions[quizStep]?.type === 'vitals') {
-      if (!quizHeightFeet || !quizHeightInches || !quizWeight || !quizDOB) {
-        alert('Please fill out all vitals values.');
+    if (quizStep < STEP_CONTACT) {
+      const question = resolveVitalsStepQuestion(quizProduct, clinicalSteps[quizStep]);
+      const validation = validateClinicalStep(question, quizAnswers, {
+        heightFeet: quizHeightFeet,
+        heightInches: quizHeightInches,
+        weight: quizWeight,
+        dob: quizDOB,
+      });
+      if (!validation.ok) {
+        alert(validation.message);
         return;
       }
+      setQuizStep(quizStep + 1);
+      return;
     }
 
-    if (quizStep < currentProductQuestions.length - 1) {
-      setQuizStep(quizStep + 1);
-    } else if (quizStep === currentProductQuestions.length - 1) {
-      // Go to Contact step
-      setQuizStep(currentProductQuestions.length);
-    } else if (quizStep === currentProductQuestions.length) {
-      // Triggers evaluation loader
+    if (quizStep === STEP_CONTACT) {
+      const validation = validateContactStep({
+        name: contactName,
+        email: contactEmail,
+        phone: contactPhone,
+        consent: contactConsent,
+      });
+      if (!validation.ok) {
+        alert(validation.message);
+        return;
+      }
+      setQuizStep(STEP_LOADING);
       startClinicalEvaluation();
     }
   };
 
   const handleQuizBack = () => {
+    if (quizStep === STEP_PORTAL) {
+      setQuizStep(STEP_PLAN);
+      return;
+    }
+    if (quizStep === STEP_PLAN) {
+      setQuizStep(STEP_CONTACT);
+      return;
+    }
     if (quizStep > 0) {
       setQuizStep(quizStep - 1);
     } else {
@@ -793,7 +838,7 @@ export default function ShopPage({ setPage }) {
     }
 
     setQuizRecommendation(finalRec);
-    setQuizStep(totalSteps - 1); // Move to recommendation screen
+    setQuizStep(STEP_PLAN);
   };
 
   const handleSelectOption = (questionId, value, isMulti = false) => {
@@ -844,7 +889,14 @@ export default function ShopPage({ setPage }) {
         product: quizRecommendation,
         category: quizRecommendation.category,
       });
-      window.location.assign(result.enrollment_url);
+      setPortalHandoff({
+        enrollment_url: result.enrollment_url,
+        patient_login_url:
+          result.patient_login_url ||
+          result.portals?.patient_login_url ||
+          getPatientPortalLoginUrl(),
+      });
+      setQuizStep(STEP_PORTAL);
       return;
     } catch (err) {
       console.warn('[Partner enrollment] Falling back to local cart flow:', err);
@@ -862,9 +914,7 @@ export default function ShopPage({ setPage }) {
     return p.category === activeTab;
   });
 
-  const getProgressPercentage = () => {
-    return Math.min(Math.round((quizStep / (totalSteps - 1)) * 100), 100);
-  };
+  const getProgressPercentage = () => intakeProgressPercent(quizStep);
 
   return (
     <div className="landing-layout animate-fade-in" style={{ paddingTop: '100px', minHeight: '100vh', backgroundColor: '#f9fafb' }}>
@@ -1193,6 +1243,67 @@ export default function ShopPage({ setPage }) {
           height: 100%;
           background-color: #00d2c4;
           transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .yucca-step-indicator {
+          text-align: center;
+          padding: 12px 24px 0;
+          font-size: 0.8rem;
+          font-weight: 800;
+          color: #64748b;
+          letter-spacing: 0.5px;
+          text-transform: uppercase;
+        }
+
+        .yucca-step-indicator strong {
+          color: #0f2e2f;
+        }
+
+        .yucca-step-pills {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+          justify-content: center;
+          padding: 12px 24px 0;
+          max-width: 640px;
+          margin: 0 auto;
+        }
+
+        .yucca-step-pill {
+          font-size: 0.62rem;
+          font-weight: 800;
+          padding: 4px 8px;
+          border-radius: 999px;
+          background: #e2e8f0;
+          color: #64748b;
+          text-transform: uppercase;
+          letter-spacing: 0.3px;
+        }
+
+        .yucca-step-pill.active {
+          background: #0f2e2f;
+          color: #ffffff;
+        }
+
+        .yucca-step-pill.done {
+          background: rgba(0, 210, 196, 0.2);
+          color: #0f2e2f;
+        }
+
+        .yucca-portal-card {
+          background: #ffffff;
+          border: 1.5px solid #e2e8f0;
+          border-radius: 24px;
+          padding: 40px 32px;
+          text-align: center;
+          box-shadow: 0 10px 25px rgba(15,46,47,0.05);
+        }
+
+        .yucca-portal-logo {
+          height: 48px;
+          width: auto;
+          margin: 0 auto 20px;
+          display: block;
         }
 
         .yucca-quiz-content {
@@ -1606,8 +1717,8 @@ export default function ShopPage({ setPage }) {
             <button className="yucca-back-btn" onClick={handleQuizBack}>
               <ArrowLeft size={18} /> BACK
             </button>
-            <div className="yucca-brand">SummitMD</div>
-            <div style={{ width: '60px' }}></div> {/* Spacer */}
+            <img src="/logo.png" alt="SummitMD" className="yucca-portal-logo" style={{ height: 32, margin: 0 }} />
+            <div style={{ width: '60px' }}></div>
           </div>
 
           {/* Top Progress Line */}
@@ -1615,281 +1726,234 @@ export default function ShopPage({ setPage }) {
             <div className="yucca-progress-bar" style={{ width: `${getProgressPercentage()}%` }}></div>
           </div>
 
+          <div className="yucca-step-indicator">
+            Step <strong>{quizStep + 1}</strong> of {INTAKE_TOTAL_STEPS} · {INTAKE_STEP_LABELS[quizStep]}
+          </div>
+
+          <div className="yucca-step-pills">
+            {INTAKE_STEP_LABELS.map((label, idx) => (
+              <span
+                key={label}
+                className={`yucca-step-pill${idx === quizStep ? ' active' : idx < quizStep ? ' done' : ''}`}
+              >
+                {idx + 1}. {label.split(' ')[0]}
+              </span>
+            ))}
+          </div>
+
           {/* Main Question Body */}
           <div className="yucca-quiz-content">
-            
-            {/* 1. Quiz Loading Assessment State */}
-            {quizLoading ? (
+
+            {(quizLoading || quizStep === STEP_LOADING) ? (
               <div style={{ textAlign: 'center', padding: '80px 20px' }}>
                 <Loader2 size={60} className="animate-spin" style={{ color: '#00d2c4', margin: '0 auto 24px auto' }} />
-                <h3 style={{ fontSize: '1.4rem', fontWeight: 800 }}>Analyzing Medical Eligibility</h3>
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 800 }}>Step 7 — Analyzing Medical Eligibility</h3>
                 <p style={{ color: '#64748b', marginTop: '8px', minHeight: '24px' }}>
                   {quizLoadingIndex === 0 && 'Checking clinical safety profile & contraindications...'}
                   {quizLoadingIndex === 1 && 'Calculating Body Mass Index (BMI) & metabolic rate...'}
                   {quizLoadingIndex === 2 && 'Assigning medical recommendations and plan choices...'}
                 </p>
               </div>
-            ) : (
-              <>
-                {/* 2. Step: Question Selector or Pre-Quiz Program Entry */}
-                {quizStep < currentProductQuestions.length ? (
-                  <div>
-                    {/* Render active question */}
-                    {(() => {
-                      const q = currentProductQuestions[quizStep];
-                      
-                      // BRANCH 1: General Options
-                      if (q.type === 'singleselect' || q.type === 'multiselect') {
-                        const isMulti = q.type === 'multiselect';
-                        return (
-                          <div>
-                            <h2 className="yucca-question-title">{q.question}</h2>
-                            <p className="yucca-question-sub">{q.sub}</p>
-                            
-                            <div className="options-stack">
-                              {q.options.map(opt => {
-                                const isSelected = isMulti 
-                                  ? (quizAnswers[q.id] || []).includes(opt.value)
-                                  : quizAnswers[q.id] === opt.value;
-                                
-                                return (
-                                  <div key={opt.value}>
-                                    <div 
-                                      className={`yucca-option-card${isSelected ? ' active' : ''}`}
-                                      onClick={() => handleSelectOption(q.id, opt.value, isMulti)}
-                                    >
-                                      {isMulti ? (
-                                        <div className="yucca-checkbox-square">
-                                          {isSelected && <Check size={14} />}
-                                        </div>
-                                      ) : (
-                                        <div className="yucca-radio-circle"></div>
-                                      )}
-                                      <span className="yucca-option-label">{opt.label}</span>
+            ) : quizStep < STEP_CONTACT ? (
+              <div>
+                {(() => {
+                  const q = resolveVitalsStepQuestion(quizProduct, clinicalSteps[quizStep]);
+                  if (q.type === 'singleselect' || q.type === 'multiselect') {
+                    const isMulti = q.type === 'multiselect';
+                    return (
+                      <div>
+                        <h2 className="yucca-question-title">{q.question}</h2>
+                        <p className="yucca-question-sub">{q.sub}</p>
+                        <div className="options-stack">
+                          {q.options.map(opt => {
+                            const isSelected = isMulti
+                              ? (quizAnswers[q.id] || []).includes(opt.value)
+                              : quizAnswers[q.id] === opt.value;
+                            return (
+                              <div key={opt.value}>
+                                <div
+                                  className={`yucca-option-card${isSelected ? ' active' : ''}`}
+                                  onClick={() => handleSelectOption(q.id, opt.value, isMulti)}
+                                >
+                                  {isMulti ? (
+                                    <div className="yucca-checkbox-square">
+                                      {isSelected && <Check size={14} />}
                                     </div>
-                                    
-                                    {/* Warnings if contraindicated */}
-                                    {isSelected && opt.warning && (
-                                      <div className="yucca-warning-card animate-fade-in">
-                                        <Info size={16} style={{ flexShrink: 0 }} />
-                                        <span>{opt.warning}</span>
-                                      </div>
-                                    )}
+                                  ) : (
+                                    <div className="yucca-radio-circle"></div>
+                                  )}
+                                  <span className="yucca-option-label">{opt.label}</span>
+                                </div>
+                                {isSelected && opt.warning && (
+                                  <div className="yucca-warning-card animate-fade-in">
+                                    <Info size={16} style={{ flexShrink: 0 }} />
+                                    <span>{opt.warning}</span>
                                   </div>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        );
-                      }
-
-                      // BRANCH 2: Weight Loss Vitals Inputs
-                      if (q.type === 'vitals') {
-                        return (
-                          <div>
-                            <h2 className="yucca-question-title">{q.question}</h2>
-                            <p className="yucca-question-sub">{q.sub}</p>
-
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                              <div>
-                                <label className="yucca-input-label">Height (Feet)</label>
-                                <select className="yucca-input" value={quizHeightFeet} onChange={e => setQuizHeightFeet(e.target.value)}>
-                                  <option value="4">4 ft</option>
-                                  <option value="5">5 ft</option>
-                                  <option value="6">6 ft</option>
-                                  <option value="7">7 ft</option>
-                                </select>
+                                )}
                               </div>
-                              <div>
-                                <label className="yucca-input-label">Height (Inches)</label>
-                                <select className="yucca-input" value={quizHeightInches} onChange={e => setQuizHeightInches(e.target.value)}>
-                                  {Array.from({ length: 12 }, (_, i) => (
-                                    <option key={i} value={i}>{i} in</option>
-                                  ))}
-                                </select>
-                              </div>
-                            </div>
-
-                            <label className="yucca-input-label">Weight (lbs)</label>
-                            <input 
-                              type="number" 
-                              className="yucca-input" 
-                              value={quizWeight} 
-                              onChange={e => setQuizWeight(e.target.value)} 
-                              placeholder="e.g. 165" 
-                            />
-
-                            <label className="yucca-input-label">Date of Birth</label>
-                            <input 
-                              type="date" 
-                              className="yucca-input" 
-                              value={quizDOB} 
-                              onChange={e => setQuizDOB(e.target.value)} 
-                            />
-                          </div>
-                        );
-                      }
-                    })()}
-                  </div>
-                ) : quizStep === currentProductQuestions.length ? (
-                  /* 3. Step: Universal Contact/Consent details */
-                  <div>
-                    <h2 className="yucca-question-title">Create your health profile</h2>
-                    <p className="yucca-question-sub">Submit your contact details to review your clinical prescription assessment.</p>
-
-                    <label className="yucca-input-label">Full Name</label>
-                    <input type="text" className="yucca-input" placeholder="e.g. Alex Harrison" required />
-
-                    <label className="yucca-input-label">Email Address</label>
-                    <input type="email" className="yucca-input" placeholder="alex@example.com" required />
-
-                    <label className="yucca-input-label">Phone Number</label>
-                    <input type="tel" className="yucca-input" placeholder="(555) 000-0000" required />
-
-                    <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', marginTop: '16px' }}>
-                      <input type="checkbox" id="consent" style={{ marginTop: '4px', transform: 'scale(1.2)' }} defaultChecked />
-                      <label htmlFor="consent" style={{ fontSize: '0.85rem', color: '#64748b', cursor: 'pointer' }}>
-                        I confirm that the health answers provided are accurate and complete, and I consent to telehealth evaluation by SummitMD clinical practitioners.
-                      </label>
-                    </div>
-                  </div>
-                ) : (
-                  /* 4. Step: Branded Recommendation plan details (TryYucca styled) */
-                  <div className="animate-fade-in" style={{ paddingBottom: '60px' }}>
-                    <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-                      <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: '#00d2c4', fontWeight: 800, backgroundColor: '#0f2e2f', padding: '6px 16px', borderRadius: '30px', display: 'inline-block' }}>
-                        Recommended Clinical Plan
-                      </span>
-                    </div>
-
-                    <div style={{ backgroundColor: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 10px 25px rgba(15,46,47,0.05)' }}>
-                      <div style={{ padding: '24px', backgroundColor: '#e6ecea', borderBottom: '1px solid rgba(15,46,47,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div>
-                          <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0f2e2f' }}>{quizRecommendation?.name}</h3>
-                          <p style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '2px' }}>{quizRecommendation?.badge || 'Clinical Assessment Completed'}</p>
+                            );
+                          })}
                         </div>
-                        <ShieldCheck size={32} style={{ color: '#00d2c4' }} />
                       </div>
-
-                      <div style={{ padding: '32px 24px' }}>
-                        <p style={{ fontSize: '0.9rem', color: '#475569', lineHeight: '1.5', marginBottom: '24px' }}>
-                          {quizRecommendation?.desc}
-                        </p>
-
-                        {/* If weight loss, show BMI and safety report */}
-                        {quizProduct.id.includes('weightloss') && (
-                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px', backgroundColor: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
-                            <div>
-                              <span style={{ fontSize: '0.75rem', color: '#64748b', display: 'block', textTransform: 'uppercase', fontWeight: 700 }}>Calculated BMI</span>
-                              <strong style={{ fontSize: '1.5rem', color: '#0f2e2f' }}>{quizRecommendation?.calculatedBmi || 'N/A'}</strong>
-                            </div>
-                            <div>
-                              <span style={{ fontSize: '0.75rem', color: '#64748b', display: 'block', textTransform: 'uppercase', fontWeight: 700 }}>Safety Assessment</span>
-                              <strong style={{ fontSize: '1rem', color: quizRecommendation?.isAlternative ? '#991b1b' : '#00d2c4' }}>
-                                {quizRecommendation?.isAlternative ? 'Contraindicated (Alternative Plan)' : 'Eligible for Prescription'}
-                              </strong>
-                            </div>
+                    );
+                  }
+                  if (q.type === 'vitals') {
+                    return (
+                      <div>
+                        <h2 className="yucca-question-title">{q.question}</h2>
+                        <p className="yucca-question-sub">{q.sub}</p>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                          <div>
+                            <label className="yucca-input-label">Height (Feet)</label>
+                            <select className="yucca-input" value={quizHeightFeet} onChange={e => setQuizHeightFeet(e.target.value)}>
+                              <option value="4">4 ft</option>
+                              <option value="5">5 ft</option>
+                              <option value="6">6 ft</option>
+                              <option value="7">7 ft</option>
+                            </select>
                           </div>
-                        )}
-
-                        {/* Plan pricing duration toggles */}
-                        {quizRecommendation?.subPrice && (
-                          <div style={{ marginBottom: '24px' }}>
-                            <label className="yucca-input-label" style={{ marginBottom: '12px' }}>Select Subscription Length</label>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
-                              
-                              {/* 1 Month */}
-                              <div 
-                                onClick={() => setSelectedPlanDuration('1month')}
-                                style={{ 
-                                  border: '1.5px solid', 
-                                  borderColor: selectedPlanDuration === '1month' ? '#0f2e2f' : '#cbd5e1',
-                                  backgroundColor: selectedPlanDuration === '1month' ? 'rgba(0, 210, 196, 0.05)' : '#ffffff',
-                                  padding: '16px 8px',
-                                  borderRadius: '12px',
-                                  textAlign: 'center',
-                                  cursor: 'pointer',
-                                  transition: 'all 0.2s'
-                                }}
-                              >
-                                <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#64748b' }}>Monthly</span>
-                                <strong style={{ display: 'block', fontSize: '1.15rem', color: '#0f2e2f', marginTop: '4px' }}>${quizRecommendation.subPrice}</strong>
-                                <span style={{ fontSize: '0.65rem', color: '#64748b' }}>per month</span>
-                              </div>
-
-                              {/* 3 Months */}
-                              <div 
-                                onClick={() => setSelectedPlanDuration('3month')}
-                                style={{ 
-                                  border: '1.5px solid', 
-                                  borderColor: selectedPlanDuration === '3month' ? '#0f2e2f' : '#cbd5e1',
-                                  backgroundColor: selectedPlanDuration === '3month' ? 'rgba(0, 210, 196, 0.05)' : '#ffffff',
-                                  padding: '16px 8px',
-                                  borderRadius: '12px',
-                                  textAlign: 'center',
-                                  cursor: 'pointer',
-                                  position: 'relative',
-                                  transition: 'all 0.2s'
-                                }}
-                              >
-                                <span style={{ position: 'absolute', top: '-10px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#0f2e2f', color: '#ffffff', fontSize: '0.55rem', fontWeight: 800, padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase', width: 'max-content' }}>
-                                  Save 15%
-                                </span>
-                                <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#64748b', marginTop: '2px' }}>3 Months</span>
-                                <strong style={{ display: 'block', fontSize: '1.15rem', color: '#0f2e2f', marginTop: '4px' }}>${Math.round(quizRecommendation.subPrice * 0.85)}</strong>
-                                <span style={{ fontSize: '0.65rem', color: '#64748b' }}>per month</span>
-                              </div>
-
-                              {/* 6 Months */}
-                              <div 
-                                onClick={() => setSelectedPlanDuration('6month')}
-                                style={{ 
-                                  border: '1.5px solid', 
-                                  borderColor: selectedPlanDuration === '6month' ? '#0f2e2f' : '#cbd5e1',
-                                  backgroundColor: selectedPlanDuration === '6month' ? 'rgba(0, 210, 196, 0.05)' : '#ffffff',
-                                  padding: '16px 8px',
-                                  borderRadius: '12px',
-                                  textAlign: 'center',
-                                  cursor: 'pointer',
-                                  position: 'relative',
-                                  transition: 'all 0.2s'
-                                }}
-                              >
-                                <span style={{ position: 'absolute', top: '-10px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#00d2c4', color: '#0f2e2f', fontSize: '0.55rem', fontWeight: 800, padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase', width: 'max-content' }}>
-                                  Save 30%
-                                </span>
-                                <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#64748b', marginTop: '2px' }}>6 Months</span>
-                                <strong style={{ display: 'block', fontSize: '1.15rem', color: '#0f2e2f', marginTop: '4px' }}>${Math.round(quizRecommendation.subPrice * 0.70)}</strong>
-                                <span style={{ fontSize: '0.65rem', color: '#64748b' }}>per month</span>
-                              </div>
-
-                            </div>
+                          <div>
+                            <label className="yucca-input-label">Height (Inches)</label>
+                            <select className="yucca-input" value={quizHeightInches} onChange={e => setQuizHeightInches(e.target.value)}>
+                              {Array.from({ length: 12 }, (_, i) => (
+                                <option key={i} value={i}>{i} in</option>
+                              ))}
+                            </select>
                           </div>
-                        )}
-
-                        <button 
-                          onClick={handleCheckoutRecommendation}
-                          disabled={enrollmentSubmitting}
-                          className="btn" 
-                          style={{ width: '100%', backgroundColor: '#0f2e2f', color: '#ffffff', padding: '16px', borderRadius: '30px', fontWeight: '800', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: enrollmentSubmitting ? 'wait' : 'pointer', opacity: enrollmentSubmitting ? 0.8 : 1, fontSize: '1.05rem' }}
-                        >
-                          {enrollmentSubmitting ? <Loader2 size={18} className="animate-spin" /> : <ShoppingCart size={18} />}
-                          {enrollmentSubmitting ? 'Redirecting to secure enrollment...' : 'Secure Treatment Plan & Checkout'}
-                        </button>
+                        </div>
+                        <label className="yucca-input-label">Weight (lbs)</label>
+                        <input type="number" className="yucca-input" value={quizWeight} onChange={e => setQuizWeight(e.target.value)} placeholder="e.g. 165" />
+                        <label className="yucca-input-label">Date of Birth</label>
+                        <input type="date" className="yucca-input" value={quizDOB} onChange={e => setQuizDOB(e.target.value)} />
                       </div>
+                    );
+                  }
+                  return null;
+                })()}
+              </div>
+            ) : quizStep === STEP_CONTACT ? (
+              <div>
+                <h2 className="yucca-question-title">Create your health profile</h2>
+                <p className="yucca-question-sub">Submit your contact details to review your clinical prescription assessment.</p>
+                <label className="yucca-input-label">Full Name</label>
+                <input type="text" className="yucca-input" placeholder="e.g. Alex Harrison" value={contactName} onChange={e => setContactName(e.target.value)} required />
+                <label className="yucca-input-label">Email Address</label>
+                <input type="email" className="yucca-input" placeholder="alex@example.com" value={contactEmail} onChange={e => setContactEmail(e.target.value)} required />
+                <label className="yucca-input-label">Phone Number</label>
+                <input type="tel" className="yucca-input" placeholder="(555) 000-0000" value={contactPhone} onChange={e => setContactPhone(e.target.value)} required />
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', marginTop: '16px' }}>
+                  <input type="checkbox" id="consent" style={{ marginTop: '4px', transform: 'scale(1.2)' }} checked={contactConsent} onChange={e => setContactConsent(e.target.checked)} />
+                  <label htmlFor="consent" style={{ fontSize: '0.85rem', color: '#64748b', cursor: 'pointer' }}>
+                    I confirm that the health answers provided are accurate and complete, and I consent to telehealth evaluation by SummitMD clinical practitioners.
+                  </label>
+                </div>
+              </div>
+            ) : quizStep === STEP_PLAN ? (
+              <div className="animate-fade-in" style={{ paddingBottom: '60px' }}>
+                <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+                  <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: '#00d2c4', fontWeight: 800, backgroundColor: '#0f2e2f', padding: '6px 16px', borderRadius: '30px', display: 'inline-block' }}>
+                    Step 8 — Recommended Clinical Plan
+                  </span>
+                </div>
+                <div style={{ backgroundColor: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 10px 25px rgba(15,46,47,0.05)' }}>
+                  <div style={{ padding: '24px', backgroundColor: '#e6ecea', borderBottom: '1px solid rgba(15,46,47,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0f2e2f' }}>{quizRecommendation?.name}</h3>
+                      <p style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '2px' }}>{quizRecommendation?.badge || 'Clinical Assessment Completed'}</p>
                     </div>
+                    <ShieldCheck size={32} style={{ color: '#00d2c4' }} />
                   </div>
-                )}
-              </>
-            )}
+                  <div style={{ padding: '32px 24px' }}>
+                    <p style={{ fontSize: '0.9rem', color: '#475569', lineHeight: '1.5', marginBottom: '24px' }}>{quizRecommendation?.desc}</p>
+                    {quizProduct.id.includes('weightloss') && (
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px', backgroundColor: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
+                        <div>
+                          <span style={{ fontSize: '0.75rem', color: '#64748b', display: 'block', textTransform: 'uppercase', fontWeight: 700 }}>Calculated BMI</span>
+                          <strong style={{ fontSize: '1.5rem', color: '#0f2e2f' }}>{quizRecommendation?.calculatedBmi || 'N/A'}</strong>
+                        </div>
+                        <div>
+                          <span style={{ fontSize: '0.75rem', color: '#64748b', display: 'block', textTransform: 'uppercase', fontWeight: 700 }}>Safety Assessment</span>
+                          <strong style={{ fontSize: '1rem', color: quizRecommendation?.isAlternative ? '#991b1b' : '#00d2c4' }}>
+                            {quizRecommendation?.isAlternative ? 'Contraindicated (Alternative Plan)' : 'Eligible for Prescription'}
+                          </strong>
+                        </div>
+                      </div>
+                    )}
+                    {quizRecommendation?.subPrice && (
+                      <div style={{ marginBottom: '24px' }}>
+                        <label className="yucca-input-label" style={{ marginBottom: '12px' }}>Select Subscription Length</label>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
+                          <div onClick={() => setSelectedPlanDuration('1month')} style={{ border: '1.5px solid', borderColor: selectedPlanDuration === '1month' ? '#0f2e2f' : '#cbd5e1', backgroundColor: selectedPlanDuration === '1month' ? 'rgba(0, 210, 196, 0.05)' : '#ffffff', padding: '16px 8px', borderRadius: '12px', textAlign: 'center', cursor: 'pointer' }}>
+                            <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#64748b' }}>Monthly</span>
+                            <strong style={{ display: 'block', fontSize: '1.15rem', color: '#0f2e2f', marginTop: '4px' }}>${quizRecommendation.subPrice}</strong>
+                          </div>
+                          <div onClick={() => setSelectedPlanDuration('3month')} style={{ border: '1.5px solid', borderColor: selectedPlanDuration === '3month' ? '#0f2e2f' : '#cbd5e1', backgroundColor: selectedPlanDuration === '3month' ? 'rgba(0, 210, 196, 0.05)' : '#ffffff', padding: '16px 8px', borderRadius: '12px', textAlign: 'center', cursor: 'pointer', position: 'relative' }}>
+                            <span style={{ position: 'absolute', top: '-10px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#0f2e2f', color: '#ffffff', fontSize: '0.55rem', fontWeight: 800, padding: '2px 6px', borderRadius: '4px' }}>Save 15%</span>
+                            <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#64748b', marginTop: '2px' }}>3 Months</span>
+                            <strong style={{ display: 'block', fontSize: '1.15rem', color: '#0f2e2f', marginTop: '4px' }}>${Math.round(quizRecommendation.subPrice * 0.85)}</strong>
+                          </div>
+                          <div onClick={() => setSelectedPlanDuration('6month')} style={{ border: '1.5px solid', borderColor: selectedPlanDuration === '6month' ? '#0f2e2f' : '#cbd5e1', backgroundColor: selectedPlanDuration === '6month' ? 'rgba(0, 210, 196, 0.05)' : '#ffffff', padding: '16px 8px', borderRadius: '12px', textAlign: 'center', cursor: 'pointer', position: 'relative' }}>
+                            <span style={{ position: 'absolute', top: '-10px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#00d2c4', color: '#0f2e2f', fontSize: '0.55rem', fontWeight: 800, padding: '2px 6px', borderRadius: '4px' }}>Save 30%</span>
+                            <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#64748b', marginTop: '2px' }}>6 Months</span>
+                            <strong style={{ display: 'block', fontSize: '1.15rem', color: '#0f2e2f', marginTop: '4px' }}>${Math.round(quizRecommendation.subPrice * 0.70)}</strong>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    <button onClick={handleCheckoutRecommendation} disabled={enrollmentSubmitting} className="btn" style={{ width: '100%', backgroundColor: '#0f2e2f', color: '#ffffff', padding: '16px', borderRadius: '30px', fontWeight: '800', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: enrollmentSubmitting ? 'wait' : 'pointer', opacity: enrollmentSubmitting ? 0.8 : 1, fontSize: '1.05rem' }}>
+                      {enrollmentSubmitting ? <Loader2 size={18} className="animate-spin" /> : <ShoppingCart size={18} />}
+                      {enrollmentSubmitting ? 'Preparing secure enrollment...' : 'Secure Treatment Plan & Checkout'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : quizStep === STEP_PORTAL ? (
+              <div className="yucca-portal-card animate-fade-in">
+                <img src="/logo.png" alt="SummitMD" className="yucca-portal-logo" />
+                <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: '#00d2c4', fontWeight: 800, backgroundColor: '#0f2e2f', padding: '6px 16px', borderRadius: '30px', display: 'inline-block', marginBottom: '16px' }}>
+                  Step 9 — Patient Portal
+                </span>
+                <h2 className="yucca-question-title" style={{ fontSize: '1.6rem', marginBottom: '8px' }}>
+                  Your SummitMD portal is ready
+                </h2>
+                <p className="yucca-question-sub" style={{ marginBottom: '28px' }}>
+                  {quizRecommendation?.isAlternative
+                    ? 'Complete checkout for your alternative wellness plan, then log in to manage care with SummitMD branding.'
+                    : 'Complete secure checkout on Peak Health, then access your branded SummitMD patient portal for messaging, prescriptions, and follow-up care.'}
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {portalHandoff.enrollment_url && (
+                    <button
+                      type="button"
+                      className="btn"
+                      onClick={() => window.location.assign(portalHandoff.enrollment_url)}
+                      style={{ width: '100%', backgroundColor: '#0f2e2f', color: '#ffffff', padding: '16px', borderRadius: '30px', fontWeight: '800', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '1.05rem' }}
+                    >
+                      Complete Secure Checkout <ExternalLink size={18} />
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    className="btn"
+                    onClick={() => window.location.assign(portalHandoff.patient_login_url || getPatientPortalLoginUrl())}
+                    style={{ width: '100%', backgroundColor: '#ffffff', color: '#0f2e2f', padding: '16px', borderRadius: '30px', fontWeight: '800', border: '1.5px solid #0f2e2f', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '1.05rem' }}
+                  >
+                    <LogIn size={18} /> Log In to SummitMD Patient Portal
+                  </button>
+                </div>
+                <p style={{ fontSize: '0.78rem', color: '#64748b', marginTop: '20px', lineHeight: 1.5 }}>
+                  Portal URL: {portalHandoff.patient_login_url || getPatientPortalLoginUrl()}
+                </p>
+              </div>
+            ) : null}
 
           </div>
 
           {/* Quiz Action Navigation Footer */}
-          {!quizLoading && (
+          {!quizLoading && quizStep !== STEP_LOADING && (
             <div className="yucca-quiz-footer">
               <div className="yucca-footer-inner">
-                {quizStep < totalSteps - 1 ? (
+                {quizStep <= STEP_CONTACT ? (
                   <>
                     <button className="yucca-back-btn" onClick={handleQuizBack}>
                       <ArrowLeft size={16} /> Previous Step
@@ -1898,13 +1962,33 @@ export default function ShopPage({ setPage }) {
                       Continue <ArrowRight size={16} />
                     </button>
                   </>
-                ) : (
-                  <div style={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
-                    <button 
-                      className="yucca-back-btn" 
+                ) : quizStep === STEP_PLAN ? (
+                  <>
+                    <button className="yucca-back-btn" onClick={handleQuizBack}>
+                      <ArrowLeft size={16} /> Back
+                    </button>
+                    <button
+                      className="yucca-back-btn"
                       onClick={() => {
                         setQuizStep(0);
                         setQuizRecommendation(null);
+                        setPortalHandoff({ enrollment_url: null, patient_login_url: null });
+                      }}
+                    >
+                      Restart Assessment
+                    </button>
+                  </>
+                ) : (
+                  <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
+                    <button className="yucca-back-btn" onClick={handleQuizBack}>
+                      <ArrowLeft size={16} /> Back to Plan
+                    </button>
+                    <button
+                      className="yucca-back-btn"
+                      onClick={() => {
+                        setQuizStep(0);
+                        setQuizRecommendation(null);
+                        setPortalHandoff({ enrollment_url: null, patient_login_url: null });
                       }}
                     >
                       Restart Assessment
