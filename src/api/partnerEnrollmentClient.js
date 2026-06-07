@@ -131,6 +131,7 @@ export function buildPatientLoginHandoff({ product, category } = {}) {
   const params = {
     source: "summitmd-shop",
     redirect: `/care/${PARTNER_BRAND_SLUG}/patient`,
+    mode: "signup",
   };
   const productId = resolveProductId(product);
   if (productId) params.productId = productId;
