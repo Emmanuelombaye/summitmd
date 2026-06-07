@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Check, Info, ShoppingCart, Calendar, Heart, ShieldCheck, ArrowRight, ArrowLeft, Loader2, Star, Plus, LogIn, ExternalLink } from 'lucide-react';
-import { startPartnerEnrollment, getPatientPortalLoginUrl } from '../../api/partnerEnrollmentClient';
+import { startPartnerEnrollment, getPatientPortalLoginUrl, resolvePartnerEnrollment } from '../../api/partnerEnrollmentClient';
 import {
   INTAKE_TOTAL_STEPS,
   INTAKE_STEP_LABELS,
@@ -706,7 +706,7 @@ export default function ShopPage({ setPage }) {
   const [contactEmail, setContactEmail] = useState('');
   const [contactPhone, setContactPhone] = useState('');
   const [contactConsent, setContactConsent] = useState(false);
-  const [portalHandoff, setPortalHandoff] = useState({ enrollment_url: null, patient_login_url: null });
+  const [portalHandoff, setPortalHandoff] = useState({ enrollment_url: null, patient_login_url: null, handoff_error: null, direct_handoff: false });
 
   const handleAddToCart = (productName) => {
     setCartSuccess(productName);
@@ -725,7 +725,7 @@ export default function ShopPage({ setPage }) {
     setContactEmail('');
     setContactPhone('');
     setContactConsent(false);
-    setPortalHandoff({ enrollment_url: null, patient_login_url: null });
+    setPortalHandoff({ enrollment_url: null, patient_login_url: null, handoff_error: null, direct_handoff: false });
     setQuizOpen(true);
   };
 
@@ -866,42 +866,19 @@ export default function ShopPage({ setPage }) {
   const handleCheckoutRecommendation = async () => {
     if (!quizRecommendation) return;
 
-    let finalPrice = quizRecommendation.subPrice || quizRecommendation.oneTimePrice;
-    let durationText = '';
-
-    if (quizRecommendation.subPrice) {
-      if (selectedPlanDuration === '3month') {
-        finalPrice = Math.round(quizRecommendation.subPrice * 0.85); // 15% off
-        durationText = ' (3-Month Subscription)';
-      } else if (selectedPlanDuration === '6month') {
-        finalPrice = Math.round(quizRecommendation.subPrice * 0.70); // 30% off
-        durationText = ' (6-Month Subscription)';
-      } else {
-        durationText = ' (Monthly Subscription)';
-      }
-    }
-
-    const cartLabel = `${quizRecommendation.name}${durationText} - $${finalPrice}`;
-
     setEnrollmentSubmitting(true);
     try {
-      const result = await startPartnerEnrollment({
+      const result = await resolvePartnerEnrollment({
         product: quizRecommendation,
         category: quizRecommendation.category,
       });
       setPortalHandoff({
         enrollment_url: result.enrollment_url,
-        patient_login_url:
-          result.patient_login_url ||
-          result.portals?.patient_login_url ||
-          getPatientPortalLoginUrl(),
+        patient_login_url: result.patient_login_url || getPatientPortalLoginUrl(),
+        handoff_error: result.handoff_error || null,
+        direct_handoff: Boolean(result.direct_handoff),
       });
       setQuizStep(STEP_PORTAL);
-      return;
-    } catch (err) {
-      console.warn('[Partner enrollment] Falling back to local cart flow:', err);
-      handleAddToCart(cartLabel);
-      setQuizOpen(false);
     } finally {
       setEnrollmentSubmitting(false);
     }
@@ -1902,7 +1879,7 @@ export default function ShopPage({ setPage }) {
                     )}
                     <button onClick={handleCheckoutRecommendation} disabled={enrollmentSubmitting} className="btn" style={{ width: '100%', backgroundColor: '#0f2e2f', color: '#ffffff', padding: '16px', borderRadius: '30px', fontWeight: '800', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: enrollmentSubmitting ? 'wait' : 'pointer', opacity: enrollmentSubmitting ? 0.8 : 1, fontSize: '1.05rem' }}>
                       {enrollmentSubmitting ? <Loader2 size={18} className="animate-spin" /> : <ShoppingCart size={18} />}
-                      {enrollmentSubmitting ? 'Preparing secure enrollment...' : 'Secure Treatment Plan & Checkout'}
+                      {enrollmentSubmitting ? 'Preparing payment & portal...' : 'Continue to Payment & Portal'}
                     </button>
                   </div>
                 </div>
@@ -1911,16 +1888,33 @@ export default function ShopPage({ setPage }) {
               <div className="yucca-portal-card animate-fade-in">
                 <img src="/logo.png" alt="SummitMD" className="yucca-portal-logo" />
                 <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: '#00d2c4', fontWeight: 800, backgroundColor: '#0f2e2f', padding: '6px 16px', borderRadius: '30px', display: 'inline-block', marginBottom: '16px' }}>
-                  Step 9 — Patient Portal
+                  Step 9 — Payment & Patient Portal
                 </span>
                 <h2 className="yucca-question-title" style={{ fontSize: '1.6rem', marginBottom: '8px' }}>
-                  Your SummitMD portal is ready
+                  Complete payment on SummitMD
                 </h2>
-                <p className="yucca-question-sub" style={{ marginBottom: '28px' }}>
-                  {quizRecommendation?.isAlternative
-                    ? 'Complete checkout for your alternative wellness plan, then log in to manage care with SummitMD branding.'
-                    : 'Complete secure checkout on Peak Health, then access your branded SummitMD patient portal for messaging, prescriptions, and follow-up care.'}
+                <p className="yucca-question-sub" style={{ marginBottom: '20px' }}>
+                  Finish checkout on your branded Peak Health portal — payment, medical intake, then patient login with the SummitMD logo.
                 </p>
+
+                {portalHandoff.handoff_error && (
+                  <div className="yucca-warning-card animate-fade-in" style={{ marginBottom: '20px', textAlign: 'left' }}>
+                    <Info size={16} style={{ flexShrink: 0 }} />
+                    <span>
+                      Server partner API unavailable ({portalHandoff.handoff_error}). Using direct Peak enrollment link — payment and intake still work.
+                    </span>
+                  </div>
+                )}
+
+                <div style={{ textAlign: 'left', marginBottom: '24px', backgroundColor: '#f8fafc', borderRadius: '12px', padding: '16px', border: '1px solid #e2e8f0' }}>
+                  <p style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', marginBottom: '12px' }}>What happens next</p>
+                  <ol style={{ margin: 0, paddingLeft: '20px', color: '#475569', fontSize: '0.9rem', lineHeight: 1.7 }}>
+                    <li>Secure payment on Peak Health (SummitMD branded)</li>
+                    <li>Complete medical intake & provider review</li>
+                    <li>Log in to your SummitMD patient portal</li>
+                  </ol>
+                </div>
+
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {portalHandoff.enrollment_url && (
                     <button
@@ -1929,7 +1923,7 @@ export default function ShopPage({ setPage }) {
                       onClick={() => window.location.assign(portalHandoff.enrollment_url)}
                       style={{ width: '100%', backgroundColor: '#0f2e2f', color: '#ffffff', padding: '16px', borderRadius: '30px', fontWeight: '800', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '1.05rem' }}
                     >
-                      Complete Secure Checkout <ExternalLink size={18} />
+                      Continue to Payment & Checkout <ExternalLink size={18} />
                     </button>
                   )}
                   <button
@@ -1942,7 +1936,7 @@ export default function ShopPage({ setPage }) {
                   </button>
                 </div>
                 <p style={{ fontSize: '0.78rem', color: '#64748b', marginTop: '20px', lineHeight: 1.5 }}>
-                  Portal URL: {portalHandoff.patient_login_url || getPatientPortalLoginUrl()}
+                  Payment URL: {portalHandoff.enrollment_url}
                 </p>
               </div>
             ) : null}
@@ -1972,7 +1966,7 @@ export default function ShopPage({ setPage }) {
                       onClick={() => {
                         setQuizStep(0);
                         setQuizRecommendation(null);
-                        setPortalHandoff({ enrollment_url: null, patient_login_url: null });
+                        setPortalHandoff({ enrollment_url: null, patient_login_url: null, handoff_error: null, direct_handoff: false });
                       }}
                     >
                       Restart Assessment
@@ -1988,7 +1982,7 @@ export default function ShopPage({ setPage }) {
                       onClick={() => {
                         setQuizStep(0);
                         setQuizRecommendation(null);
-                        setPortalHandoff({ enrollment_url: null, patient_login_url: null });
+                        setPortalHandoff({ enrollment_url: null, patient_login_url: null, handoff_error: null, direct_handoff: false });
                       }}
                     >
                       Restart Assessment

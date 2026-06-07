@@ -80,7 +80,7 @@ VITE_PARTNER_PRODUCT_MAP_JSON={"weightloss_semaglutide":"<peak-product-uuid>"}
 
 | Variable | Value |
 |----------|--------|
-| `PARTNER_API_KEY` | `pk_live_sm_…` (from Supabase SQL reveal) |
+| `PARTNER_API_KEY` | `pk_live_sm_…` (from Supabase SQL reveal) — **required to remove 500 on `/api/enroll-start`** |
 | `PARTNER_BRAND_SLUG` | `summit-md` |
 | `PARTNER_API_URL` | `https://vzzmdbdvcofajgrjgajq.supabase.co/functions/v1/partner-api` |
 | `PARTNER_PORTAL_ORIGIN` | `https://www.peak-health.io` |

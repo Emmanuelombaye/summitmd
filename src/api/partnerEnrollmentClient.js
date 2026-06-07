@@ -1,3 +1,5 @@
+import { mapPartnerCategory } from "../lib/partnerCategoryMap.js";
+
 const DEFAULT_PARTNER_API =
   "https://vzzmdbdvcofajgrjgajq.supabase.co/functions/v1/partner-api";
 
@@ -20,6 +22,9 @@ const PARTNER_PORTAL_ORIGIN = (
 ).trim();
 const PARTNER_RETURN_URL = (import.meta.env.VITE_PARTNER_RETURN_URL || "").trim();
 const PRODUCT_MAP_JSON = (import.meta.env.VITE_PARTNER_PRODUCT_MAP_JSON || "").trim();
+const PARTNER_BRAND_ID = (
+  import.meta.env.VITE_PARTNER_BRAND_ID || "7caaa526-185e-4eda-bf0e-832be6ba37a7"
+).trim();
 
 function parseProductMap() {
   if (!PRODUCT_MAP_JSON) return {};
@@ -112,4 +117,55 @@ export async function startPartnerEnrollment({ product, category }) {
     throw new Error("Enrollment response missing enrollment_url.");
   }
   return data;
+}
+
+/** Direct Peak shop URL when server proxy is unavailable (no API key required in browser). */
+export function buildDirectPeakHandoff({ product, category } = {}) {
+  const origin = PARTNER_PORTAL_ORIGIN.replace(/\/$/, "");
+  const slug = PARTNER_BRAND_SLUG;
+  const params = new URLSearchParams({
+    brand: slug,
+    brandId: PARTNER_BRAND_ID,
+  });
+
+  const mappedCategory = mapPartnerCategory(category || product?.category);
+  if (mappedCategory) params.set("category", mappedCategory);
+
+  const productId = resolveProductId(product);
+  if (productId) {
+    params.set("productId", productId);
+    params.set("auto", "1");
+  }
+
+  if (PARTNER_RETURN_URL) params.set("returnUrl", PARTNER_RETURN_URL);
+
+  return {
+    enrollment_url: `${origin}/care/${slug}/shop?${params.toString()}`,
+    patient_login_url: getPatientPortalLoginUrl(),
+    patient_portal_url: getPatientPortalUrl(),
+    direct_handoff: true,
+  };
+}
+
+/**
+ * Try Partner API proxy first; fall back to direct Peak enrollment URL so payment
+ * always continues on Peak (never local cart).
+ */
+export async function resolvePartnerEnrollment({ product, category }) {
+  try {
+    const result = await startPartnerEnrollment({ product, category });
+    return {
+      ...result,
+      patient_login_url:
+        result.patient_login_url ||
+        result.portals?.patient_login_url ||
+        getPatientPortalLoginUrl(),
+      direct_handoff: false,
+    };
+  } catch (err) {
+    return {
+      ...buildDirectPeakHandoff({ product, category }),
+      handoff_error: err.message || "Partner enrollment unavailable",
+    };
+  }
 }
