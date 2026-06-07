@@ -1,53 +1,87 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Search, X, CheckCircle2, ArrowRight } from 'lucide-react';
+import './LandingPage.css';
 
 export default function LandingPage({ setPage }) {
   const careCards = [
     {
       img: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&q=80&w=400',
       title: '24/7 Care',
-      desc: 'Talk to a medical provider anytime, day or night. Whether it\'s cold and flu symptoms, allergies or infections, get the care you need from anywhere.',
-      cta: 'Learn more',
+      desc: 'Talk to a medical provider anytime, day or night. Get fast help for urgent needs from the comfort of your home.',
+      cta: 'Get Care Now',
       page: 'urgent-care',
+      badge: '24/7 Online',
+      price: '$0 with insurance',
+      theme: 'teal',
+      symptoms: ['Cold & Flu', 'Allergies & Sinus', 'UTIs & Infections', 'Sore Throat & Cough'],
+      keywords: ['cold', 'flu', 'cough', 'fever', 'sore throat', 'sinus', 'allergy', 'allergies', 'infection', 'uti', 'urgent', 'instant', 'night', 'now', 'refill']
     },
     {
       img: 'https://images.unsplash.com/photo-1579684389782-64d84b5e902a?auto=format&fit=crop&q=80&w=400',
       title: 'Primary Care',
-      desc: 'Stay on top of your health with board-certified providers supporting your checkups, preventative care and prescriptions.',
-      cta: 'Learn more',
+      desc: 'Stay on top of your health with board-certified providers supporting your routine checkups, wellness, and prescriptions.',
+      cta: 'Book Appointment',
       page: 'primary-care',
+      badge: 'Dedicated Doctor',
+      price: 'Low Copay',
+      theme: 'indigo',
+      symptoms: ['Routine Checkups', 'Prescription Refills', 'Preventative Care', 'Chronic Disease Support'],
+      keywords: ['doctor', 'checkup', 'preventative', 'refill', 'prescription', 'appointment', 'routine', 'wellness', 'health', 'exam']
     },
     {
       img: 'https://images.unsplash.com/photo-1527137341206-1a2ab818aa69?auto=format&fit=crop&q=80&w=400',
       title: 'Mental Health',
-      desc: 'Connect with a therapist or psychiatrist and get the support you need—however you prefer to engage.',
-      cta: 'Learn more',
+      desc: 'Connect with a licensed therapist or psychiatrist for personalized, ongoing support—on your terms.',
+      cta: 'Find a Therapist',
       page: 'mental-health',
+      badge: '100% Confidential',
+      price: 'Copay Match',
+      theme: 'rose',
+      symptoms: ['Anxiety & Depression', 'Stress Management', 'Therapy & Psychiatry', 'Grief & Relationships'],
+      keywords: ['mental', 'therapy', 'therapist', 'anxiety', 'depression', 'stress', 'grief', 'psychiatrist', 'psychiatry', 'counseling', 'mind', 'relationship']
     },
     {
       img: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&q=80&w=400',
       title: 'Condition Management',
-      desc: 'Get personalized support for diabetes, hypertension, weight management and more—right from your phone.',
-      cta: 'Learn more',
+      desc: 'Get personalized, device-connected support for diabetes, hypertension, and weight management.',
+      cta: 'Explore Plans',
       page: 'chronic-care',
+      badge: 'Devices Included',
+      price: 'Free Program Option',
+      theme: 'blue',
+      symptoms: ['Diabetes Support', 'Hypertension Tracking', 'Weight Management', 'Continuous Monitoring'],
+      keywords: ['diabetes', 'hypertension', 'blood pressure', 'glucose', 'weight', 'obesity', 'monitoring', 'chronic', 'device', 'scale', 'glp1', 'semaglutide']
     },
     {
       img: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=400',
       title: 'Specialty Care',
-      desc: 'Get expert medical opinions, dermatology visits and other specialty care—without the wait.',
-      cta: 'Learn more',
+      desc: 'Get expert medical opinions, dermatologist visits, and other specialized clinical support without the long wait.',
+      cta: 'Request Opinion',
       page: 'specialty-wellness',
+      badge: 'Expert Clinical Team',
+      price: 'Specialist Copay',
+      theme: 'purple',
+      symptoms: ['Dermatology & Rashes', 'Second Medical Opinions', 'Specialist Referrals', 'Complex Care Coordination'],
+      keywords: ['specialist', 'opinion', 'dermatology', 'skin', 'rash', 'moles', 'acne', 'expert', 'second opinion', 'referral']
     },
     {
       img: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=400',
       title: 'Everyday Habits',
-      desc: 'Build lasting habits with support for better sleep, balanced nutrition and healthy lifestyle choices.',
-      cta: 'Learn more',
+      desc: 'Build healthy, lasting lifestyle habits with professional support for sleep, nutrition, and exercise.',
+      cta: 'Start Lifestyle Coaching',
       page: 'specialty-wellness',
+      badge: 'Coaching Support',
+      price: 'Wellness Plan',
+      theme: 'gold',
+      symptoms: ['Sleep Improvement', 'Nutrition & Meal Plans', 'Weight Management Support', 'Healthy Lifestyle Habits'],
+      keywords: ['sleep', 'nutrition', 'habit', 'diet', 'meal', 'coach', 'exercise', 'lifestyle', 'fitness', 'weight loss']
     },
   ];
 
   const [currentCard, setCurrentCard] = useState(0);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 768);
+  const [searchQuery, setSearchQuery] = useState('');
+  const scrollContainerRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -61,6 +95,30 @@ export default function LandingPage({ setPage }) {
 
   const cardsPerView = isMobile ? 1 : 3;
   const maxIndex = careCards.length - cardsPerView;
+
+  const handleScroll = (e) => {
+    if (!isMobile) return;
+    const container = e.target;
+    const scrollLeft = container.scrollLeft;
+    const cardWidth = container.clientWidth * 0.82 + 16;
+    const index = Math.round(scrollLeft / cardWidth);
+    if (index >= 0 && index < careCards.length && currentCard !== index) {
+      setCurrentCard(index);
+    }
+  };
+
+  const scrollToCard = (index) => {
+    setCurrentCard(index);
+    if (scrollContainerRef.current) {
+      if (isMobile) {
+        const cardWidth = scrollContainerRef.current.clientWidth * 0.82 + 16;
+        scrollContainerRef.current.scrollTo({
+          left: index * cardWidth,
+          behavior: 'smooth'
+        });
+      }
+    }
+  };
 
   const logos = ['Aetna', 'Blue Cross Blue Shield', 'UnitedHealthcare', 'Cigna', 'Humana', 'CVS Health', 'Anthem', 'Centene', 'Molina', 'WellCare'];
 
@@ -122,49 +180,138 @@ export default function LandingPage({ setPage }) {
       <section className="tdh-care-section">
         <div className="tdh-care-inner">
           <h2 className="tdh-care-heading">The care you need, all in one place</h2>
+          
+          {/* Interactive Symptom Search */}
+          <div className="tdh-symptom-search-container">
+            <div className="tdh-symptom-search-wrapper">
+              <Search className="tdh-symptom-search-icon" size={18} />
+              <input
+                type="text"
+                className="tdh-symptom-search-input"
+                placeholder="Search symptoms (e.g. flu, therapy, refill, rashes)..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  className="tdh-symptom-search-clear"
+                  onClick={() => setSearchQuery('')}
+                  aria-label="Clear search"
+                >
+                  <X size={12} />
+                </button>
+              )}
+            </div>
+          </div>
+
           <div className="tdh-care-carousel-wrap">
             <button
               className="tdh-carousel-btn tdh-carousel-btn--prev"
               disabled={currentCard === 0}
-              onClick={() => setCurrentCard(Math.max(0, currentCard - 1))}
+              onClick={() => scrollToCard(Math.max(0, currentCard - 1))}
               aria-label="Previous"
             >‹</button>
-            <div className="tdh-care-grid" style={{ transform: `translateX(-${currentCard * (100 / cardsPerView)}%)` }}>
-              {careCards.map((card, i) => (
-                <div className="tdh-care-card" key={i} onClick={() => setPage(card.page)}>
-                  <div className="tdh-care-card-img-wrap">
-                    <img
-                      src={card.img}
-                      alt={card.title}
-                      className="tdh-care-card-img"
-                      loading={i < 3 ? 'eager' : 'lazy'}
-                      decoding="async"
-                      width="400"
-                      height="240"
-                      onError={e => { e.target.src = 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&q=60'; }}
-                    />
+            
+            <div 
+              className="tdh-care-grid" 
+              ref={scrollContainerRef}
+              onScroll={handleScroll}
+              style={{ transform: isMobile ? 'none' : `translateX(-${currentCard * (100 / cardsPerView)}%)` }}
+            >
+              {careCards.map((card, i) => {
+                const isSearchActive = searchQuery.trim() !== '';
+                const lowercaseQuery = searchQuery.toLowerCase().trim();
+                const isMatched = isSearchActive && (
+                  card.title.toLowerCase().includes(lowercaseQuery) ||
+                  card.desc.toLowerCase().includes(lowercaseQuery) ||
+                  card.symptoms.some(s => s.toLowerCase().includes(lowercaseQuery)) ||
+                  card.keywords.some(k => k.toLowerCase().includes(lowercaseQuery))
+                );
+                
+                const cardClass = `tdh-care-card tdh-card-theme-${card.theme}${
+                  isSearchActive ? (isMatched ? ' highlighted' : ' dimmed') : ''
+                }`;
+
+                return (
+                  <div className={cardClass} key={i} onClick={() => setPage(card.page)}>
+                    <div className="tdh-care-card-img-wrap">
+                      <div className="tdh-card-badge">
+                        <span className="tdh-card-badge-dot pulsing"></span>
+                        {card.badge}
+                      </div>
+                      <img
+                        src={card.img}
+                        alt={card.title}
+                        className="tdh-care-card-img"
+                        loading={i < 3 ? 'eager' : 'lazy'}
+                        decoding="async"
+                        width="400"
+                        height="240"
+                        onError={e => { e.target.src = 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&q=60'; }}
+                      />
+                    </div>
+                    <div className="tdh-care-card-body">
+                      <div className="tdh-card-top-info">
+                        <span className="tdh-card-price">{card.price}</span>
+                      </div>
+                      <h3>{card.title}</h3>
+                      <p>{card.desc}</p>
+                      
+                      <div className="tdh-care-symptoms-list">
+                        {card.symptoms.map((symptom, idx) => (
+                          <div className="tdh-symptom-item" key={idx}>
+                            <CheckCircle2 size={13} strokeWidth={2.5} />
+                            <span>{symptom}</span>
+                          </div>
+                        ))}
+                      </div>
+                      
+                      <div className="tdh-care-card-link-wrapper" style={{ marginTop: '20px' }}>
+                        <span>{card.cta}</span>
+                        <ArrowRight size={15} strokeWidth={2.5} />
+                      </div>
+                    </div>
                   </div>
-                  <div className="tdh-care-card-body">
-                    <h3>{card.title}</h3>
-                    <p>{card.desc}</p>
-                    <span className="tdh-care-card-link">{card.cta}</span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
+            
             <button
               className="tdh-carousel-btn tdh-carousel-btn--next"
               disabled={currentCard >= maxIndex}
-              onClick={() => setCurrentCard(Math.min(maxIndex, currentCard + 1))}
+              onClick={() => scrollToCard(Math.min(maxIndex, currentCard + 1))}
               aria-label="Next"
             >›</button>
           </div>
-          {/* Dots */}
-          <div className="tdh-carousel-dots">
-            {Array.from({ length: maxIndex + 1 }).map((_, i) => (
-              <button key={i} className={`tdh-dot${currentCard === i ? ' active' : ''}`} onClick={() => setCurrentCard(i)} aria-label={`Go to slide ${i + 1}`} />
-            ))}
-          </div>
+          
+          {/* Desktop Dots Indicator */}
+          {!isMobile && (
+            <div className="tdh-carousel-dots">
+              {Array.from({ length: maxIndex + 1 }).map((_, i) => (
+                <button 
+                  key={i} 
+                  className={`tdh-dot${currentCard === i ? ' active' : ''}`} 
+                  onClick={() => scrollToCard(i)} 
+                  aria-label={`Go to slide ${i + 1}`} 
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Mobile Scroll Progress Indicator */}
+          {isMobile && (
+            <div className="tdh-care-scroll-indicator">
+              {careCards.map((_, i) => (
+                <button
+                  key={i}
+                  className={`tdh-scroll-dot ${currentCard === i ? 'active' : 'inactive'}`}
+                  onClick={() => scrollToCard(i)}
+                  aria-label={`Go to card ${i + 1}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
