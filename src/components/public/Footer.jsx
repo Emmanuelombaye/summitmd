@@ -13,7 +13,7 @@ export default function TDHFooter({ setPage }) {
 
   const goto = (href) => {
     if (href && !href.startsWith('http')) setPage(href);
-    else if (href) window.open(href, '_blank');
+    else if (href) window.open(href, '_self');
   };
 
   const footerCols = [
@@ -106,7 +106,7 @@ export default function TDHFooter({ setPage }) {
                 { icon: '▶', label: 'youtube', url: 'https://www.youtube.com/user/TeladocVideos' },
                 { icon: '𝕏', label: 'x', url: 'https://www.twitter.com/SummitMD' },
               ].map((s) => (
-                <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer" aria-label={s.label} className="tdh-footer-social-icon">
+                <a key={s.label} href={s.url} target="_self" rel="noopener noreferrer" aria-label={s.label} className="tdh-footer-social-icon">
                   {s.icon}
                 </a>
               ))}
@@ -133,7 +133,7 @@ export default function TDHFooter({ setPage }) {
                     {col.links.map(l => (
                       <li key={l.label}>
                         {l.external ? (
-                          <a href={l.url} target="_blank" rel="noopener noreferrer">{l.label} ↗</a>
+                          <a href={l.url} target="_self" rel="noopener noreferrer">{l.label} ↗</a>
                         ) : (
                           <a href="#" onClick={e => { e.preventDefault(); goto(l.href); }}>{l.label}</a>
                         )}
@@ -154,10 +154,10 @@ export default function TDHFooter({ setPage }) {
             <p className="tdh-footer-propel">PL015954.A</p>
           </div>
           <div className="tdh-footer-badges">
-            <a href="https://go.onelink.me/agxg/f6blsn9h" target="_blank" rel="noopener noreferrer">
+            <a href="https://go.onelink.me/agxg/f6blsn9h" target="_self" rel="noopener noreferrer">
               <img src="https://www.SummitMD.com/content/dam/tdh-www/us/en/images/app-badge-apple.png" alt="Apple App Store" style={{ height: '36px', borderRadius: '6px' }} onError={e => { e.target.style.display='none'; }} />
             </a>
-            <a href="https://go.onelink.me/agxg/ov06wfm5" target="_blank" rel="noopener noreferrer">
+            <a href="https://go.onelink.me/agxg/ov06wfm5" target="_self" rel="noopener noreferrer">
               <img src="https://www.SummitMD.com/content/dam/tdh-www/us/en/images/app-badge-google.png" alt="Google Play Store" style={{ height: '36px', borderRadius: '6px' }} onError={e => { e.target.style.display='none'; }} />
             </a>
           </div>

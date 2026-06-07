@@ -146,7 +146,7 @@ export default function EmployersPage({ setPage }) {
             <p>Catapult Health VirtualCheckups® makes it easy to complete at-home wellness exams for early risk detection.</p>
             <a
               href="https://www.catapulthealth.com/"
-              target="_blank"
+              target="_self"
               rel="noopener noreferrer"
               className="tdh-btn tdh-btn-primary-inverted"
             >

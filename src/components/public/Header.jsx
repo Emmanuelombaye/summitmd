@@ -450,7 +450,7 @@ export default function TDHHeader({ setPage }) {
                                     <a
                                       key={sIdx}
                                       href={subItem.external ? subItem.url : '#'}
-                                      target={subItem.external ? '_blank' : undefined}
+                                      target={subItem.external ? '_self' : undefined}
                                       rel={subItem.external ? 'noopener noreferrer' : undefined}
                                       onClick={ev => {
                                         if (!subItem.external) {
@@ -499,7 +499,7 @@ export default function TDHHeader({ setPage }) {
                       <div className="tdh-mega-promo" style={{ backgroundImage: `url(${NAV_INDIVIDUALS.promo.bg})` }}>
                         <div className="tdh-mega-promo-body">
                           <h3>{NAV_INDIVIDUALS.promo.title}</h3>
-                          <a href={NAV_INDIVIDUALS.promo.url} target="_blank" rel="noopener noreferrer" className="tdh-mega-promo-cta">
+                          <a href={NAV_INDIVIDUALS.promo.url} target="_self" rel="noopener noreferrer" className="tdh-mega-promo-cta">
                             {NAV_INDIVIDUALS.promo.cta} <i className="tdh-icon-arrow">↗</i>
                           </a>
                         </div>
@@ -607,7 +607,7 @@ export default function TDHHeader({ setPage }) {
                               {t.external ? (
                                 <a
                                   href={t.url}
-                                  target="_blank"
+                                  target="_self"
                                   rel="noopener noreferrer"
                                   className="tdh-mega-way-link-title"
                                   style={{ fontWeight: '700', fontSize: '0.95rem', color: 'var(--tdh-navy)', textDecoration: 'none' }}
@@ -631,7 +631,7 @@ export default function TDHHeader({ setPage }) {
                                     <a
                                       key={sIdx}
                                       href={subItem.external ? subItem.url : "#"}
-                                      target={subItem.external ? "_blank" : undefined}
+                                      target={subItem.external ? "_self" : undefined}
                                       rel={subItem.external ? "noopener noreferrer" : undefined}
                                       onClick={e => {
                                         if (!subItem.external) {
@@ -665,7 +665,7 @@ export default function TDHHeader({ setPage }) {
                         {NAV_CLINICIANS.explore.map((e2, i) => (
                           <li key={i}>
                             {e2.external
-                              ? <a href={e2.url} target="_blank" rel="noopener noreferrer" className="tdh-mega-explore-link">{e2.label} ↗</a>
+                              ? <a href={e2.url} target="_self" rel="noopener noreferrer" className="tdh-mega-explore-link">{e2.label} ↗</a>
                               : <a href="#" className="tdh-mega-explore-link" onClick={e => { e.preventDefault(); goto(e2.href); }}>{e2.label}</a>
                             }
                           </li>
@@ -676,7 +676,7 @@ export default function TDHHeader({ setPage }) {
                       <div className="tdh-mega-promo" style={{ backgroundImage: `url(${NAV_CLINICIANS.promo.bg})` }}>
                         <div className="tdh-mega-promo-body">
                           <h3>{NAV_CLINICIANS.promo.title}</h3>
-                          <a href={NAV_CLINICIANS.promo.url} target="_blank" rel="noopener noreferrer" className="tdh-mega-promo-cta">
+                          <a href={NAV_CLINICIANS.promo.url} target="_self" rel="noopener noreferrer" className="tdh-mega-promo-cta">
                             {NAV_CLINICIANS.promo.cta} ↗
                           </a>
                         </div>
@@ -790,7 +790,7 @@ export default function TDHHeader({ setPage }) {
                 key={i}
                 className="mob-nav-link"
                 onClick={() => {
-                  if (t.external) window.open(t.url, '_blank');
+                  if (t.external) window.open(t.url, '_self');
                   else goto(t.href);
                 }}
               >
