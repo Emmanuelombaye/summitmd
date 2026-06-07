@@ -16,17 +16,15 @@ npm-debug.log*
 Thumbs.db
 
 # Local env files
-.env
-.env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
 # IDE configurations
-.vscode/
 .idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+config.bat

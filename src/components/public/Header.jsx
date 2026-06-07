@@ -93,7 +93,7 @@ const NAV_INDIVIDUALS = {
       desc: 'Find therapy that works best for you.',
       sub: [
         { label: 'SummitMD Mental Health', href: 'mental-health' },
-        { label: 'BetterHelp', external: true, url: 'https://www.betterhelp.com/teladoc-health/' },
+        { label: 'BetterHelp', href: 'mental-health' },
       ],
     },
     {
@@ -130,7 +130,7 @@ const NAV_INDIVIDUALS = {
         { label: 'Overview', href: 'specialty-wellness' },
         { label: 'Dermatology', href: 'dermatology' },
         { label: 'Expert Medical Opinion', href: 'specialty-wellness' },
-        { label: 'BetterSleep—Try for $0', external: true, url: 'https://www.bettersleep.com/transform-your-sleep-SummitMD-30' },
+        { label: 'BetterSleep—Try for $0', href: 'specialty-wellness' },
       ],
     },
     {
@@ -154,8 +154,8 @@ const NAV_INDIVIDUALS = {
   promo: {
     bg: '/better_sleep_promo.png',
     title: 'Stop racing thoughts and start sleeping better',
-    cta: 'Try BetterSleep—30 days for $0',
-    url: 'https://www.bettersleep.com/transform-your-sleep-SummitMD-30',
+    cta: 'Explore sleep support',
+    href: 'specialty-wellness',
   },
 };
 
@@ -251,14 +251,12 @@ const NAV_CLINICIANS = {
     {
       label: 'Provider Careers',
       href: 'careers',
-      external: true,
-      url: 'https://teladoc.wd503.myworkdayjobs.com/en-US/SummitMD_is_hiring',
       desc: 'Interested in joining our world-class team? View our openings.',
-      sub: [{ label: 'View openings', external: true, url: 'https://teladoc.wd503.myworkdayjobs.com/en-US/SummitMD_is_hiring' }],
+      sub: [{ label: 'View openings', href: 'careers' }],
     },
   ],
   explore: [
-    { label: 'Join Our Team', external: true, url: 'https://teladoc.wd503.myworkdayjobs.com/en-US/SummitMD_is_hiring' },
+    { label: 'Join Our Team', href: 'careers' },
     { label: 'About Us', href: 'about' },
     { label: 'Our Impact', href: 'our-impact' },
     { label: 'Contact us', href: 'contact' },
@@ -267,8 +265,7 @@ const NAV_CLINICIANS = {
     bg: '/clinician_promo.png',
     title: 'Simplify your work. Amplify your impact.',
     cta: 'See open roles',
-    url: 'https://teladoc.wd503.myworkdayjobs.com/en-US/SummitMD_is_hiring',
-    external: true,
+    href: 'careers',
   },
 };
 
@@ -499,8 +496,8 @@ export default function TDHHeader({ setPage }) {
                       <div className="tdh-mega-promo" style={{ backgroundImage: `url(${NAV_INDIVIDUALS.promo.bg})` }}>
                         <div className="tdh-mega-promo-body">
                           <h3>{NAV_INDIVIDUALS.promo.title}</h3>
-                          <a href={NAV_INDIVIDUALS.promo.url} target="_self" rel="noopener noreferrer" className="tdh-mega-promo-cta">
-                            {NAV_INDIVIDUALS.promo.cta} <i className="tdh-icon-arrow">↗</i>
+                          <a href="#" onClick={e => { e.preventDefault(); goto(NAV_INDIVIDUALS.promo.href); }} className="tdh-mega-promo-cta">
+                            {NAV_INDIVIDUALS.promo.cta} →
                           </a>
                         </div>
                       </div>
@@ -676,8 +673,8 @@ export default function TDHHeader({ setPage }) {
                       <div className="tdh-mega-promo" style={{ backgroundImage: `url(${NAV_CLINICIANS.promo.bg})` }}>
                         <div className="tdh-mega-promo-body">
                           <h3>{NAV_CLINICIANS.promo.title}</h3>
-                          <a href={NAV_CLINICIANS.promo.url} target="_self" rel="noopener noreferrer" className="tdh-mega-promo-cta">
-                            {NAV_CLINICIANS.promo.cta} ↗
+                          <a href="#" onClick={e => { e.preventDefault(); goto(NAV_CLINICIANS.promo.href); }} className="tdh-mega-promo-cta">
+                            {NAV_CLINICIANS.promo.cta} →
                           </a>
                         </div>
                       </div>

@@ -47,7 +47,7 @@ export default function TDHFooter({ setPage }) {
       links: [
         { label: 'Provider Resources', href: 'providers-signup' },
         { label: 'How It Works', href: 'how-it-works' },
-        { label: 'Provider Careers', external: true, url: 'https://teladoc.wd1.myworkdayjobs.com/en-US/SummitMD_is_hiring' },
+        { label: 'Provider Careers', href: 'careers' },
       ]
     },
     {
@@ -60,7 +60,7 @@ export default function TDHFooter({ setPage }) {
         { label: 'Careers', href: 'careers' },
         { label: 'Industry Events', href: 'newsroom' },
         { label: 'Newsroom', href: 'newsroom' },
-        { label: 'Investors', external: true, url: 'https://ir.SummitMD.com' },
+        { label: 'Investors', href: 'about' },
       ]
     },
     {
