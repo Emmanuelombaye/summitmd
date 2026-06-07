@@ -128,13 +128,14 @@ export async function startPartnerEnrollment({ product, category }) {
 
 /** Login handoff — product already chosen on SummitMD shop; skip Peak product catalog. */
 export function buildPatientLoginHandoff({ product, category } = {}) {
-  const params = {};
+  const params = {
+    source: "summitmd-shop",
+    redirect: `/care/${PARTNER_BRAND_SLUG}/patient`,
+  };
   const productId = resolveProductId(product);
   if (productId) params.productId = productId;
   const mappedCategory = mapPartnerCategory(category || product?.category);
   if (mappedCategory) params.category = mappedCategory;
-  // After auth, land in patient app — not shop/products again
-  params.redirect = `/care/${PARTNER_BRAND_SLUG}/patient`;
 
   const loginUrl = getPatientPortalLoginUrl(params);
 
@@ -152,22 +153,9 @@ export function buildDirectPeakHandoff({ product, category } = {}) {
 }
 
 /**
- * Resolve handoff after Summit intake. Always sends patient to branded login —
- * not back through Peak shop/product catalog.
+ * After Summit intake — build login URL only (no Peak shop, no server API on step 8).
+ * Optional background Partner API ping can be added later for analytics.
  */
-export async function resolvePartnerEnrollment({ product, category }) {
-  const loginHandoff = buildPatientLoginHandoff({ product, category });
-
-  try {
-    await startPartnerEnrollment({ product, category });
-    return {
-      ...loginHandoff,
-      direct_handoff: false,
-    };
-  } catch (err) {
-    return {
-      ...loginHandoff,
-      handoff_error: err.message || "Partner enrollment unavailable",
-    };
-  }
+export function resolvePartnerEnrollment({ product, category }) {
+  return buildPatientLoginHandoff({ product, category });
 }
