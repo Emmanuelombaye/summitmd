@@ -47,9 +47,16 @@ export function partnerDocsLinks() {
   };
 }
 
-export function getPatientPortalLoginUrl() {
+export function getPatientPortalLoginUrl(extraParams = {}) {
   const origin = PARTNER_PORTAL_ORIGIN.replace(/\/$/, "");
-  return `${origin}/care/${PARTNER_BRAND_SLUG}/login`;
+  const slug = PARTNER_BRAND_SLUG;
+  const params = new URLSearchParams({
+    brand: slug,
+    brandId: PARTNER_BRAND_ID,
+    ...extraParams,
+  });
+  const qs = params.toString();
+  return `${origin}/care/${slug}/login${qs ? `?${qs}` : ""}`;
 }
 
 export function getPatientPortalUrl() {
@@ -119,52 +126,47 @@ export async function startPartnerEnrollment({ product, category }) {
   return data;
 }
 
-/** Direct Peak shop URL when server proxy is unavailable (no API key required in browser). */
-export function buildDirectPeakHandoff({ product, category } = {}) {
-  const origin = PARTNER_PORTAL_ORIGIN.replace(/\/$/, "");
-  const slug = PARTNER_BRAND_SLUG;
-  const params = new URLSearchParams({
-    brand: slug,
-    brandId: PARTNER_BRAND_ID,
-  });
-
-  const mappedCategory = mapPartnerCategory(category || product?.category);
-  if (mappedCategory) params.set("category", mappedCategory);
-
+/** Login handoff — product already chosen on SummitMD shop; skip Peak product catalog. */
+export function buildPatientLoginHandoff({ product, category } = {}) {
+  const params = {};
   const productId = resolveProductId(product);
-  if (productId) {
-    params.set("productId", productId);
-    params.set("auto", "1");
-  }
+  if (productId) params.productId = productId;
+  const mappedCategory = mapPartnerCategory(category || product?.category);
+  if (mappedCategory) params.category = mappedCategory;
+  // After auth, land in patient app — not shop/products again
+  params.redirect = `/care/${PARTNER_BRAND_SLUG}/patient`;
 
-  if (PARTNER_RETURN_URL) params.set("returnUrl", PARTNER_RETURN_URL);
+  const loginUrl = getPatientPortalLoginUrl(params);
 
   return {
-    enrollment_url: `${origin}/care/${slug}/shop?${params.toString()}`,
-    patient_login_url: getPatientPortalLoginUrl(),
+    login_url: loginUrl,
+    patient_login_url: loginUrl,
     patient_portal_url: getPatientPortalUrl(),
     direct_handoff: true,
   };
 }
 
+/** @deprecated Use buildPatientLoginHandoff — Summit selects products on marketing site. */
+export function buildDirectPeakHandoff({ product, category } = {}) {
+  return buildPatientLoginHandoff({ product, category });
+}
+
 /**
- * Try Partner API proxy first; fall back to direct Peak enrollment URL so payment
- * always continues on Peak (never local cart).
+ * Resolve handoff after Summit intake. Always sends patient to branded login —
+ * not back through Peak shop/product catalog.
  */
 export async function resolvePartnerEnrollment({ product, category }) {
+  const loginHandoff = buildPatientLoginHandoff({ product, category });
+
   try {
-    const result = await startPartnerEnrollment({ product, category });
+    await startPartnerEnrollment({ product, category });
     return {
-      ...result,
-      patient_login_url:
-        result.patient_login_url ||
-        result.portals?.patient_login_url ||
-        getPatientPortalLoginUrl(),
+      ...loginHandoff,
       direct_handoff: false,
     };
   } catch (err) {
     return {
-      ...buildDirectPeakHandoff({ product, category }),
+      ...loginHandoff,
       handoff_error: err.message || "Partner enrollment unavailable",
     };
   }

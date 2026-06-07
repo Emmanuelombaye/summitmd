@@ -11,7 +11,7 @@ export const INTAKE_STEP_LABELS = [
   "Contact & Consent",
   "Clinical Review",
   "Your Plan",
-  "Patient Portal",
+  "Patient Login",
 ];
 
 export const STEP_CONTACT = 5;
